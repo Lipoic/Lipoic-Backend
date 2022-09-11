@@ -21,4 +21,5 @@ async function start() {
   });
 }
 
-export const DB: Database = await start();
+export let DB: Database;
+start().then((database) => (DB = database));
