@@ -1,6 +1,6 @@
 # Lipoic-Backend
 
-The backend for Lipoic, using [Express.js](https://expressjs.com/).
+The backend for Lipoic, using [Express.js](https://expressjs.com/) and [TypeScript](https://www.typescriptlang.org/).
 
 ## Development
 
