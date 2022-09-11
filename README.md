@@ -1,35 +1,43 @@
 # Lipoic-Backend
-The backend repository for lipoic, built with node.js + typescript + express.js.
+
+The backend for Lipoic, using [Express.js](https://expressjs.com/).
 
 ## Development
-### Get Started
-Install [Node.js](https://nodejs.org) and [Yarn](https://yarnpkg.com/getting-started/install)
 
-Run the commands
+### Getting Started
+
+Requirements:
+- [Node.js](https://nodejs.org)
+- [Yarn](https://yarnpkg.com/getting-started/install)
+
+Install dependencies:
 ```shell
 yarn install
 ```
-### Start Server (dev)
+
+Start server (dev):
 ```shell
 yarn dev
 ```
-### Start Server (product)
+
+Start server (product):
 ```shell
 yarn start
 ```
-### Build
+
+Build:
 ```shell
 yarn build
 ```
-### ESLint
+
+ESLint:
 ```shell
 yarn lint
 ```
 
-## Config
+## Configuration
+
 Create the `.env` file.
 ```env
 PORT=8080
 ```
-
-## Deploy
