@@ -1,6 +1,7 @@
 import { config } from 'dotenv';
 
-import { createServer } from '@/util/server';
+import { createServer } from './util/server';
+import { Database, connectDatabase } from './util/database';
 
 config();
 
@@ -9,6 +10,15 @@ process
   .on('uncaughtException', console.error)
   .on('unhandledRejection', console.error);
 
-const { server } = createServer();
+async function start() {
+  const { server } = createServer();
 
-server.listen(process.env.PORT ?? 8080);
+  server.listen(process.env.PORT ?? 8080);
+
+  return await connectDatabase().catch((error) => {
+    console.error('Failed to connect to database', error);
+    process.exit(1);
+  });
+}
+
+export const DB: Database = await start();
