@@ -1,9 +1,7 @@
-import { IUser, userSchema } from '@/model/auth/user';
 import * as mongoose from 'mongoose';
 
 export default class Database {
   client!: typeof import('mongoose');
-  user!: mongoose.Model<IUser>;
 }
 
 export async function connectDatabase(): Promise<Database> {
@@ -22,7 +20,5 @@ export async function connectDatabase(): Promise<Database> {
     autoIndex: true,
   });
 
-  const user = mongoose.model<IUser>('user', userSchema);
-
-  return { client, user };
+  return { client };
 }

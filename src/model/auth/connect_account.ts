@@ -1,5 +1,5 @@
 export interface ConnectAccount {
-  account_type: ConnectType;
+  account_type: string;
   name: string;
   email: string;
 }
