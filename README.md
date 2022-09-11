@@ -6,31 +6,37 @@ The backend for Lipoic, using [Express.js](https://expressjs.com/) and [TypeScri
 
 ### Getting Started
 
-Requirements:
+#### Requirements
+
 - [Node.js](https://nodejs.org)
 - [Yarn](https://yarnpkg.com/getting-started/install)
 
-Install dependencies:
+#### Install dependencies
+
 ```shell
 yarn install
 ```
 
-Start server (dev):
+#### Start server (dev)
+
 ```shell
 yarn dev
 ```
 
-Start server (product):
+#### Start server (product)
+
 ```shell
 yarn start
 ```
 
-Build:
+#### Build
+
 ```shell
 yarn build
 ```
 
-ESLint:
+#### ESLint
+
 ```shell
 yarn lint
 ```
@@ -38,6 +44,7 @@ yarn lint
 ## Configuration
 
 Create the `.env` file.
+
 ```env
 PORT=8080
 ```

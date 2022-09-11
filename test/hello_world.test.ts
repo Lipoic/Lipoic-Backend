@@ -1,15 +1,17 @@
-import { createServer } from '@/util/server';
+import { createServer } from '../src/util/server';
 import request from 'supertest';
-import { Express } from 'express-serve-static-core';
 
-let server: Express;
+import type { Server } from 'http';
+import type { Express } from 'express';
+
+let server: { app: Express; server: Server };
 
 beforeAll(() => {
   server = createServer();
 });
 
 it('Get / should return 200 & valid response', (done) => {
-  request(server)
+  request(server.app)
     .get(`/`)
     .expect('Content-Type', /json/)
     .expect(200)

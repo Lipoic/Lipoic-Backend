@@ -1,8 +1,14 @@
+import { config } from 'dotenv';
+
 import { createServer } from '@/util/server';
 
-const app = createServer();
-const port = process.env.PORT ?? 8080;
+config();
 
-app.listen(port, () => {
-  console.log(`Server is running at https://localhost:${port}`);
-});
+/* on error */
+process
+  .on('uncaughtException', console.error)
+  .on('unhandledRejection', console.error);
+
+const { server } = createServer();
+
+server.listen(process.env.PORT ?? 8080);
