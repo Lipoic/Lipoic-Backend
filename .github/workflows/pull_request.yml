@@ -1,0 +1,24 @@
+name: Pull request
+on: [pull_request]
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: yarn install
+      - name: Run eslint on changed files
+        uses: tj-actions/eslint-changed-files@v13
+        with:
+          token: ${{ github.token }}
+          config_path: ".eslintrc.js"
+          file_extensions: |
+            **/*.ts
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: yarn install
+      - name: Build
+        run: yarn build
