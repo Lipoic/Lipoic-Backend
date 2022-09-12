@@ -11,6 +11,7 @@ export default defineConfig({
         'node_modules/**',
         'dist/**',
         'test/**',
+        'src/index.ts',
         '.eslintrc.js',
         'vitest.config.ts',
       ],
