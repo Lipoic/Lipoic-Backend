@@ -1,16 +1,18 @@
-import * as mongoose from 'mongoose';
+import { Connection, createConnection } from 'mongoose';
 
 export default class Database {
-  client!: typeof import('mongoose');
+  connection!: Connection;
 }
 
-export async function connectDatabase(): Promise<Database> {
+export async function connectDatabase(
+  dbName = 'lipoic_data'
+): Promise<Database> {
   const url = process.env.DATABASE_URL ?? 'mongodb://localhost:27017';
   const username = process.env.DATABASE_USERNAME;
   const password = process.env.DATABASE_PASSWORD;
 
-  const client = await mongoose.connect(url, {
-    dbName: 'lipoic_data',
+  const connection = await createConnection(url, {
+    dbName,
     auth: {
       username,
       password,
@@ -20,5 +22,5 @@ export async function connectDatabase(): Promise<Database> {
     autoIndex: true,
   });
 
-  return { client };
+  return { connection };
 }
