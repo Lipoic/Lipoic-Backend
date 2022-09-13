@@ -37,10 +37,4 @@ yarn lint
 
 ## Configuration
 
-Create the `.env` file.
-```env
-PORT=8080
-DATABASE_URL=mongodb://localhost:27017
-DATABASE_USERNAME=
-DATABASE_PASSWORD=
-```
+Create the `.env` file and see the [example file](.env.example))
