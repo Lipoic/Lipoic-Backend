@@ -37,4 +37,12 @@ yarn lint
 
 ## Configuration
 
-Create the `.env` file and see the [example file](.env.example))
+Create the `.env` file and add key-value pairs according to the table below.
+You can find an example in [`.env.example`](.env.example).
+
+| Key                 | Description                 | Default Value               |
+|---------------------|-----------------------------|-----------------------------|
+| `PORT`              | The server port.            | `8080`                      |
+| `DATABASE_URL`      | The URL to the database.    | `mongodb://localhost:27017` |
+| `DATABASE_USERNAME` | The database auth username. |                             |
+| `DATABASE_PASSWORD` | The database auth password. |                             |
