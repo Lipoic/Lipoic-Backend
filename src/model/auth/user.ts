@@ -14,7 +14,7 @@ export interface IUser {
   updated_at: Date;
 }
 
-export const userSchema = new Schema<IUser>(
+const userSchema = new Schema<IUser>(
   {
     username: { type: String, required: true },
     email: { type: String, required: true },

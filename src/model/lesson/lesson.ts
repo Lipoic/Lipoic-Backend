@@ -19,7 +19,7 @@ export interface ILesson {
   classroom_id?: Types.ObjectId;
 }
 
-export const lessonSchema = new Schema<ILesson>(
+const lessonSchema = new Schema<ILesson>(
   {
     name: { type: String, required: true },
     description: { type: String, required: false },
