@@ -8,7 +8,7 @@ test('Connect to the database', async () => {
   const db = await connectDatabase();
   expect(db.connection).toBeDefined();
 
-  // await db.connection.close();
+  await db.connection.close();
 });
 
 test('Connect to the database & check the database name', async () => {
@@ -16,5 +16,5 @@ test('Connect to the database & check the database name', async () => {
   expect(db.connection).toBeDefined();
   expect(db.connection.getClient().options.dbName).toBe('test');
 
-  // await db.connection.close();
+  await db.connection.close();
 });
