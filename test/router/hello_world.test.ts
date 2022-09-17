@@ -2,10 +2,12 @@ import { createServer } from '@/util/server';
 import request from 'supertest';
 import { Express } from 'express-serve-static-core';
 import { test, expect, beforeAll } from 'vitest';
+import { init } from '@/util/init';
 
 let server: Express;
 
 beforeAll(() => {
+  init();
   server = createServer();
 });
 

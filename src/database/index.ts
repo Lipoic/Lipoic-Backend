@@ -22,5 +22,7 @@ export async function connectDatabase(
     autoIndex: true,
   });
 
+  await connection.asPromise();
+
   return { connection };
 }

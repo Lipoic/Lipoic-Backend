@@ -1,16 +1,12 @@
-import express, { Express, Request, Response } from 'express';
-import dotenv from 'dotenv';
+import express, { Express } from 'express';
+import router from '@/router';
+import morgan from 'morgan';
 
 export function createServer(): Express {
-  dotenv.config();
-
   const app: Express = express();
 
-  app.get('/', (req: Request, res: Response) => {
-    res.json({
-      message: 'Hello, World!',
-    });
-  });
+  app.use(router);
+  app.use(morgan('dev'));
 
   return app;
 }
