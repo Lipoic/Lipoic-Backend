@@ -3,7 +3,7 @@ export enum StatusCode {
   NOT_FOUND = 404,
 }
 
-enum StatusCodeMessage {
+export enum StatusCodeMessage {
   OK = 'OK',
   NOT_FOUND = 'Resource not found.',
 }
@@ -37,6 +37,7 @@ export const getStatusCodeData = (code: StatusCode) => {
     code,
   };
 };
+
 export const getCodeData = (code: Codes) => {
   return {
     message: CodeMessage[<CodeKeys>Codes[code]],
