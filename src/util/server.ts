@@ -1,12 +1,19 @@
 import express, { Express } from 'express';
-import router from '@/router';
 import morgan from 'morgan';
+import cors from 'cors';
+
+import router from '@/router';
 
 export function createServer(): Express {
   const app: Express = express();
 
+  app
+    .use(morgan('dev'))
+    .use(cors())
+    .use(express.json())
+    .use(express.urlencoded({ extended: false }));
+
   app.use(router);
-  app.use(morgan('dev'));
 
   return app;
 }

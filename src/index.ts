@@ -23,3 +23,8 @@ async function main() {
 }
 
 main();
+
+/* on error */
+process
+  .on('uncaughtException', console.error)
+  .on('unhandledRejection', console.error);

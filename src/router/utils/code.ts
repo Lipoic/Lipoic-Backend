@@ -1,8 +1,8 @@
 export class Code {
   constructor(public code: number, public message: string) {}
 
-  static ok = new Code(200, 'OK');
-  static not_found = new Code(404, 'Resource not found.');
+  static OK = new Code(200, 'OK');
+  static NOT_FOUND = new Code(404, 'Resource not found.');
   // static oauth_code_error = new Code(1, 'OAuth auth code error.');
   // static oauth_get_user_info_error = new Code(
   //   2,

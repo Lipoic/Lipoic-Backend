@@ -1,5 +1,6 @@
-import { Code } from '@/router/code';
 import { Response } from 'express';
+
+import { Code } from '#';
 
 interface IAPIResponse<D> {
   code: number;
@@ -20,6 +21,7 @@ export class APIResponse<D = unknown> {
 
   send(res: Response): void {
     const code = this.code.code;
+
     // if the status code is a custom code, set it to 400 (Bad Request)
     const status = code >= 100 ? code : 400;
 
