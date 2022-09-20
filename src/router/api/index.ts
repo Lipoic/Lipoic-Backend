@@ -1,4 +1,6 @@
-import { Code, APIResponse, Router } from '#';
+import { Router } from 'express';
+
+import { Code, APIResponse } from '#';
 
 const router = Router();
 

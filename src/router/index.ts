@@ -10,5 +10,6 @@ router.use(api).use((_, res) => {
   new APIResponse(Code.NOT_FOUND).send(res);
 });
 
+export { Router };
 export * from './utils';
 export default router;
