@@ -39,10 +39,3 @@ test('Not found page', async () => {
     message: 'Resource not found.',
   });
 });
-
-export enum StatusCodes {
-  OK = 200,
-}
-export enum ReasonPhrases {
-  OK = 'OK',
-}
