@@ -1,22 +1,32 @@
-export class Code {
-  constructor(public code: number, public message: string) {}
-
-  static OK = new Code(200, 'OK');
-  static NOT_FOUND = new Code(404, 'Resource not found.');
-  // static OAUTH_CODE_ERROR = new Code(1, 'OAuth auth code error.');
-  // static OAUTH_GET_USER_INFO_ERROR = new Code(
-  //   2,
-  //   'OAuth get user info error.'
-  // );
-  // static LOGIN_USER_NOT_FOUND_ERROR = new Code(
-  //   3,
-  //   'User not found error.'
-  // );
-  // static LOGIN_PASSWORD_ERROR = new Code(4, 'Input password error.');
-  // static sing_up_email_already_registered = new Code(
-  //   5,
-  //   'This email is already registered.'
-  // );
-  // static verify_email_error = new Code(6, 'This code is invalid.');
-  // static auth_error = new Code(7, 'This token is invalid.');
+export enum StatusCode {
+  OK = 200,
+  NOT_FOUND = 404,
+  OAUTH_CODE_ERROR = 1,
+  OAUTH_GET_USER_INFO_ERROR = 2,
+  LOGIN_USER_NOT_FOUND_ERROR = 3,
+  LOGIN_PASSWORD_ERROR = 4,
+  SING_UP_EMAIL_ALREADY_REGISTERED = 5,
+  VERIFY_EMAIL_ERROR = 6,
+  AUTH_ERROR = 7,
 }
+
+enum StatusCodeMessage {
+  OK = 'OK',
+  NOT_FOUND = 'Resource not found.',
+  OAUTH_CODE_ERROR = 'OAuth auth code error.',
+  OAUTH_GET_USER_INFO_ERROR = 'OAuth get user info error.',
+  LOGIN_USER_NOT_FOUND_ERROR = 'User not found error.',
+  LOGIN_PASSWORD_ERROR = 'Input password error.',
+  SING_UP_EMAIL_ALREADY_REGISTERED = 'This email is already registered.',
+  VERIFY_EMAIL_ERROR = 'This code is invalid.',
+  AUTH_ERROR = 'This token is invalid.',
+}
+
+type StatusCodeKeys = keyof typeof StatusCode;
+
+export const getStatusCodeData = (code: StatusCode) => {
+  return {
+    message: StatusCodeMessage[<StatusCodeKeys>StatusCode[code]],
+    code,
+  };
+};
