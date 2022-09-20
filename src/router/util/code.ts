@@ -3,16 +3,16 @@ export class Code {
 
   static OK = new Code(200, 'OK');
   static NOT_FOUND = new Code(404, 'Resource not found.');
-  // static oauth_code_error = new Code(1, 'OAuth auth code error.');
-  // static oauth_get_user_info_error = new Code(
+  // static OAUTH_CODE_ERROR = new Code(1, 'OAuth auth code error.');
+  // static OAUTH_GET_USER_INFO_ERROR = new Code(
   //   2,
   //   'OAuth get user info error.'
   // );
-  // static login_user_not_found_error = new Code(
+  // static LOGIN_USER_NOT_FOUND_ERROR = new Code(
   //   3,
   //   'User not found error.'
   // );
-  // static login_password_error = new Code(4, 'Input password error.');
+  // static LOGIN_PASSWORD_ERROR = new Code(4, 'Input password error.');
   // static sing_up_email_already_registered = new Code(
   //   5,
   //   'This email is already registered.'

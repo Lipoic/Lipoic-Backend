@@ -24,7 +24,7 @@ async function main() {
 
 main();
 
-/* on error */
+/* error handler */
 process
   .on('uncaughtException', console.error)
   .on('unhandledRejection', console.error);
