@@ -28,8 +28,8 @@ export enum CodeMessage {
   AUTH_ERROR = 'This token is invalid.',
 }
 
-type StatusCodeKeys = keyof typeof StatusCode;
-type CodeKeys = keyof typeof Codes;
+export type StatusCodeKeys = keyof typeof StatusCode;
+export type CodeKeys = keyof typeof Codes;
 
 export const getStatusCodeData = (code: StatusCode) => {
   return {
