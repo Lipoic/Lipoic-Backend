@@ -10,7 +10,7 @@ async function main() {
   const port = process.env.PORT || 8080;
 
   app.listen(port, () => {
-    console.log(`Server is running at https://localhost:${port}`);
+    console.log(`Server is running at http://localhost:${port}`);
   });
 
   try {
