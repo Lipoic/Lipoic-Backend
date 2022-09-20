@@ -46,3 +46,4 @@ You can find an example in [`.env.example`](.env.example).
 | `DATABASE_URL`      | The URL to the MongoDB database. | `mongodb://localhost:27017` |
 | `DATABASE_USERNAME` | The database auth username.      |                             |
 | `DATABASE_PASSWORD` | The database auth password.      |                             |
+| `ALLOWED_ORIGINS`   | The server allowed origins (CORS)|                             |
