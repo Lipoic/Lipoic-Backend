@@ -11,7 +11,7 @@ beforeAll(() => {
   server = createServer();
 });
 
-test('Get / should return 200 & valid response', async () => {
+test('Hello world', async () => {
   const response = await request(server).get(`/`);
 
   expect(response.headers['content-type']).toBe(
@@ -24,5 +24,18 @@ test('Get / should return 200 & valid response', async () => {
     data: {
       message: 'Hello, World!',
     },
+  });
+});
+
+test('Not found page', async () => {
+  const response = await request(server).get(`/test`);
+
+  expect(response.headers['content-type']).toBe(
+    'application/json; charset=utf-8'
+  );
+  expect(response.status).toBe(404);
+  expect(response.body).toMatchObject({
+    code: 404,
+    message: 'Resource not found.',
   });
 });
