@@ -1,11 +1,11 @@
-import { Router, Request, Response } from 'express';
+import { StatusCode } from '@/router/status_code';
+import { APIResponse } from '@/router/resopnse';
+import { Router } from 'express';
 
 const router = Router();
 
-router.get('/', (req: Request, res: Response) => {
-  res.json({
-    message: 'Hello, World!',
-  });
+router.get('/', (_, res) => {
+  new APIResponse(StatusCode.ok, { message: 'Hello, World!' }).send(res);
 });
 
 export default router;

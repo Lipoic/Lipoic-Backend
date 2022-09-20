@@ -12,12 +12,17 @@ beforeAll(() => {
 });
 
 test('Get / should return 200 & valid response', async () => {
-  request(server)
-    .get(`/`)
-    .expect('Content-Type', /json/)
-    .expect(200)
-    .end((err, res) => {
-      if (err) return;
-      expect(res.body).toMatchObject({ message: 'Hello, World!' });
-    });
+  const response = await request(server).get(`/`);
+
+  expect(response.headers['content-type']).toBe(
+    'application/json; charset=utf-8'
+  );
+  expect(response.status).toBe(200);
+  expect(response.body).toMatchObject({
+    code: 200,
+    message: 'OK',
+    data: {
+      message: 'Hello, World!',
+    },
+  });
 });
