@@ -1,6 +1,6 @@
 import { Response } from 'express';
 
-import { getStatusCodeData, StatusCode } from '#';
+import { getCodeData, Code, getStatusCodeData, StatusCode } from '#';
 
 interface IAPIResponse<D> {
   code: number;
@@ -9,10 +9,14 @@ interface IAPIResponse<D> {
 }
 
 export class APIResponse<D = unknown> {
-  constructor(public status_code: StatusCode, public data?: D) {}
+  constructor(
+    public readonly status_code: StatusCode,
+    public readonly code: Code,
+    public readonly data?: D
+  ) {}
 
   serialize(): IAPIResponse<D> {
-    const { code, message } = getStatusCodeData(this.status_code);
+    const { code, message } = getCodeData(this.code);
 
     return {
       code,
@@ -22,10 +26,7 @@ export class APIResponse<D = unknown> {
   }
 
   send(res: Response): void {
-    const { code } = getStatusCodeData(this.status_code);
-
-    // if the status code is a custom code, set it to 400 (Bad Request)
-    const status = code >= 100 ? code : 400;
+    const { status } = getStatusCodeData(this.status_code);
 
     res.status(status).json(this.serialize());
   }

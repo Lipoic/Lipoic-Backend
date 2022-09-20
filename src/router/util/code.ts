@@ -1,14 +1,5 @@
-export enum StatusCode {
-  OK = 200,
-  NOT_FOUND = 404,
-}
-
-export enum StatusCodeMessage {
-  OK = 'OK',
-  NOT_FOUND = 'Resource not found.',
-}
-
-export enum Codes {
+export enum Code {
+  SUCCESS = 0,
   OAUTH_CODE_ERROR = 1,
   OAUTH_GET_USER_INFO_ERROR = 2,
   LOGIN_USER_NOT_FOUND_ERROR = 3,
@@ -16,9 +7,11 @@ export enum Codes {
   SING_UP_EMAIL_ALREADY_REGISTERED = 5,
   VERIFY_EMAIL_ERROR = 6,
   AUTH_ERROR = 7,
+  NOT_FOUND = 8,
 }
 
-export enum CodeMessage {
+enum CodeMessage {
+  SUCCESS = 'Success',
   OAUTH_CODE_ERROR = 'OAuth auth code error.',
   OAUTH_GET_USER_INFO_ERROR = 'OAuth get user info error.',
   LOGIN_USER_NOT_FOUND_ERROR = 'User not found error.',
@@ -26,21 +19,14 @@ export enum CodeMessage {
   SING_UP_EMAIL_ALREADY_REGISTERED = 'This email is already registered.',
   VERIFY_EMAIL_ERROR = 'This code is invalid.',
   AUTH_ERROR = 'This token is invalid.',
+  NOT_FOUND = 'Resource not found.',
 }
 
-export type StatusCodeKeys = keyof typeof StatusCode;
-export type CodeKeys = keyof typeof Codes;
+type CodeKeys = keyof typeof Code;
 
-export const getStatusCodeData = (code: StatusCode) => {
+export const getCodeData = (code: Code) => {
   return {
-    message: StatusCodeMessage[<StatusCodeKeys>StatusCode[code]],
-    code,
-  };
-};
-
-export const getCodeData = (code: Codes) => {
-  return {
-    message: CodeMessage[<CodeKeys>Codes[code]],
+    message: CodeMessage[<CodeKeys>Code[code]],
     code,
   };
 };
