@@ -9,7 +9,7 @@ export function createServer(): Express {
 
   app
     .use(morgan('dev'))
-    .use(cors())
+    .use(cors({ origin: ['http://localhost:8080', 'https://lipoic.org'] }))
     .use(express.json())
     .use(express.urlencoded({ extended: false }));
 
