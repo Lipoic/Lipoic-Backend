@@ -6,6 +6,7 @@ import {
   ResponseStatusCode,
   CreateAPIResponse,
   APIResponseData,
+  SendResponse,
 } from '#/util';
 
 const router = Router();
@@ -18,6 +19,7 @@ router.use((_, res) => {
     HttpStatusCode.NOT_FOUND,
     'Router not found'
   );
+  SendResponse(res, responsePack);
 });
 
 export * from '#/util';
