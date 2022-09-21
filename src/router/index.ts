@@ -17,7 +17,7 @@ router.use((_, res) => {
   const responsePack: APIResponseData = CreateAPIResponse(
     ResponseStatusCode.NOT_FOUND,
     HttpStatusCode.NOT_FOUND,
-    'Router not found'
+    'Router not found.'
   );
   SendResponse(res, responsePack);
 });

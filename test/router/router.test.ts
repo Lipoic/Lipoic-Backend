@@ -19,11 +19,10 @@ test('Hello world', async () => {
   );
   expect(response.status).toBe(200);
   expect(response.body).toMatchObject({
-    code: 0,
     message: 'Success',
-    data: {
-      message: 'Hello, World!',
-    },
+    response_status_code: 0,
+    http_status_code: 200,
+    data: { message: 'hello, world.' },
   });
 });
 
@@ -35,7 +34,9 @@ test('Not found page', async () => {
   );
   expect(response.status).toBe(404);
   expect(response.body).toMatchObject({
-    code: 8,
     message: 'Resource not found.',
+    response_status_code: 8,
+    http_status_code: 404,
+    data: 'Router not found.',
   });
 });
