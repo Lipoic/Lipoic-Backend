@@ -1,33 +1,31 @@
 import { Response } from 'express';
 
-import { getCodeData, Code, getStatusCodeData, StatusCode } from '#';
+import { getCodeData, ResponseStatusCode, HttpStatusCode } from '#';
 
-interface IAPIResponse<D> {
-  code: number;
+export interface APIResponseData {
+  http_status_code: HttpStatusCode;
+  response_status_code: ResponseStatusCode;
   message: string;
-  data?: D;
+  data: any;
 }
 
-export class APIResponse<D = unknown> {
-  constructor(
-    public readonly status_code: StatusCode,
-    public readonly code: Code,
-    public readonly data?: D
-  ) {}
+export const CreateAPIResponse = (
+  response_status_code: ResponseStatusCode,
+  http_status_code: HttpStatusCode = 200,
+  data?: any
+): APIResponseData => {
+  const responsePack: APIResponseData = {
+    message: getCodeData(response_status_code).message,
+    response_status_code,
+    http_status_code,
+    data: data,
+  };
+  return responsePack;
+};
 
-  serialize(): IAPIResponse<D> {
-    const { code, message } = getCodeData(this.code);
-
-    return {
-      code,
-      message,
-      data: this.data,
-    };
-  }
-
-  send(res: Response): void {
-    const { status } = getStatusCodeData(this.status_code);
-
-    res.status(status).json(this.serialize());
-  }
-}
+export const SendResponse = (
+  responseRef: Response,
+  responsePack: APIResponseData
+) => {
+  responseRef.status(responsePack.http_status_code).json(responsePack);
+};

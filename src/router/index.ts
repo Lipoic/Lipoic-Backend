@@ -1,14 +1,23 @@
 import { Router } from 'express';
 
 import api from '#/api';
-import { StatusCode, Code, APIResponse } from '#/util';
+import {
+  HttpStatusCode,
+  ResponseStatusCode,
+  CreateAPIResponse,
+  APIResponseData,
+} from '#/util';
 
 const router = Router();
 
 router.use(api);
 router.use((_, res) => {
   /* handle not found page error */
-  new APIResponse(StatusCode.NOT_FOUND, Code.NOT_FOUND).send(res);
+  const responsePack: APIResponseData = CreateAPIResponse(
+    ResponseStatusCode.NOT_FOUND,
+    HttpStatusCode.NOT_FOUND,
+    'Router not found'
+  );
 });
 
 export * from '#/util';
