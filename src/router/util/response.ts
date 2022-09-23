@@ -2,19 +2,19 @@ import { Response } from 'express';
 
 import { getCodeData, ResponseStatusCode, HttpStatusCode } from '#';
 
-export interface APIResponseData {
+export interface APIResponseData<T> {
   http_status_code: HttpStatusCode;
   response_status_code: ResponseStatusCode;
   message: string;
-  data: any;
+  data: T;
 }
 
-export const CreateAPIResponse = (
+export const createAPIResponse = (
   response_status_code: ResponseStatusCode,
   http_status_code: HttpStatusCode = 200,
   data?: any
-): APIResponseData => {
-  const responsePack: APIResponseData = {
+): APIResponseData<typeof data> => {
+  const responsePack: APIResponseData<typeof data> = {
     message: getCodeData(response_status_code).message,
     response_status_code,
     http_status_code,
@@ -23,9 +23,9 @@ export const CreateAPIResponse = (
   return responsePack;
 };
 
-export const SendResponse = (
+export const sendResponse = (
   responseRef: Response,
-  responsePack: APIResponseData
+  responsePack: APIResponseData<any>
 ) => {
   responseRef.status(responsePack.http_status_code).json(responsePack);
 };
