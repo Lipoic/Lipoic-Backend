@@ -16,8 +16,7 @@ router.use((_, res) => {
   /* handle not found page error */
   const responsePack: APIResponseData<string> = createResponse(
     HttpStatusCode.NOT_FOUND,
-    ResponseStatusCode.NOT_FOUND,
-    'Router not found.'
+    ResponseStatusCode.NOT_FOUND
   );
   sendResponse(res, responsePack);
 });

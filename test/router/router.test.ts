@@ -32,7 +32,6 @@ test('Not found page', async () => {
   );
   expect(response.status).toBe(404);
   expect(response.body).toMatchObject({
-    data: 'Router not found.',
     response_status_code: 8,
   });
 });
