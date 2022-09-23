@@ -1,6 +1,10 @@
 import { Response } from 'express';
 
-import { getCodeData, ResponseStatusCode, HttpStatusCode } from '#';
+import {
+  getResponseStatusCodeData,
+  ResponseStatusCode,
+  HttpStatusCode,
+} from '#';
 
 export interface APIResponseData<T> {
   http_status_code: HttpStatusCode;
@@ -9,22 +13,19 @@ export interface APIResponseData<T> {
   data?: T;
 }
 
-export function createAPIResponse<DataType>(
+export function createResponse<T>(
+  http_status_code = HttpStatusCode.OK,
   response_status_code: ResponseStatusCode,
-  http_status_code: HttpStatusCode = 200,
-  data?: DataType
-): APIResponseData<DataType> {
+  data?: T
+): APIResponseData<T> {
   return {
-    message: getCodeData(response_status_code).message,
-    response_status_code,
+    message: getResponseStatusCodeData(response_status_code).message,
     http_status_code,
+    response_status_code,
     data: data,
   };
 }
 
-export const sendResponse = (
-  responseRef: Response,
-  responsePack: APIResponseData<any>
-) => {
-  responseRef.status(responsePack.http_status_code).json(responsePack);
-};
+export function sendResponse<T>(res: Response, data: APIResponseData<T>): void {
+  res.status(data.http_status_code).json(data);
+}

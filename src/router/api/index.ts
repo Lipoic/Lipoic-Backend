@@ -2,17 +2,17 @@ import { Router } from 'express';
 
 import {
   ResponseStatusCode,
-  CreateAPIResponse,
+  createResponse,
   HttpStatusCode,
-  SendResponse,
+  sendResponse,
 } from '#';
 
 const router = Router();
 
 router.get('/', (_, res) => {
-  SendResponse(
+  sendResponse(
     res,
-    CreateAPIResponse(ResponseStatusCode.SUCCESS, HttpStatusCode.OK, {
+    createResponse(HttpStatusCode.OK, ResponseStatusCode.SUCCESS, {
       message: 'hello, world.',
     })
   );

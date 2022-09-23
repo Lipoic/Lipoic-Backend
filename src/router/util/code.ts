@@ -10,7 +10,7 @@ export enum ResponseStatusCode {
   NOT_FOUND,
 }
 
-enum CodeMessage {
+enum ResponseStatusCodeMessage {
   SUCCESS = 'Success',
   OAUTH_CODE_ERROR = 'OAuth auth code error.',
   OAUTH_GET_USER_INFO_ERROR = 'OAuth get user info error.',
@@ -32,11 +32,14 @@ export enum HttpStatusCode {
   BAD_GATEWAY = 502,
 }
 
-type CodeKeys = keyof typeof ResponseStatusCode;
+type ResponseStatusCodeKeys = keyof typeof ResponseStatusCode;
 
-export const getCodeData = (code: ResponseStatusCode) => {
+export const getResponseStatusCodeData = (code: ResponseStatusCode) => {
   return {
-    message: CodeMessage[<CodeKeys>ResponseStatusCode[code]],
+    message:
+      ResponseStatusCodeMessage[
+        <ResponseStatusCodeKeys>ResponseStatusCode[code]
+      ],
     code,
   };
 };
