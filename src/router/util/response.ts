@@ -26,6 +26,11 @@ export function createResponse<T>(
   };
 }
 
-export function sendResponse<T>(res: Response, data: APIResponseData<T>): void {
-  res.status(data.http_status_code).json(data);
+export function sendResponse<T>(
+  res: Response,
+  responseData: APIResponseData<T>
+): void {
+  const { message, data, http_status_code, response_status_code } =
+    responseData;
+  res.status(http_status_code).json({ data, message, response_status_code });
 }
