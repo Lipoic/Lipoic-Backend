@@ -6,22 +6,22 @@ export interface APIResponseData<T> {
   http_status_code: HttpStatusCode;
   response_status_code: ResponseStatusCode;
   message: string;
-  data: T;
+  data?: T;
 }
 
-export const createAPIResponse = (
+export function createAPIResponse<DataType>(
   response_status_code: ResponseStatusCode,
   http_status_code: HttpStatusCode = 200,
-  data?: any
-): APIResponseData<typeof data> => {
-  const responsePack: APIResponseData<typeof data> = {
+  data?: DataType
+): APIResponseData<typeof data> {
+  const responsePack: APIResponseData<DataType> = {
     message: getCodeData(response_status_code).message,
     response_status_code,
     http_status_code,
     data: data,
   };
   return responsePack;
-};
+}
 
 export const sendResponse = (
   responseRef: Response,
