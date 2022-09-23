@@ -13,14 +13,13 @@ export function createAPIResponse<DataType>(
   response_status_code: ResponseStatusCode,
   http_status_code: HttpStatusCode = 200,
   data?: DataType
-): APIResponseData<typeof data> {
-  const responsePack: APIResponseData<DataType> = {
+): APIResponseData<DataType> {
+  return {
     message: getCodeData(response_status_code).message,
     response_status_code,
     http_status_code,
     data: data,
   };
-  return responsePack;
 }
 
 export const sendResponse = (
