@@ -19,8 +19,8 @@ test('Hello world', async () => {
   );
   expect(response.status).toBe(200);
   expect(response.body).toMatchObject({
-    data: { message: 'hello, world.' },
-    response_status_code: 0,
+    data: { message: 'Hello, World!' },
+    code: 0,
   });
 });
 
@@ -32,6 +32,6 @@ test('Not found page', async () => {
   );
   expect(response.status).toBe(404);
   expect(response.body).toMatchObject({
-    response_status_code: 8,
+    code: 8,
   });
 });
