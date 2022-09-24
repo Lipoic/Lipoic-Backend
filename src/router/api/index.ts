@@ -1,19 +1,17 @@
 import { Router } from 'express';
 
 import { ResponseStatusCode, sendResponse } from '#';
-import authenticationAPI from '#/api/authentication';
-import userAPI from '#/api/user';
+import { authenticationRouter } from '#/api/authentication';
+import { userRouter } from '#/api/user';
 
-const router = Router();
+export const apiRouter = Router();
 
-router.get('/', (_, res) => {
+apiRouter.get('/', (_, res) => {
   sendResponse(res, {
     code: ResponseStatusCode.SUCCESS,
     data: { message: 'Hello, World!' },
   });
 });
 
-router.use('/authentication', authenticationAPI);
-router.use('/user', userAPI);
-
-export default router;
+apiRouter.use('/authentication', authenticationRouter);
+apiRouter.use('/user', userRouter);
