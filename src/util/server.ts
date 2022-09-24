@@ -5,11 +5,11 @@ import router from '#';
 
 export function createServer(): Express {
   const app: Express = express();
-  const allowed_origins = process.env.ALLOWED_ORIGINS?.split(',');
+  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',');
 
   app
     .use(morgan('dev'))
-    .use(cors({ origin: allowed_origins }))
+    .use(cors({ origin: allowedOrigins }))
     .use(express.json())
     .use(express.urlencoded({ extended: false }));
 

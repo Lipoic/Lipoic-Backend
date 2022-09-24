@@ -1,13 +1,14 @@
 import { Router } from 'express';
 
-import { Code, APIResponse, StatusCode } from '#';
+import { ResponseStatusCode, sendResponse } from '#';
 
 const router = Router();
 
 router.get('/', (_, res) => {
-  new APIResponse(StatusCode.OK, Code.SUCCESS, {
-    message: 'Hello, World!',
-  }).send(res);
+  sendResponse(res, {
+    code: ResponseStatusCode.SUCCESS,
+    data: { message: 'Hello, World!' },
+  });
 });
 
 export default router;
