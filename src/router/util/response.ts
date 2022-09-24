@@ -2,28 +2,21 @@ import { Response } from 'express';
 
 import { ResponseStatusCode, HttpStatusCode } from '#';
 
-export interface APIResponseData<T> {
-  http_status_code: HttpStatusCode;
-  response_status_code: ResponseStatusCode;
+export interface APIResponseBody<T> {
+  code: ResponseStatusCode;
   data?: T;
 }
 
-export function createResponse<T>(
-  http_status_code = HttpStatusCode.OK,
-  response_status_code: ResponseStatusCode,
-  data?: T
-): APIResponseData<T> {
-  return {
-    http_status_code,
-    response_status_code,
-    data: data,
-  };
-}
-
+/**
+ * Send a api response body to the client.
+ * @param res The response object from express.
+ * @param body The response body.
+ * @param httpStatusCode The HTTP status code.
+ */
 export function sendResponse<T>(
   res: Response,
-  responseData: APIResponseData<T>
+  body: APIResponseBody<T>,
+  httpStatusCode = HttpStatusCode.OK
 ): void {
-  const { data, http_status_code, response_status_code } = responseData;
-  res.status(http_status_code).json({ data, response_status_code });
+  res.status(httpStatusCode).json(body);
 }
