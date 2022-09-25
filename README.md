@@ -49,3 +49,5 @@ You can find an example in [`.env.example`](.env.example).
 | `ALLOWED_ORIGINS`   | The server allowed origins (CORS)|                             |
 |`GOOGLE_OAUTH_SECRET`| Google OAuth client secret       |                             |
 | `GOOGLE_OAUTH_ID`   | Google OAuth client id           |                             |
+|`FACEBOOK_OAUTH_SECRET`| Facebook OAuth client secret   |                             |
+|`FACEBOOK_OAUTH_ID`  | Facebook OAuth client id         |                             |

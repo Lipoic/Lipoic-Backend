@@ -97,3 +97,92 @@ describe('Google OAuth', () => {
     });
   });
 });
+
+describe('Facebook OAuth', () => {
+  test('Get facebook auth URL', async () => {
+    process.env.FACEBOOK_OAUTH_SECRET = 'test';
+    process.env.FACEBOOK_OAUTH_ID = 'test';
+
+    const response = await supertest(server).get(
+      `/authentication/facebook/url?redirect_uri=https://localhost:3000/login`
+    );
+
+    expect(response.status).toBe(200);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 0,
+      data: {
+        url: 'https://www.facebook.com/dialog/oauth?client_id=test&redirect_uri=https%3A%2F%2Flocalhost%3A3000%2Flogin&scope=public_profile%2Cemail&response_type=code',
+      },
+    });
+
+    delete process.env.FACEBOOK_OAUTH_SECRET;
+    delete process.env.FACEBOOK_OAUTH_ID;
+  });
+
+  test('Get facebook auth URL without redirect_uri', async () => {
+    const response = await supertest(server).get(
+      `/authentication/facebook/url`
+    );
+
+    expect(response.status).toBe(400);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 2,
+    });
+  });
+
+  test('Get facebook auth URL without client secret', async () => {
+    process.env.FACEBOOK_OAUTH_ID = 'test';
+
+    const response = await supertest(server).get(
+      `/authentication/facebook/url?redirect_uri=https://localhost:3000/login`
+    );
+
+    expect(response.status).toBe(500);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 2,
+    });
+
+    delete process.env.FACEBOOK_OAUTH_ID;
+  });
+
+  test('Get facebook auth URL without client id', async () => {
+    process.env.FACEBOOK_OAUTH_SECRET = 'test';
+
+    const response = await supertest(server).get(
+      `/authentication/facebook/url?redirect_uri=https://localhost:3000/login`
+    );
+
+    expect(response.status).toBe(500);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 2,
+    });
+
+    delete process.env.FACEBOOK_OAUTH_SECRET;
+  });
+
+  test('Get facebook auth URL without client id and secret', async () => {
+    const response = await supertest(server).get(
+      `/authentication/facebook/url?redirect_uri=https://localhost:3000/login`
+    );
+
+    expect(response.status).toBe(500);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 2,
+    });
+  });
+});
