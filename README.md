@@ -47,3 +47,5 @@ You can find an example in [`.env.example`](.env.example).
 | `DATABASE_USERNAME` | The database auth username.      |                             |
 | `DATABASE_PASSWORD` | The database auth password.      |                             |
 | `ALLOWED_ORIGINS`   | The server allowed origins (CORS)|                             |
+|`GOOGLE_OAUTH_SECRET`| Google OAuth client secret       |                             |
+| `GOOGLE_OAUTH_ID`   | Google OAuth client id           |                             |

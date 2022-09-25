@@ -1,5 +1,5 @@
 import { createServer } from '@/util/server';
-import request from 'supertest';
+import supertest from 'supertest';
 import { Express } from 'express-serve-static-core';
 import { test, expect, beforeAll } from 'vitest';
 import { init } from '@/util/init';
@@ -12,26 +12,26 @@ beforeAll(() => {
 });
 
 test('Hello world', async () => {
-  const response = await request(server).get(`/`);
+  const response = await supertest(server).get(`/`);
 
   expect(response.headers['content-type']).toBe(
     'application/json; charset=utf-8'
   );
   expect(response.status).toBe(200);
-  expect(response.body).toMatchObject({
+  expect(response.body).toEqual({
     data: { message: 'Hello, World!' },
     code: 0,
   });
 });
 
 test('Not found page', async () => {
-  const response = await request(server).get(`/test`);
+  const response = await supertest(server).get(`/test`);
 
   expect(response.headers['content-type']).toBe(
     'application/json; charset=utf-8'
   );
   expect(response.status).toBe(404);
-  expect(response.body).toMatchObject({
-    code: 8,
+  expect(response.body).toEqual({
+    code: 1,
   });
 });
