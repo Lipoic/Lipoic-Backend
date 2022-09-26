@@ -3,9 +3,9 @@ import { OauthData } from '#/api/authentication/oauth_data';
 import { HttpStatusCode, ResponseStatusCode, sendResponse } from '#/util';
 import { Router } from 'express';
 
-export const authenticationRouter = Router();
+const router = Router();
 
-authenticationRouter.get('/google/url', (req, res) => {
+router.get('/google/url', (req, res) => {
   const redirectUri = req.query.redirect_uri;
 
   if (typeof redirectUri !== 'string') {
@@ -42,7 +42,7 @@ authenticationRouter.get('/google/url', (req, res) => {
   });
 });
 
-authenticationRouter.get('/facebook/url', (req, res) => {
+router.get('/facebook/url', (req, res) => {
   const redirectUri = req.query.redirect_uri;
 
   if (typeof redirectUri !== 'string') {
@@ -77,3 +77,5 @@ authenticationRouter.get('/facebook/url', (req, res) => {
     data: { url: oauth.getAuthUrl() },
   });
 });
+
+export { router as authenticationRouter };

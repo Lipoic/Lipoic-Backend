@@ -1,7 +1,7 @@
+import { authenticationRouter } from '#/api/authentication';
 import { Router } from 'express';
 
 import { ResponseStatusCode, sendResponse } from '#';
-import { authenticationRouter } from '#/api/authentication';
 import { userRouter } from '@/router/api/user';
 
 export const apiRouter = Router();
