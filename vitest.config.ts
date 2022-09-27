@@ -19,6 +19,7 @@ export default defineConfig({
         'src/index.ts',
         '.eslintrc.js',
         'vitest.config.ts',
+        'swagger.ts',
       ],
     },
   },

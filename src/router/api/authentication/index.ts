@@ -6,9 +6,17 @@ import { Router } from 'express';
 const router = Router();
 
 router.get('/google/url', (req, res) => {
+  // #swagger.tags = ['Authentication']
+  // #swagger.description = 'Get google oauth url'
+
   const redirectUri = req.query.redirect_uri;
 
   if (typeof redirectUri !== 'string') {
+    /* #swagger.responses[400] = {
+      schema: {
+        code: 2,
+      },
+    }; */
     sendResponse(
       res,
       { code: ResponseStatusCode.GET_AUTH_URL_ERROR },
@@ -21,6 +29,11 @@ router.get('/google/url', (req, res) => {
   const clientId = process.env.GOOGLE_OAUTH_ID;
 
   if (clientSecret === undefined || clientId === undefined) {
+    /* #swagger.responses[500] = {
+      schema: {
+        code: 2,
+      },
+    }; */
     sendResponse(
       res,
       { code: ResponseStatusCode.GET_AUTH_URL_ERROR },
@@ -36,6 +49,12 @@ router.get('/google/url', (req, res) => {
     redirectUri
   );
 
+  /* #swagger.responses[200] = {
+    schema: {
+      code: 0,
+      data: { $ref: '#/components/schemas/AuthURL' },
+    },
+  }; */
   sendResponse(res, {
     code: ResponseStatusCode.SUCCESS,
     data: { url: oauth.getAuthUrl() },
@@ -43,9 +62,17 @@ router.get('/google/url', (req, res) => {
 });
 
 router.get('/facebook/url', (req, res) => {
+  // #swagger.tags = ['Authentication']
+  // #swagger.description = 'Get facebook oauth url'
+
   const redirectUri = req.query.redirect_uri;
 
   if (typeof redirectUri !== 'string') {
+    /* #swagger.responses[400] = {
+      schema: {
+        code: 2,
+      },
+    }; */
     sendResponse(
       res,
       { code: ResponseStatusCode.GET_AUTH_URL_ERROR },
@@ -58,6 +85,11 @@ router.get('/facebook/url', (req, res) => {
   const clientId = process.env.FACEBOOK_OAUTH_ID;
 
   if (clientSecret === undefined || clientId === undefined) {
+    /* #swagger.responses[500] = {
+      schema: {
+        code: 2,
+      },
+    }; */
     sendResponse(
       res,
       { code: ResponseStatusCode.GET_AUTH_URL_ERROR },
@@ -72,6 +104,12 @@ router.get('/facebook/url', (req, res) => {
     redirectUri
   );
 
+  /* #swagger.responses[200] = {
+    schema: {
+      code: 0,
+      data: { $ref: '#/components/schemas/AuthURL' },
+    },
+  }; */
   sendResponse(res, {
     code: ResponseStatusCode.SUCCESS,
     data: { url: oauth.getAuthUrl() },
