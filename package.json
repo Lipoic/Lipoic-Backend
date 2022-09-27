@@ -12,7 +12,7 @@
     "start": "yarn swagger && yarn build && node dist/src/index.js",
     "lint": "eslint src/**/*.ts --fix",
     "test": "yarn swagger && vitest",
-    "coverage": "vitest run --coverage",
+    "coverage": "yarn swagger && vitest run --coverage",
     "swagger": "ts-node swagger.ts"
   },
   "dependencies": {
