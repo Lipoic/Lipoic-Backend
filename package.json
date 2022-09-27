@@ -7,11 +7,11 @@
   "author": "Lipoic backend team",
   "license": "GPL-3.0",
   "scripts": {
-    "build": "tsc && tsc-alias",
-    "dev": "concurrently \"tsc -w\" \"tsc-alias -w\" \"nodemon dist/src/index.js\"",
+    "build": "yarn swagger && tsc && tsc-alias",
+    "dev": "yarn swagger && concurrently \"tsc -w\" \"tsc-alias -w\" \"nodemon dist/src/index.js\"",
     "start": "yarn swagger && yarn build && node dist/src/index.js",
     "lint": "eslint src/**/*.ts --fix",
-    "test": "vitest",
+    "test": "yarn swagger && vitest",
     "coverage": "vitest run --coverage",
     "swagger": "ts-node swagger.ts"
   },
