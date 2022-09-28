@@ -1,4 +1,3 @@
-import console from 'console';
 import swaggerAutogen from 'swagger-autogen';
 
 const doc = {

@@ -9,7 +9,7 @@ router.get('/google/url', (req, res) => {
   // #swagger.tags = ['Authentication']
   // #swagger.description = 'Get google oauth url'
 
-  const redirectUri = req.query.redirect_uri;
+  const redirectUri = req.query.redirectUri;
 
   if (typeof redirectUri !== 'string') {
     /* #swagger.responses[400] = {
@@ -65,7 +65,7 @@ router.get('/facebook/url', (req, res) => {
   // #swagger.tags = ['Authentication']
   // #swagger.description = 'Get facebook oauth url'
 
-  const redirectUri = req.query.redirect_uri;
+  const redirectUri = req.query.redirectUri;
 
   if (typeof redirectUri !== 'string') {
     /* #swagger.responses[400] = {

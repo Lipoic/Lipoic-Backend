@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 
 export interface LessonPermission {
-  permission_type: string;
+  permissionType: string;
   allows?: Types.ObjectId[];
 }
 

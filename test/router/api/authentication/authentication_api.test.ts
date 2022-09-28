@@ -17,7 +17,7 @@ describe('Google OAuth', () => {
     process.env.GOOGLE_OAUTH_ID = 'test';
 
     const response = await supertest(server).get(
-      `/authentication/google/url?redirect_uri=https://localhost:3000/login`
+      `/authentication/google/url?redirectUri=https://localhost:3000/login`
     );
 
     expect(response.status).toBe(200);
@@ -35,7 +35,7 @@ describe('Google OAuth', () => {
     delete process.env.GOOGLE_OAUTH_ID;
   });
 
-  test('Get google auth URL without redirect_uri', async () => {
+  test('Get google auth URL without redirectUri', async () => {
     const response = await supertest(server).get(`/authentication/google/url`);
 
     expect(response.status).toBe(400);
@@ -51,7 +51,7 @@ describe('Google OAuth', () => {
     process.env.GOOGLE_OAUTH_ID = 'test';
 
     const response = await supertest(server).get(
-      `/authentication/google/url?redirect_uri=https://localhost:3000/login`
+      `/authentication/google/url?redirectUri=https://localhost:3000/login`
     );
 
     expect(response.status).toBe(500);
@@ -69,7 +69,7 @@ describe('Google OAuth', () => {
     process.env.GOOGLE_OAUTH_SECRET = 'test';
 
     const response = await supertest(server).get(
-      `/authentication/google/url?redirect_uri=https://localhost:3000/login`
+      `/authentication/google/url?redirectUri=https://localhost:3000/login`
     );
 
     expect(response.status).toBe(500);
@@ -85,7 +85,7 @@ describe('Google OAuth', () => {
 
   test('Get google auth URL without client id and secret', async () => {
     const response = await supertest(server).get(
-      `/authentication/google/url?redirect_uri=https://localhost:3000/login`
+      `/authentication/google/url?redirectUri=https://localhost:3000/login`
     );
 
     expect(response.status).toBe(500);
@@ -104,7 +104,7 @@ describe('Facebook OAuth', () => {
     process.env.FACEBOOK_OAUTH_ID = 'test';
 
     const response = await supertest(server).get(
-      `/authentication/facebook/url?redirect_uri=https://localhost:3000/login`
+      `/authentication/facebook/url?redirectUri=https://localhost:3000/login`
     );
 
     expect(response.status).toBe(200);
@@ -122,7 +122,7 @@ describe('Facebook OAuth', () => {
     delete process.env.FACEBOOK_OAUTH_ID;
   });
 
-  test('Get facebook auth URL without redirect_uri', async () => {
+  test('Get facebook auth URL without redirectUri', async () => {
     const response = await supertest(server).get(
       `/authentication/facebook/url`
     );
@@ -140,7 +140,7 @@ describe('Facebook OAuth', () => {
     process.env.FACEBOOK_OAUTH_ID = 'test';
 
     const response = await supertest(server).get(
-      `/authentication/facebook/url?redirect_uri=https://localhost:3000/login`
+      `/authentication/facebook/url?redirectUri=https://localhost:3000/login`
     );
 
     expect(response.status).toBe(500);
@@ -158,7 +158,7 @@ describe('Facebook OAuth', () => {
     process.env.FACEBOOK_OAUTH_SECRET = 'test';
 
     const response = await supertest(server).get(
-      `/authentication/facebook/url?redirect_uri=https://localhost:3000/login`
+      `/authentication/facebook/url?redirectUri=https://localhost:3000/login`
     );
 
     expect(response.status).toBe(500);
@@ -174,7 +174,7 @@ describe('Facebook OAuth', () => {
 
   test('Get facebook auth URL without client id and secret', async () => {
     const response = await supertest(server).get(
-      `/authentication/facebook/url?redirect_uri=https://localhost:3000/login`
+      `/authentication/facebook/url?redirectUri=https://localhost:3000/login`
     );
 
     expect(response.status).toBe(500);
