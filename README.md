@@ -51,3 +51,4 @@ You can find an example in [`.env.example`](.env.example).
 | `GOOGLE_OAUTH_ID`       | Google OAuth client id            |                             |
 | `FACEBOOK_OAUTH_SECRET` | Facebook OAuth client secret      |                             |
 | `FACEBOOK_OAUTH_ID`     | Facebook OAuth client id          |                             |
+| `CLOUDFLARE`            |The server is proxied by Cloudflare| `false`                     |

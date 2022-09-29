@@ -16,7 +16,7 @@ const doc = {
       description: 'Internal server for testing',
     },
   ],
-  tags: ['Other', 'Authentication'],
+  tags: ['Main', 'Authentication'],
   components: {
     '@schemas': {
       AuthURL: {
@@ -47,7 +47,12 @@ const doc = {
       ResponseStatusCode: {
         type: 'number',
         description: 'Response status code',
-        enum: ['SUCCESS (0)', 'NOT_FOUND (1)', 'GET_AUTH_URL_ERROR (2)'],
+        enum: [
+          'SUCCESS (0)',
+          'NOT_FOUND (1)',
+          'GET_AUTH_URL_ERROR (2)',
+          'OAUTH_CODE_CALLBACK_ERROR (3)',
+        ],
       },
     },
     securitySchemes: {
