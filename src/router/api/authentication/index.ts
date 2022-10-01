@@ -2,11 +2,14 @@ import { ConnectType } from '@/model/auth/connect_account';
 import { OauthData } from '#/api/authentication/oauth_data';
 import { HttpStatusCode, ResponseStatusCode, sendResponse } from '#/util';
 import { Router } from 'express';
+import { connectOAuthAccount } from '#/api/authentication/util';
+import { getIp } from '@/router/util/util';
+import { createJWTToken } from '@/util/jwt';
+import { User } from '@/model/auth/user';
 
 const router = Router();
 
 router.get('/google/url', (req, res) => {
-  // #swagger.tags = ['Authentication']
   // #swagger.description = 'Get google oauth url'
 
   const redirectUri = req.query.redirectUri;
@@ -28,7 +31,7 @@ router.get('/google/url', (req, res) => {
   const clientSecret = process.env.GOOGLE_OAUTH_SECRET;
   const clientId = process.env.GOOGLE_OAUTH_ID;
 
-  if (clientSecret === undefined || clientId === undefined) {
+  if (!clientSecret || !clientId) {
     /* #swagger.responses[500] = {
       schema: {
         code: 2,
@@ -62,7 +65,6 @@ router.get('/google/url', (req, res) => {
 });
 
 router.get('/facebook/url', (req, res) => {
-  // #swagger.tags = ['Authentication']
   // #swagger.description = 'Get facebook oauth url'
 
   const redirectUri = req.query.redirectUri;
@@ -84,7 +86,7 @@ router.get('/facebook/url', (req, res) => {
   const clientSecret = process.env.FACEBOOK_OAUTH_SECRET;
   const clientId = process.env.FACEBOOK_OAUTH_ID;
 
-  if (clientSecret === undefined || clientId === undefined) {
+  if (!clientSecret || !clientId) {
     /* #swagger.responses[500] = {
       schema: {
         code: 2,
@@ -113,6 +115,86 @@ router.get('/facebook/url', (req, res) => {
   sendResponse(res, {
     code: ResponseStatusCode.SUCCESS,
     data: { url: oauth.getAuthUrl() },
+  });
+});
+
+router.get('/google/callback', async (req, res) => {
+  // #swagger.description = 'Get access token by google oauth code'
+
+  const code = req.query.code;
+  const redirectUri = req.query.redirectUri;
+
+  if (typeof code !== 'string' || typeof redirectUri !== 'string') {
+    /* #swagger.responses[400] = {
+      schema: {
+        code: 3,
+      },
+    }; */
+    sendResponse(
+      res,
+      { code: ResponseStatusCode.OAUTH_CODE_CALLBACK_ERROR },
+      HttpStatusCode.BAD_REQUEST
+    );
+    return;
+  }
+
+  const clientSecret = process.env.GOOGLE_OAUTH_SECRET;
+  const clientId = process.env.GOOGLE_OAUTH_ID;
+
+  if (!clientSecret || !clientId) {
+    /* #swagger.responses[500] = {
+      schema: {
+        code: 3,
+      },
+    }; */
+    sendResponse(
+      res,
+      { code: ResponseStatusCode.OAUTH_CODE_CALLBACK_ERROR },
+      HttpStatusCode.INTERNAL_SERVER_ERROR
+    );
+    return;
+  }
+
+  const oauth = new OauthData(
+    ConnectType.Google,
+    clientSecret,
+    clientId,
+    redirectUri
+  );
+
+  const accountInfo = await connectOAuthAccount(oauth, code, getIp(req));
+
+  if (!accountInfo) {
+    sendResponse(
+      res,
+      { code: ResponseStatusCode.OAUTH_CODE_CALLBACK_ERROR },
+      HttpStatusCode.INTERNAL_SERVER_ERROR
+    );
+    return;
+  }
+
+  const user = await User.findOne().where('email').equals(accountInfo.email);
+
+  if (!user) {
+    sendResponse(
+      res,
+      { code: ResponseStatusCode.OAUTH_CODE_CALLBACK_ERROR },
+      HttpStatusCode.INTERNAL_SERVER_ERROR
+    );
+    return;
+  }
+
+  const token = createJWTToken(user);
+
+  /* #swagger.responses[200] = {
+    schema: {
+      code: 0,
+      data: { $ref: '#/components/schemas/AccessToken' },
+    },
+  }; */
+  sendResponse(res, {
+    code: ResponseStatusCode.SUCCESS,
+    data: { token: token },
   });
 });
 

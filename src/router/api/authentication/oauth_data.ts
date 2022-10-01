@@ -1,4 +1,6 @@
+import { OauthAccessInfo } from '@/router/api/authentication/oauth_access_info';
 import { ConnectType } from '@/model/auth/connect_account';
+import axios, { AxiosResponse } from 'axios';
 
 export class OauthData {
   readonly accountType: ConnectType;
@@ -27,6 +29,46 @@ export class OauthData {
     return `${uriPrefix}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code`;
   }
 
+  public async getAccessInfo(code: string): Promise<OauthAccessInfo> {
+    let redirectUri = this.redirectUri;
+
+    // Because Facebook OAuth requires "/" at the end of the redirect uri
+    if (
+      this.accountType === ConnectType.Facebook &&
+      !redirectUri.endsWith('/')
+    ) {
+      redirectUri += '/';
+    }
+
+    const data: Record<string, string> = {
+      client_id: this.clientId,
+      client_secret: this.clientSecret,
+      code,
+      redirect_uri: redirectUri,
+    };
+
+    const token_url = this.#getTokenUrl();
+    let response: AxiosResponse;
+
+    switch (this.accountType) {
+      case ConnectType.Google:
+        data['grant_type'] = 'authorization_code';
+        response = await axios.postForm(token_url, data);
+        break;
+      case ConnectType.Facebook:
+        response = await axios.get(token_url, { params: data });
+        break;
+    }
+
+    const response_data = response.data;
+
+    return new OauthAccessInfo(
+      response_data.access_token,
+      response_data.expires_in,
+      response_data.token_type
+    );
+  }
+
   #getScope() {
     switch (this.accountType) {
       case ConnectType.Google:
@@ -42,6 +84,15 @@ export class OauthData {
         return 'https://accounts.google.com/o/oauth2/auth';
       case ConnectType.Facebook:
         return 'https://www.facebook.com/dialog/oauth';
+    }
+  }
+
+  #getTokenUrl() {
+    switch (this.accountType) {
+      case ConnectType.Google:
+        return 'https://oauth2.googleapis.com/token';
+      case ConnectType.Facebook:
+        return 'https://www.googleapis.com/oauth2/v1/userinfo?alt=json';
     }
   }
 }

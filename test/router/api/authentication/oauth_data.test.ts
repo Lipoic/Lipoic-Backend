@@ -1,9 +1,13 @@
+import { init } from '@/util/init';
 import { ConnectType } from '@/model/auth/connect_account';
 import { OauthData } from '#/api/authentication/oauth_data';
-import { expect, test } from 'vitest';
+import { expect, test, beforeEach } from 'vitest';
 
 const clientId = 'The client id';
 const clientSecret = 'The client secret';
+
+// Reset data after each test "important for test isolation"
+beforeEach(() => init());
 
 test('Get auth URL with google account type', () => {
   const oauth = new OauthData(

@@ -1,15 +1,17 @@
 import { createServer } from '@/util/server';
 import supertest from 'supertest';
 import { Express } from 'express-serve-static-core';
-import { test, expect, beforeAll, describe } from 'vitest';
+import { test, expect, beforeAll, describe, beforeEach } from 'vitest';
 import { init } from '@/util/init';
 
 let server: Express;
 
 beforeAll(() => {
-  init();
   server = createServer();
 });
+
+// Reset data after each test "important for test isolation"
+beforeEach(() => init());
 
 test('Hello world', async () => {
   const response = await supertest(server).get(`/`);

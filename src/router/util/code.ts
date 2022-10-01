@@ -2,6 +2,7 @@ export enum ResponseStatusCode {
   SUCCESS,
   NOT_FOUND,
   GET_AUTH_URL_ERROR,
+  OAUTH_CODE_CALLBACK_ERROR,
 }
 
 export enum HttpStatusCode {

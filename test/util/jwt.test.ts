@@ -7,11 +7,12 @@ import { findJWTKeys, init } from '@/util/init';
 import jwt from 'jsonwebtoken';
 
 beforeAll(async () => {
-  init();
   await connectDatabase();
 });
 
+// Reset data after each test "important for test isolation"
 beforeEach(() => {
+  init();
   findJWTKeys();
 });
 
@@ -25,8 +26,6 @@ describe('Create JWT Token', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
 
     const token = createJWTToken(user);
@@ -46,8 +45,6 @@ describe('Create JWT Token', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
 
     expect(process.env.JWT_PRIVATE_KEY).toBeUndefined();
@@ -64,8 +61,6 @@ describe('Verify JWT Token', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
 
     await user.save();
@@ -103,8 +98,6 @@ describe('Verify JWT Token', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
 
     await user.save();
@@ -122,14 +115,14 @@ describe('Verify JWT Token', () => {
     await user.delete();
   });
 
-  test('Verify a token with invalid token', async () => {
+  test('Verify a token and invalid token', async () => {
     const token = 'invalid token';
     const verifyUser = await verifyJWTToken(token);
 
     expect(verifyUser).toBeNull();
   });
 
-  test('Verify a token with invalid payload', async () => {
+  test('Verify a token and invalid payload', async () => {
     const privateKey = process.env.JWT_PRIVATE_KEY;
 
     expect(privateKey).toBeDefined();
@@ -146,7 +139,7 @@ describe('Verify JWT Token', () => {
     expect(verifyUser).toBeNull();
   });
 
-  test('Verify a token with invalid user', async () => {
+  test('Verify a token and invalid user', async () => {
     const user = new User({
       username: 'test',
       email: 'test@test.com',
@@ -154,8 +147,6 @@ describe('Verify JWT Token', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      createdAt: new Date(),
-      updatedAt: new Date(),
     });
 
     const token = createJWTToken(user);
