@@ -1,3 +1,4 @@
+import { ResponseStatusCode } from './src/router/util/code';
 import swaggerAutogen from 'swagger-autogen';
 
 const doc = {
@@ -19,18 +20,6 @@ const doc = {
   tags: ['Main', 'Authentication'],
   components: {
     '@schemas': {
-      AuthURL: {
-        type: 'object',
-        required: ['url'],
-        properties: {
-          url: {
-            type: 'string',
-          },
-        },
-        example: {
-          url: 'https://accounts.google.com/o/oauth2/auth?client_id=test&redirect_uri=https%3A%2F%2Flocalhost%3A3000%2Flogin&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&response_type=code',
-        },
-      },
       APIResponse: {
         type: 'object',
         required: ['code'],
@@ -47,12 +36,34 @@ const doc = {
       ResponseStatusCode: {
         type: 'number',
         description: 'Response status code',
-        enum: [
-          'SUCCESS (0)',
-          'NOT_FOUND (1)',
-          'GET_AUTH_URL_ERROR (2)',
-          'OAUTH_CODE_CALLBACK_ERROR (3)',
-        ],
+        enum: Object.values(ResponseStatusCode)
+          .filter((value) => typeof value !== 'number')
+          .map(
+            (value) =>
+              `${value} (${ResponseStatusCode[value as ResponseStatusCode]})`
+          ),
+      },
+      AuthURL: {
+        type: 'object',
+        required: ['url'],
+        properties: {
+          url: {
+            type: 'string',
+            example:
+              'https://accounts.google.com/o/oauth2/auth?client_id=test&redirect_uri=https%3A%2F%2Flocalhost%3A3000%2Flogin&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&response_type=code',
+          },
+        },
+      },
+      AccessToken: {
+        type: 'object',
+        required: ['token'],
+        properties: {
+          token: {
+            type: 'string',
+            example:
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+          },
+        },
       },
     },
     securitySchemes: {

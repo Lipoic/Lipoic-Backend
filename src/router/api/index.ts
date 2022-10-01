@@ -24,6 +24,7 @@ apiRouter.get('/', (_, res) => {
 
 apiRouter.get('/ip', (req, res) => {
   // #swagger.tags = ['Main']
+  // #swagger.description = 'Get the ip address of the client'
   /* #swagger.responses[200] = {
     schema: {
       code: 0,
@@ -39,5 +40,9 @@ apiRouter.get('/ip', (req, res) => {
   });
 });
 
-apiRouter.use('/authentication', authenticationRouter);
+apiRouter.use(
+  '/authentication',
+  authenticationRouter
+  // #swagger.tags = ['Authentication']
+);
 apiRouter.use('/user', userRouter);

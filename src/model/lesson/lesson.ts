@@ -1,4 +1,4 @@
-import { model, Schema, Types } from 'mongoose';
+import { HydratedDocument, model, Schema, Types } from 'mongoose';
 import {
   LessonPermission,
   LessonPermissionType,
@@ -6,7 +6,7 @@ import {
 import { LessonState } from '@/model/lesson/lesson_state';
 import { User } from '@/model/auth/user';
 
-export interface ILesson {
+interface ILesson {
   name: string;
   description?: string;
   createdAt: Date;
@@ -43,3 +43,4 @@ const lessonSchema = new Schema<ILesson>(
 );
 
 export const Lesson = model<ILesson>('lesson', lessonSchema);
+export type LessonDocument = HydratedDocument<ILesson>;

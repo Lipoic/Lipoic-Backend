@@ -52,3 +52,14 @@ You can find an example in [`.env.example`](.env.example).
 | `FACEBOOK_OAUTH_SECRET` | Facebook OAuth client secret      |                             |
 | `FACEBOOK_OAUTH_ID`     | Facebook OAuth client id          |                             |
 | `CLOUDFLARE`            |The server is proxied by Cloudflare| `false`                     |
+| `JWT_PRIVATE_KEY`       | The ECDSA privacy key used to sign the token|                         |
+| `JWT_PUBLIC_KEY`        | The ECDSA public key used to verify the token|                        |
+
+### Generate JWT keys
+Generate keys for signing and verifying JWT tokens
+
+```shell
+openssl ecparam -genkey -name secp256k1 -noout -out jwt_private_key.pem
+openssl ec -in jwt_private_key.pem -pubout -out jwt_public_key.pem
+```
+

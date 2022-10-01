@@ -1,8 +1,6 @@
 import { createServer } from '@/util/server';
-import Database, { connectDatabase } from '@/database';
+import { connectDatabase } from '@/database';
 import { init } from '@/util/init';
-
-export let db: Database;
 
 async function main() {
   init();
@@ -14,7 +12,7 @@ async function main() {
   });
 
   try {
-    db = await connectDatabase();
+    await connectDatabase();
     console.log('Successfully connected to database');
   } catch (error) {
     console.error('Failed to connect to database', error);

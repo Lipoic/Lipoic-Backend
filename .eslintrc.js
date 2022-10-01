@@ -9,6 +9,6 @@ module.exports = {
   root: true,
   rules: {
     '@typescript-eslint/ban-ts-comment': 'off',
-    'prettier/prettier': ['error'],
+    'prettier/prettier': ['warn', { endOfLine: 'auto' }],
   },
 };

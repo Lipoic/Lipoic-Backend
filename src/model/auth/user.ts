@@ -1,8 +1,8 @@
-import { model, Schema, Types } from 'mongoose';
+import { HydratedDocument, model, Schema, Types } from 'mongoose';
 import { UserMode } from '@/model/auth/user_mode';
 import { ConnectAccount, ConnectType } from '@/model/auth/connect_account';
 
-export interface IUser {
+interface IUser {
   username: string;
   email: string;
   verifiedEmail: boolean;
@@ -45,3 +45,4 @@ const userSchema = new Schema<IUser>(
 );
 
 export const User = model<IUser>('user', userSchema);
+export type UserDocument = HydratedDocument<IUser>;
