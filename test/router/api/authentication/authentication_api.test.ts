@@ -1,4 +1,3 @@
-import { Query } from 'mongoose';
 import { init } from '@/util/init';
 import { createServer } from '@/util/server';
 import { Express } from 'express-serve-static-core';
@@ -10,15 +9,14 @@ import {
   afterAll,
   afterEach,
   beforeEach,
-  vi,
 } from 'vitest';
 import supertest from 'supertest';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
-import { connectDatabase } from '@/database';
-import { User } from '@/model/auth/user';
+import Database, { connectDatabase } from '@/database';
 
 let server: Express;
+let db: Database;
 
 const mockRestHandlers = [
   rest.post('https://oauth2.googleapis.com/token', (_req, res, ctx) => {
@@ -54,14 +52,15 @@ beforeAll(async () => {
   init();
   mockServer.listen({ onUnhandledRequest: 'bypass' });
   server = createServer();
-  await connectDatabase();
+  db = await connectDatabase();
 });
 afterAll(() => mockServer.close());
 // Reset data after each test "important for test isolation"
 beforeEach(() => init());
 // Reset handlers after each test "important for test isolation"
-afterEach(() => {
+afterEach(async () => {
   mockServer.resetHandlers();
+  await db.connection.dropDatabase();
 });
 
 describe('Google OAuth', () => {

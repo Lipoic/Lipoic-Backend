@@ -1,13 +1,22 @@
-import { connectDatabase } from '@/database';
+import Database, { connectDatabase } from '@/database';
 import { Types } from 'mongoose';
 import { createJWTToken, verifyJWTToken } from '@/util/jwt';
-import { describe, expect, test, beforeAll, beforeEach } from 'vitest';
+import {
+  describe,
+  expect,
+  test,
+  beforeAll,
+  beforeEach,
+  afterEach,
+} from 'vitest';
 import { User } from '@/model/auth/user';
 import { findJWTKeys, init } from '@/util/init';
 import jwt from 'jsonwebtoken';
 
+let db: Database;
+
 beforeAll(async () => {
-  await connectDatabase();
+  db = await connectDatabase();
 });
 
 // Reset data after each test "important for test isolation"
@@ -15,6 +24,7 @@ beforeEach(() => {
   init();
   findJWTKeys();
 });
+afterEach(async () => await db.connection.dropDatabase());
 
 describe('Create JWT Token', () => {
   test('Create a token', () => {
