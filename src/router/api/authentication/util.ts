@@ -15,7 +15,7 @@ export async function connectOAuthAccount(
 
   try {
     accessInfo = await oauth.getAccessInfo(code);
-  } catch (_) {
+  } catch (err) {
     return null;
   }
 

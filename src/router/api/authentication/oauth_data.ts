@@ -30,21 +30,11 @@ export class OauthData {
   }
 
   public async getAccessInfo(code: string): Promise<OauthAccessInfo> {
-    let redirectUri = this.redirectUri;
-
-    // Because Facebook OAuth requires "/" at the end of the redirect uri
-    if (
-      this.accountType === ConnectType.Facebook &&
-      !redirectUri.endsWith('/')
-    ) {
-      redirectUri += '/';
-    }
-
     const data: Record<string, string> = {
       client_id: this.clientId,
       client_secret: this.clientSecret,
       code,
-      redirect_uri: redirectUri,
+      redirect_uri: this.redirectUri,
     };
 
     const token_url = this.#getTokenUrl();
@@ -92,7 +82,7 @@ export class OauthData {
       case ConnectType.Google:
         return 'https://oauth2.googleapis.com/token';
       case ConnectType.Facebook:
-        return 'https://www.googleapis.com/oauth2/v1/userinfo?alt=json';
+        return 'https://graph.facebook.com/v14.0/oauth/access_token';
     }
   }
 }

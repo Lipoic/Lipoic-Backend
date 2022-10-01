@@ -1,5 +1,5 @@
-import { NextFunction, Response, Router } from 'express';
-import { ErrorRequestHandler } from 'express-serve-static-core';
+import { Router } from 'express';
+import type { ErrorRequestHandler } from 'express';
 
 import { apiRouter } from '#/api';
 import { HttpStatusCode, ResponseStatusCode, sendResponse } from '#/util';
@@ -17,12 +17,11 @@ router.use((_, res) => {
 });
 
 // Error handling
-router.use<ErrorRequestHandler>(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  (err: unknown, _req: unknown, _res: Response, _next: NextFunction) => {
-    console.error(err);
-  }
-);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  console.error(err);
+};
+router.use(errorHandler);
 
 export * from '#/util';
 export default router;
