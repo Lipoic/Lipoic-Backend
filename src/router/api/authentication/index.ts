@@ -168,7 +168,87 @@ router.get('/google/callback', async (req, res) => {
     sendResponse(
       res,
       { code: ResponseStatusCode.OAUTH_CODE_CALLBACK_ERROR },
+      HttpStatusCode.BAD_REQUEST
+    );
+    return;
+  }
+
+  const user = await User.findOne().where('email').equals(accountInfo.email);
+
+  if (!user) {
+    sendResponse(
+      res,
+      { code: ResponseStatusCode.OAUTH_CODE_CALLBACK_ERROR },
       HttpStatusCode.INTERNAL_SERVER_ERROR
+    );
+    return;
+  }
+
+  const token = createJWTToken(user);
+
+  /* #swagger.responses[200] = {
+    schema: {
+      code: 0,
+      data: { $ref: '#/components/schemas/AccessToken' },
+    },
+  }; */
+  sendResponse(res, {
+    code: ResponseStatusCode.SUCCESS,
+    data: { token: token },
+  });
+});
+
+router.get('/facebook/callback', async (req, res) => {
+  // #swagger.description = 'Get access token by facebook oauth code'
+
+  const code = req.query.code;
+  const redirectUri = req.query.redirectUri;
+
+  if (typeof code !== 'string' || typeof redirectUri !== 'string') {
+    /* #swagger.responses[400] = {
+      schema: {
+        code: 3,
+      },
+    }; */
+    sendResponse(
+      res,
+      { code: ResponseStatusCode.OAUTH_CODE_CALLBACK_ERROR },
+      HttpStatusCode.BAD_REQUEST
+    );
+    return;
+  }
+
+  const clientSecret = process.env.FACEBOOK_OAUTH_SECRET;
+  const clientId = process.env.FACEBOOK_OAUTH_ID;
+
+  if (!clientSecret || !clientId) {
+    /* #swagger.responses[500] = {
+      schema: {
+        code: 3,
+      },
+    }; */
+    sendResponse(
+      res,
+      { code: ResponseStatusCode.OAUTH_CODE_CALLBACK_ERROR },
+      HttpStatusCode.INTERNAL_SERVER_ERROR
+    );
+    return;
+  }
+
+  const oauth = new OauthData(
+    ConnectType.Facebook,
+    clientSecret,
+    clientId,
+    redirectUri
+  );
+
+  const accountInfo = await connectOAuthAccount(oauth, code, getIp(req));
+
+  if (!accountInfo) {
+    sendResponse(
+      res,
+      { code: ResponseStatusCode.OAUTH_CODE_CALLBACK_ERROR },
+      HttpStatusCode.BAD_REQUEST
     );
     return;
   }
