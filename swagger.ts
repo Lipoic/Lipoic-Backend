@@ -3,7 +3,7 @@ import swaggerAutogen from 'swagger-autogen';
 
 const doc = {
   info: {
-    title: 'Lipoic API',
+    title: 'Lipoic API Docs',
     version: '1.0.0',
     description: 'This is a REST API for Lipoic',
   },
@@ -17,7 +17,7 @@ const doc = {
       description: 'Internal server for testing',
     },
   ],
-  tags: ['Main', 'Authentication'],
+  tags: ['Main', 'Authentication', 'User'],
   components: {
     '@schemas': {
       APIResponse: {
@@ -64,6 +64,52 @@ const doc = {
               'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
           },
         },
+      },
+      User: {
+        type: 'object',
+        required: [
+          'id',
+          'username',
+          'verifiedEmail',
+          'modes',
+          'createdAt',
+          'updatedAt',
+        ],
+        properties: {
+          id: {
+            type: 'string',
+            example: 'MongoDB ObjectId',
+          },
+          username: {
+            type: 'string',
+            example: 'John Doe',
+          },
+          verifiedEmail: {
+            type: 'boolean',
+            example: true,
+          },
+          modes: {
+            type: 'array',
+            items: {
+              $ref: '#/components/schemas/UserMode',
+            },
+            example: ['Teacher', 'Parent'],
+          },
+          createdAt: {
+            type: 'date',
+            example: '2022-01-01T00:00:00.000Z',
+          },
+          updatedAt: {
+            type: 'date',
+            example: '2022-01-01T00:00:00.000Z',
+          },
+        },
+      },
+      UserMode: {
+        type: 'string',
+        description: 'User mode',
+        enum: ['Student', 'Teacher', 'Parent'],
+        example: 'Teacher',
       },
     },
     securitySchemes: {

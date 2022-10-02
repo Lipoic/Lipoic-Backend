@@ -1,4 +1,4 @@
-import { OauthAccessInfo } from '@/router/api/authentication/oauth_access_info';
+import { OauthAccessInfo } from '#/api/authentication/oauth_access_info';
 import { ConnectType } from '@/model/auth/connect_account';
 import axios, { AxiosResponse } from 'axios';
 

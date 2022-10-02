@@ -3,7 +3,7 @@ import { OauthData } from '#/api/authentication/oauth_data';
 import {
   OauthAccessInfo,
   OAuthAccountInfo,
-} from '@/router/api/authentication/oauth_access_info';
+} from '#/api/authentication/oauth_access_info';
 import { User } from '@/model/auth/user';
 
 export async function connectOAuthAccount(

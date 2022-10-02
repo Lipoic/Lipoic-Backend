@@ -1,9 +1,9 @@
-import { getIp } from '@/router/util/util';
+import { getIp } from '#/util/util';
 import { authenticationRouter } from '#/api/authentication';
 import { Router } from 'express';
 
 import { ResponseStatusCode, sendResponse } from '#';
-import { userRouter } from '@/router/api/user';
+import { userRouter } from '#/api/user';
 
 export const apiRouter = Router();
 
@@ -45,4 +45,8 @@ apiRouter.use(
   authenticationRouter
   // #swagger.tags = ['Authentication']
 );
-apiRouter.use('/user', userRouter);
+apiRouter.use(
+  '/user',
+  userRouter
+  // #swagger.tags = ['User']
+);

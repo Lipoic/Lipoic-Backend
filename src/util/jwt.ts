@@ -1,14 +1,15 @@
 import { User, UserDocument } from '@/model/auth/user';
 import jwt from 'jsonwebtoken';
+import { Types } from 'mongoose';
 
-export function createJWTToken(user: UserDocument): string {
+export function createJWTToken(id: Types.ObjectId): string {
   const privateKey = process.env.JWT_PRIVATE_KEY;
   if (!privateKey) {
     throw new Error('Missing JWT private key');
   }
 
   const payload = {
-    id: user.id.toString(),
+    id: id.toString(),
   };
 
   return jwt.sign(payload, privateKey, {

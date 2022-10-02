@@ -3,6 +3,8 @@ export enum ResponseStatusCode {
   NOT_FOUND,
   GET_AUTH_URL_ERROR,
   OAUTH_CODE_CALLBACK_ERROR,
+  AUTH_ERROR,
+  USER_NOT_FOUND,
 }
 
 export enum HttpStatusCode {

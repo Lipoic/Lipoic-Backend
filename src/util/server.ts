@@ -13,13 +13,25 @@ export function createServer(): Express {
     .use(
       morgan('dev', {
         // Skip logging for api docs
-        skip: (req) => req.originalUrl.startsWith('/api-docs'),
+        skip: (req) => req.originalUrl.startsWith('/docs'),
       })
     )
     .use(cors({ origin: allowedOrigins }))
     .use(express.json())
     .use(express.urlencoded({ extended: false }))
-    .use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+    .use(
+      '/docs',
+      swaggerUi.serve,
+      swaggerUi.setup(
+        swaggerDocument,
+        undefined,
+        undefined,
+        undefined,
+        'https://github.com/Lipoic/Lipoic-Assets/raw/main/logo/logo.png',
+        undefined,
+        'Lipoic API Docs'
+      )
+    );
 
   app.use(router);
 

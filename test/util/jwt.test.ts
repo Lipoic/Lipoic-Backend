@@ -1,5 +1,4 @@
 import Database, { connectDatabase } from '@/database';
-import { Types } from 'mongoose';
 import { createJWTToken, verifyJWTToken } from '@/util/jwt';
 import {
   describe,
@@ -16,7 +15,7 @@ import jwt from 'jsonwebtoken';
 let db: Database;
 
 beforeAll(async () => {
-  db = await connectDatabase();
+  db = await connectDatabase('test');
 });
 
 // Reset data after each test "important for test isolation"
@@ -29,7 +28,6 @@ afterEach(async () => await db.connection.dropDatabase());
 describe('Create JWT Token', () => {
   test('Create a token', () => {
     const user = new User({
-      id: new Types.ObjectId(),
       username: 'test',
       email: 'test@test.com',
       verifiedEmail: true,
@@ -38,7 +36,7 @@ describe('Create JWT Token', () => {
       loginIps: [],
     });
 
-    const token = createJWTToken(user);
+    const token = createJWTToken(user.id);
 
     expect(token).toBeDefined();
     expect(token.length).toBe(214);
@@ -48,7 +46,6 @@ describe('Create JWT Token', () => {
     delete process.env.JWT_PRIVATE_KEY;
 
     const user = new User({
-      id: new Types.ObjectId(),
       username: 'test',
       email: 'test@test.com',
       verifiedEmail: true,
@@ -58,7 +55,9 @@ describe('Create JWT Token', () => {
     });
 
     expect(process.env.JWT_PRIVATE_KEY).toBeUndefined();
-    expect(() => createJWTToken(user)).toThrowError('Missing JWT private key');
+    expect(() => createJWTToken(user.id)).toThrowError(
+      'Missing JWT private key'
+    );
   });
 });
 
@@ -75,7 +74,7 @@ describe('Verify JWT Token', () => {
 
     await user.save();
 
-    const token = createJWTToken(user);
+    const token = createJWTToken(user.id);
 
     expect(token).toBeDefined();
     expect(token.length).toBe(214);
@@ -112,7 +111,7 @@ describe('Verify JWT Token', () => {
 
     await user.save();
 
-    const token = createJWTToken(user);
+    const token = createJWTToken(user.id);
 
     expect(token).toBeDefined();
     expect(token.length).toBe(214);
@@ -159,7 +158,7 @@ describe('Verify JWT Token', () => {
       loginIps: [],
     });
 
-    const token = createJWTToken(user);
+    const token = createJWTToken(user.id);
 
     expect(token).toBeDefined();
     expect(token.length).toBe(214);

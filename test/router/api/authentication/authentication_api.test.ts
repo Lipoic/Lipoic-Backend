@@ -89,7 +89,7 @@ beforeAll(async () => {
   init();
   mockServer.listen({ onUnhandledRequest: 'bypass' });
   server = createServer();
-  db = await connectDatabase();
+  db = await connectDatabase('test');
 });
 afterAll(() => mockServer.close());
 // Reset data after each test "important for test isolation"

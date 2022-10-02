@@ -3,8 +3,7 @@ import { OauthData } from '#/api/authentication/oauth_data';
 import { HttpStatusCode, ResponseStatusCode, sendResponse } from '#/util';
 import { Router } from 'express';
 import { connectOAuthAccount } from '#/api/authentication/util';
-import { getIp } from '@/router/util/util';
-import { createJWTToken } from '@/util/jwt';
+import { getIp } from '#/util/util';
 import { User } from '@/model/auth/user';
 
 const router = Router();
@@ -184,7 +183,7 @@ router.get('/google/callback', async (req, res) => {
     return;
   }
 
-  const token = createJWTToken(user);
+  const token = user.generateJWTToken();
 
   /* #swagger.responses[200] = {
     schema: {
@@ -264,7 +263,7 @@ router.get('/facebook/callback', async (req, res) => {
     return;
   }
 
-  const token = createJWTToken(user);
+  const token = user.generateJWTToken();
 
   /* #swagger.responses[200] = {
     schema: {
