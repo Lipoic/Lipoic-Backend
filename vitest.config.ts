@@ -17,6 +17,7 @@ export default defineConfig({
         'dist/**',
         'test/**',
         'src/index.ts',
+        'src/custom.d.ts',
         '.eslintrc.js',
         'vitest.config.ts',
         'swagger.ts',
