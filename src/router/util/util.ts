@@ -1,6 +1,6 @@
 import { HttpStatusCode, ResponseStatusCode, sendResponse } from '#/util';
 import { verifyJWTToken } from '@/util/jwt';
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 
 export function getIp(req: Request): string {
   const proxyByCloudflare = process.env.CLOUDFLARE === 'true';
