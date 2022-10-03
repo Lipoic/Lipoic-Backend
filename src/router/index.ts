@@ -8,10 +8,6 @@ const router = Router();
 
 router.use(apiRouter);
 router.use((_, res) => {
-  if (res.headersSent) {
-    return;
-  }
-
   /* handle not found page error */
   sendResponse(
     res,

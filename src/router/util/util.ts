@@ -13,11 +13,7 @@ export function getIp(req: Request): string {
   }
 }
 
-export async function authMiddleware(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export async function authMiddleware(req: Request, res: Response) {
   // #swagger.auto = false
   const authHeader = req.headers.authorization;
   if (authHeader) {
@@ -31,8 +27,6 @@ export async function authMiddleware(
 
       if (verifyUser) {
         req.user = verifyUser;
-
-        next();
       } else {
         /* #swagger.responses[403] = {
           schema: {

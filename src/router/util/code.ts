@@ -5,6 +5,7 @@ export enum ResponseStatusCode {
   OAUTH_CODE_CALLBACK_ERROR,
   AUTH_ERROR,
   USER_NOT_FOUND,
+  EDIT_USER_INFO_ERROR,
 }
 
 export enum HttpStatusCode {
@@ -14,5 +15,4 @@ export enum HttpStatusCode {
   FORBIDDEN = 403,
   NOT_FOUND = 404,
   INTERNAL_SERVER_ERROR = 500,
-  BAD_GATEWAY = 502,
 }

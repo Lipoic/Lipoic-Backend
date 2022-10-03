@@ -111,6 +111,23 @@ const doc = {
         enum: ['Student', 'Teacher', 'Parent'],
         example: 'Teacher',
       },
+      EditUserInfoData: {
+        type: 'object',
+        description: 'The data for editing user info',
+        properties: {
+          username: {
+            type: 'string',
+            example: 'Lipoic',
+          },
+          modes: {
+            type: 'array',
+            items: {
+              $ref: '#/components/schemas/UserMode',
+            },
+            example: ['Students'],
+          },
+        },
+      },
     },
     securitySchemes: {
       bearerAuth: {
