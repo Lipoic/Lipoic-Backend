@@ -1,3 +1,4 @@
+import { createVerifyEmailCode } from '#/api/user/util';
 import { createServer } from '@/util/server';
 import {
   afterEach,
@@ -582,6 +583,65 @@ describe('Sign up a new user via email and password', () => {
     );
     expect(response.body).toEqual({
       code: 7,
+    });
+  });
+});
+
+describe('Verify the email by the code', () => {
+  test('Verify the email by the code', async () => {
+    const user = new User({
+      username: 'test',
+      email: 'user@test.com',
+      verifiedEmail: false,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: UserLocale.AmericanEnglish,
+    });
+    await user.save();
+
+    const code = createVerifyEmailCode(user.id, user.email);
+
+    const response = await supertest(server).get('/user/verify').query({
+      code,
+    });
+
+    expect(response.status).toBe(200);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 0,
+    });
+
+    const updatedUser = await User.findById(user.id);
+    expect(updatedUser).toBeDefined();
+    expect(updatedUser?.verifiedEmail).toBe(true);
+  });
+
+  test('Verify the email by the code and invalid code', async () => {
+    const response = await supertest(server).get('/user/verify').query({
+      code: 'invalid code',
+    });
+
+    expect(response.status).toBe(400);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 9,
+    });
+  });
+
+  test('Verify the email by the code without the code', async () => {
+    const response = await supertest(server).get('/user/verify');
+
+    expect(response.status).toBe(400);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 9,
     });
   });
 });

@@ -9,7 +9,7 @@ import {
   afterEach,
 } from 'vitest';
 import { User } from '@/model/auth/user';
-import { findJWTKeys, init } from '@/util/init';
+import { init } from '@/util/init';
 import jwt from 'jsonwebtoken';
 import { UserLocale } from '@/model/auth/user_locale';
 
@@ -22,7 +22,6 @@ beforeAll(async () => {
 // Reset data after each test "important for test isolation"
 beforeEach(() => {
   init();
-  findJWTKeys();
 });
 afterEach(async () => await db.connection.dropDatabase());
 
@@ -97,8 +96,6 @@ describe('Verify JWT Token', () => {
     expect(verifyUser?.loginIps).toEqual(user.loginIps);
     expect(verifyUser?.createdAt).toEqual(user.createdAt);
     expect(verifyUser?.updatedAt).toEqual(user.updatedAt);
-
-    await user.delete();
   });
 
   test('Verify a token without public key', async () => {
@@ -125,8 +122,6 @@ describe('Verify JWT Token', () => {
     await expect(() => verifyJWTToken(token)).rejects.toThrowError(
       'Missing JWT public key'
     );
-
-    await user.delete();
   });
 
   test('Verify a token and invalid token', async () => {

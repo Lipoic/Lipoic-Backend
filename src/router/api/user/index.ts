@@ -1,11 +1,14 @@
-import { createJWTToken } from '@/util/jwt';
 import { EditUserInfoData, SignUpUserData } from '#/api/user/data';
 import { HttpStatusCode, ResponseStatusCode, sendResponse } from '#/util';
 import { authMiddleware, getIp } from '#/util/util';
 import { User } from '@/model/auth/user';
-import { passwordHash } from '@/util/bcrypt';
 import { Router } from 'express';
 import { sendVerifyEmail } from '@/util/email';
+import {
+  checkVerifyEmailCode,
+  createVerifyEmailCode,
+  passwordHash,
+} from '#/api/user/util';
 
 const router = Router();
 
@@ -126,6 +129,7 @@ router.patch('/info', async (req, res) => {
 
     if (result) {
       /* #swagger.responses[200] = {
+      description: 'The user info has been updated.',
       schema: {
         code: 0,
         data: { $ref: '#/components/schemas/User' },
@@ -173,6 +177,7 @@ router.post('/signup', async (req, res) => {
 
   if (!data.username || !data.email || !data.password || !data.locale) {
     /* #swagger.responses[400] = {
+      description: 'Missing required fields',
       schema: {
         code: 8,
       },
@@ -206,11 +211,12 @@ router.post('/signup', async (req, res) => {
     await user.save();
 
     // The verify email code.
-    const code = createJWTToken(user.id, '10 minutes');
+    const code = createVerifyEmailCode(user.id, data.email);
 
     await sendVerifyEmail(data.username, data.email, code, data.locale);
 
     /* #swagger.responses[200] = {
+      description: 'Success to sign up',
       schema: {
         code: 0,
       },
@@ -229,6 +235,69 @@ router.post('/signup', async (req, res) => {
       res,
       { code: ResponseStatusCode.Sign_Up_Email_Already_Used },
       HttpStatusCode.CONFLICT
+    );
+  }
+});
+
+router.get('/verify', async (req, res) => {
+  // #swagger.description = 'Verify the email account by the code'
+
+  const code = req.query.code;
+
+  if (typeof code !== 'string') {
+    /* #swagger.responses[400] = {
+      description: 'Missing required parameters',
+      schema: {
+        code: 9,
+      },
+    }; */
+
+    sendResponse(
+      res,
+      {
+        code: ResponseStatusCode.Verify_Email_Error,
+      },
+      HttpStatusCode.BAD_REQUEST
+    );
+    return;
+  }
+
+  const verifyUser = await checkVerifyEmailCode(code);
+
+  if (verifyUser) {
+    await User.updateOne(
+      {
+        id: verifyUser.id,
+      },
+      {
+        $set: {
+          verifiedEmail: true,
+        },
+      }
+    );
+
+    /* #swagger.responses[200] = {
+      description: 'Success to verify the email',
+      schema: {
+        code: 0,
+      },
+    }; */
+
+    sendResponse(res, { code: ResponseStatusCode.SUCCESS });
+  } else {
+    /* #swagger.responses[400] = {
+      description: 'The code is invalid',
+      schema: {
+        code: 9,
+      },
+    }; */
+
+    sendResponse(
+      res,
+      {
+        code: ResponseStatusCode.Verify_Email_Error,
+      },
+      HttpStatusCode.BAD_REQUEST
     );
   }
 });

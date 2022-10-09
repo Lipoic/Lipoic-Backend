@@ -8,6 +8,7 @@ export enum ResponseStatusCode {
   EDIT_USER_INFO_ERROR,
   Sign_Up_Email_Already_Used,
   Sign_Up_Error,
+  Verify_Email_Error,
 }
 
 export enum HttpStatusCode {

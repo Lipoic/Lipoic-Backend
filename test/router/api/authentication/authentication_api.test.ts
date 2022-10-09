@@ -106,9 +106,9 @@ describe('Google OAuth', () => {
     process.env.GOOGLE_OAUTH_SECRET = 'test';
     process.env.GOOGLE_OAUTH_ID = 'test';
 
-    const response = await supertest(server).get(
-      `/authentication/google/url?redirectUri=https://localhost:3000/login`
-    );
+    const response = await supertest(server)
+      .get('/authentication/google/url')
+      .query({ redirectUri: 'https://localhost:3000/login' });
 
     expect(response.status).toBe(200);
     expect(response.headers['content-type']).toBe(
@@ -138,9 +138,9 @@ describe('Google OAuth', () => {
     delete process.env.GOOGLE_OAUTH_SECRET;
     process.env.GOOGLE_OAUTH_ID = 'test';
 
-    const response = await supertest(server).get(
-      `/authentication/google/url?redirectUri=https://localhost:3000/login`
-    );
+    const response = await supertest(server)
+      .get('/authentication/google/url')
+      .query({ redirectUri: 'https://localhost:3000/login' });
 
     expect(response.status).toBe(500);
     expect(response.headers['content-type']).toBe(
@@ -157,9 +157,9 @@ describe('Google OAuth', () => {
     delete process.env.GOOGLE_OAUTH_ID;
     process.env.GOOGLE_OAUTH_SECRET = 'test';
 
-    const response = await supertest(server).get(
-      `/authentication/google/url?redirectUri=https://localhost:3000/login`
-    );
+    const response = await supertest(server)
+      .get('/authentication/google/url')
+      .query({ redirectUri: 'https://localhost:3000/login' });
 
     expect(response.status).toBe(500);
     expect(response.headers['content-type']).toBe(
@@ -176,9 +176,9 @@ describe('Google OAuth', () => {
     delete process.env.GOOGLE_OAUTH_ID;
     delete process.env.GOOGLE_OAUTH_SECRET;
 
-    const response = await supertest(server).get(
-      `/authentication/google/url?redirectUri=https://localhost:3000/login`
-    );
+    const response = await supertest(server)
+      .get('/authentication/google/url')
+      .query({ redirectUri: 'https://localhost:3000/login' });
 
     expect(response.status).toBe(500);
     expect(response.headers['content-type']).toBe(
@@ -194,9 +194,9 @@ describe('Google OAuth', () => {
     process.env.GOOGLE_OAUTH_SECRET = 'TEST';
 
     const code = 'test code';
-    const response = await supertest(server).get(
-      `/authentication/google/callback?code=${code}&redirectUri=https://localhost:3000/login`
-    );
+    const response = await supertest(server)
+      .get('/authentication/google/callback')
+      .query({ code, redirectUri: 'https://localhost:3000/login' });
 
     expect(response.status).toBe(200);
     expect(response.headers['content-type']).toBe(
@@ -229,9 +229,9 @@ describe('Google OAuth', () => {
     process.env.GOOGLE_OAUTH_ID = 'TEST';
     process.env.GOOGLE_OAUTH_SECRET = 'TEST';
 
-    const response = await supertest(server).get(
-      `/authentication/google/callback?redirectUri=https://localhost:3000/login`
-    );
+    const response = await supertest(server)
+      .get('/authentication/google/callback')
+      .query({ redirectUri: 'https://localhost:3000/login' });
 
     expect(response.status).toBe(400);
     expect(response.headers['content-type']).toBe(
@@ -264,9 +264,9 @@ describe('Google OAuth', () => {
     process.env.GOOGLE_OAUTH_ID = 'test';
 
     const code = 'test code';
-    const response = await supertest(server).get(
-      `/authentication/google/callback?code=${code}&redirectUri=https://localhost:3000/login`
-    );
+    const response = await supertest(server)
+      .get('/authentication/google/callback')
+      .query({ code, redirectUri: 'https://localhost:3000/login' });
 
     expect(response.status).toBe(500);
     expect(response.headers['content-type']).toBe(
