@@ -6,7 +6,7 @@ import {
 } from '#/api/user/data';
 import { HttpStatusCode, ResponseStatusCode, sendResponse } from '#/util';
 import { authMiddleware, getIp } from '#/util/util';
-import { User, UserDocument } from '@/model/auth/user';
+import { User } from '@/model/auth/user';
 import { Router } from 'express';
 import { sendVerifyEmail } from '@/util/email';
 import {
