@@ -1,4 +1,4 @@
-import { createVerifyEmailCode } from '#/api/user/util';
+import { createVerifyEmailCode, passwordHash } from '#/api/user/util';
 import { createServer } from '@/util/server';
 import {
   afterEach,
@@ -78,7 +78,7 @@ describe('Get the info of the current user', () => {
       .get('/user/info')
       .auth(token, { type: 'bearer' });
 
-    expect(response.status).toBe(403);
+    expect(response.status).toBe(401);
     expect(response.headers['content-type']).toBe(
       'application/json; charset=utf-8'
     );
@@ -216,7 +216,7 @@ describe('Edit the info of the current user', () => {
         locale: 'zh-TW',
       });
 
-    expect(response.status).toBe(403);
+    expect(response.status).toBe(401);
     expect(response.headers['content-type']).toBe(
       'application/json; charset=utf-8'
     );
@@ -561,6 +561,46 @@ describe('Sign up a new user via email and password', () => {
     const user = new User({
       username: 'user 1',
       email: 'user@test.com',
+      verifiedEmail: true,
+      passwordHash: 'the password hash',
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+    await user.save();
+
+    const response = await supertest(server).post('/user/signup').send({
+      username: 'user 1',
+      email: 'user@test.com',
+      password: 'password',
+      locale: 'en-US',
+    });
+
+    expect(response.status).toBe(409);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 7,
+    });
+  });
+
+  test('Sign up a new user via email and the email is used but not verified', async () => {
+    process.env.CLIENT_URL = 'http://localhost:3000';
+    process.env.VERIFY_EMAIL_HOST = '127.0.0.1';
+    process.env.VERIFY_EMAIL_PORT = '465';
+    process.env.VERIFY_EMAIL_USER = 'test';
+    process.env.VERIFY_EMAIL_PASSWORD = 'test';
+    process.env.VERIFY_EMAIL_FROM = 'Test Account Group <test@example.com>';
+
+    const mock = vi
+      .spyOn(Mail.prototype, 'sendMail')
+      .mockResolvedValue(undefined);
+
+    const user = new User({
+      username: 'user 1',
+      email: 'user@test.com',
       verifiedEmail: false,
       passwordHash: 'the password hash',
       connects: [],
@@ -576,6 +616,112 @@ describe('Sign up a new user via email and password', () => {
       password: 'password',
       locale: 'en-US',
     });
+
+    const callData = mock.mock.lastCall?.[0];
+
+    expect(callData?.['from']).toContain('Test Account Group');
+    expect(callData?.['to']).toBe('user@test.com');
+    expect(callData?.['subject']).toBe('Verify your Lipoic account');
+    expect(callData?.['html']).toContain('user 1');
+    expect(callData?.['html']).toContain(
+      'http://localhost:3000/verify-email/?code='
+    );
+
+    expect(response.status).toBe(200);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 0,
+    });
+  });
+
+  test('Sign up a new user via email and the email is used but the verify email is expired', async () => {
+    process.env.CLIENT_URL = 'http://localhost:3000';
+    process.env.VERIFY_EMAIL_HOST = '127.0.0.1';
+    process.env.VERIFY_EMAIL_PORT = '465';
+    process.env.VERIFY_EMAIL_USER = 'test';
+    process.env.VERIFY_EMAIL_PASSWORD = 'test';
+    process.env.VERIFY_EMAIL_FROM = 'Test Account Group <test@example.com>';
+
+    const mock = vi
+      .spyOn(Mail.prototype, 'sendMail')
+      .mockResolvedValue(undefined);
+
+    const user = new User({
+      username: 'user 1',
+      email: 'user@test.com',
+      verifiedEmail: false,
+      lastSentVerifyEmailTime: new Date(Date.now() - 1000 * 60 * 10),
+      passwordHash: 'the password hash',
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+    await user.save();
+
+    const response = await supertest(server).post('/user/signup').send({
+      username: 'user 1',
+      email: 'user@test.com',
+      password: 'password',
+      locale: 'en-US',
+    });
+
+    const callData = mock.mock.lastCall?.[0];
+
+    expect(callData?.['from']).toContain('Test Account Group');
+    expect(callData?.['to']).toBe('user@test.com');
+    expect(callData?.['subject']).toBe('Verify your Lipoic account');
+    expect(callData?.['html']).toContain('user 1');
+    expect(callData?.['html']).toContain(
+      'http://localhost:3000/verify-email/?code='
+    );
+
+    expect(response.status).toBe(200);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 0,
+    });
+  });
+
+  // If the verify email is not expired, the user should not receive a new verify email
+  test('Sign up a new user via email and the email is used but the verify email is not expired', async () => {
+    process.env.CLIENT_URL = 'http://localhost:3000';
+    process.env.VERIFY_EMAIL_HOST = '127.0.0.1';
+    process.env.VERIFY_EMAIL_PORT = '465';
+    process.env.VERIFY_EMAIL_USER = 'test';
+    process.env.VERIFY_EMAIL_PASSWORD = 'test';
+    process.env.VERIFY_EMAIL_FROM = 'Test Account Group <test@example.com>';
+
+    const mock = vi
+      .spyOn(Mail.prototype, 'sendMail')
+      .mockResolvedValue(undefined);
+
+    const user = new User({
+      username: 'user 1',
+      email: 'user@test.com',
+      verifiedEmail: false,
+      lastSentVerifyEmailTime: new Date(Date.now()),
+      passwordHash: 'the password hash',
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+    await user.save();
+
+    const response = await supertest(server).post('/user/signup').send({
+      username: 'user 1',
+      email: 'user@test.com',
+      password: 'password',
+      locale: 'en-US',
+    });
+
+    const callData = mock.mock.lastCall;
+    expect(callData).toBeUndefined();
 
     expect(response.status).toBe(409);
     expect(response.headers['content-type']).toBe(
@@ -610,9 +756,10 @@ describe('Verify the email by the code', () => {
     expect(response.headers['content-type']).toBe(
       'application/json; charset=utf-8'
     );
-    expect(response.body).toEqual({
+    expect(response.body).toMatchObject({
       code: 0,
     });
+    expect(response.body.data['token']).toBeDefined();
 
     const updatedUser = await User.findById(user.id);
     expect(updatedUser).toBeDefined();
@@ -642,6 +789,139 @@ describe('Verify the email by the code', () => {
     );
     expect(response.body).toEqual({
       code: 9,
+    });
+  });
+});
+
+describe('Login via email and password', () => {
+  test('Login via email and password', async () => {
+    const hash = await passwordHash('password');
+
+    const user = new User({
+      username: 'test',
+      email: 'user@test.com',
+      verifiedEmail: true,
+      passwordHash: hash,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: UserLocale.AmericanEnglish,
+    });
+    await user.save();
+
+    const response = await supertest(server).post('/user/login').send({
+      email: 'user@test.com',
+      password: 'password',
+    });
+
+    expect(response.status).toBe(200);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toMatchObject({
+      code: 0,
+    });
+    expect(response.body.data['token']).toBeDefined();
+  });
+
+  test('Login via email and password and the email is not verified', async () => {
+    const hash = await passwordHash('password');
+
+    const user = new User({
+      username: 'test',
+      email: 'user@test.com',
+      verifiedEmail: false,
+      passwordHash: hash,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: UserLocale.AmericanEnglish,
+    });
+    await user.save();
+
+    const response = await supertest(server).post('/user/login').send({
+      email: 'user@test.com',
+      password: 'password',
+    });
+
+    expect(response.status).toBe(403);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 11,
+    });
+  });
+
+  test('Login via email and password and the user is not found', async () => {
+    const response = await supertest(server).post('/user/login').send({
+      email: 'user@test.com',
+      password: 'password',
+    });
+
+    expect(response.status).toBe(404);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 5,
+    });
+  });
+
+  test('Login via email and password and the password is incorrect', async () => {
+    const hash = await passwordHash('password');
+
+    const user = new User({
+      username: 'test',
+      email: 'user@test.com',
+      verifiedEmail: true,
+      passwordHash: hash,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: UserLocale.AmericanEnglish,
+    });
+    await user.save();
+
+    const response = await supertest(server).post('/user/login').send({
+      email: 'user@test.com',
+      password: 'incorrect password',
+    });
+
+    expect(response.status).toBe(401);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 10,
+    });
+  });
+
+  test('Login via email and password and the email is not provided', async () => {
+    const response = await supertest(server).post('/user/login').send({
+      password: 'password',
+    });
+
+    expect(response.status).toBe(400);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 10,
+    });
+  });
+
+  test('Login via email and password and the password is not provided', async () => {
+    const response = await supertest(server).post('/user/login').send({
+      email: 'user@test.com',
+    });
+
+    expect(response.status).toBe(400);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 10,
     });
   });
 });

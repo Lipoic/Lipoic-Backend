@@ -1,13 +1,19 @@
-import { EditUserInfoData, SignUpUserData } from '#/api/user/data';
+import { createJWTToken } from '@/util/jwt';
+import {
+  EditUserInfoData,
+  LoginUserData,
+  SignUpUserData,
+} from '#/api/user/data';
 import { HttpStatusCode, ResponseStatusCode, sendResponse } from '#/util';
 import { authMiddleware, getIp } from '#/util/util';
-import { User } from '@/model/auth/user';
+import { User, UserDocument } from '@/model/auth/user';
 import { Router } from 'express';
 import { sendVerifyEmail } from '@/util/email';
 import {
   checkVerifyEmailCode,
   createVerifyEmailCode,
   passwordHash,
+  verifyPassword,
 } from '#/api/user/util';
 
 const router = Router();
@@ -193,9 +199,20 @@ router.post('/signup', async (req, res) => {
     return;
   }
 
-  const accountAlreadyExists = await User.exists({ email: data.email });
+  const alreadyExistsAccount = await User.findOne({ email: data.email });
 
-  if (!accountAlreadyExists) {
+  let emailUsed = alreadyExistsAccount !== null;
+
+  // If the email hasn't been verified, then delete the user and create a new one
+  if (
+    !alreadyExistsAccount?.verifiedEmail &&
+    alreadyExistsAccount?.canSendVerifyEmail()
+  ) {
+    await alreadyExistsAccount?.delete();
+    emailUsed = false;
+  }
+
+  if (!emailUsed) {
     const hash = await passwordHash(data.password);
 
     const user = new User({
@@ -214,6 +231,12 @@ router.post('/signup', async (req, res) => {
     const code = createVerifyEmailCode(user.id, data.email);
 
     await sendVerifyEmail(data.username, data.email, code, data.locale);
+
+    await user.update({
+      $set: {
+        lastSentVerifyEmailTime: new Date(),
+      },
+    });
 
     /* #swagger.responses[200] = {
       description: 'Success to sign up',
@@ -236,6 +259,7 @@ router.post('/signup', async (req, res) => {
       { code: ResponseStatusCode.Sign_Up_Email_Already_Used },
       HttpStatusCode.CONFLICT
     );
+    return;
   }
 });
 
@@ -275,18 +299,22 @@ router.get('/verify', async (req, res) => {
         },
       }
     );
+    const token = createJWTToken(verifyUser.id);
 
     /* #swagger.responses[200] = {
       description: 'Success to verify the email',
       schema: {
         code: 0,
+        data: {
+          $ref: '#/components/schemas/AccessToken',
+        }
       },
     }; */
 
-    sendResponse(res, { code: ResponseStatusCode.SUCCESS });
+    sendResponse(res, { code: ResponseStatusCode.SUCCESS, data: { token } });
   } else {
     /* #swagger.responses[400] = {
-      description: 'The code is invalid',
+      description: 'The code is invalid or expired',
       schema: {
         code: 9,
       },
@@ -299,6 +327,128 @@ router.get('/verify', async (req, res) => {
       },
       HttpStatusCode.BAD_REQUEST
     );
+    return;
+  }
+});
+
+router.post('/login', async (req, res) => {
+  // #swagger.description = 'Login via email and password'
+  /* #swagger.requestBody = {
+    required: true,
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/LoginUserData',
+        },
+      },
+    },
+  }; */
+
+  const data: LoginUserData = req.body;
+
+  if (!data.email || !data.password) {
+    /* #swagger.responses[400] = {
+      description: 'Missing required fields',
+      schema: {
+        code: 10,
+      },
+    }; */
+
+    sendResponse(
+      res,
+      {
+        code: ResponseStatusCode.Login_User_Error,
+      },
+      HttpStatusCode.BAD_REQUEST
+    );
+    return;
+  }
+
+  const user = await User.findOne({ email: data.email });
+  const passwordHash = user?.passwordHash;
+
+  if (!user || !passwordHash) {
+    /* #swagger.responses[404] = {
+      description: 'The user is not found',
+      schema: {
+        code: 5,
+      },
+    }; */
+
+    sendResponse(
+      res,
+      {
+        code: ResponseStatusCode.USER_NOT_FOUND,
+      },
+      HttpStatusCode.NOT_FOUND
+    );
+    return;
+  } else {
+    const passwordMatch = await verifyPassword(data.password, passwordHash);
+
+    if (passwordMatch) {
+      if (user.verifiedEmail) {
+        await User.updateOne(
+          {
+            id: user.id,
+          },
+          {
+            $addToSet: {
+              loginIps: getIp(req),
+            },
+          }
+        );
+        const token = createJWTToken(user.id);
+
+        /* #swagger.responses[200] = {
+          description: 'Success to login',
+          schema: {
+            code: 0,
+            data: {
+              $ref: '#/components/schemas/AccessToken',
+            },
+          },
+        }; */
+
+        sendResponse(res, {
+          code: ResponseStatusCode.SUCCESS,
+          data: {
+            token,
+          },
+        });
+      } else {
+        /* #swagger.responses[403] = {
+          description: 'The email has not been verified',
+          schema: {
+            code: 11,
+          },
+        }; */
+
+        sendResponse(
+          res,
+          {
+            code: ResponseStatusCode.Login_User_Email_Not_Verified,
+          },
+          HttpStatusCode.FORBIDDEN
+        );
+      }
+    } else {
+      /* #swagger.responses[400] = {
+        description: 'The password is incorrect',
+        schema: {
+          code: 10,
+        },
+      }; */
+
+      sendResponse(
+        res,
+        {
+          code: ResponseStatusCode.Login_User_Error,
+        },
+        HttpStatusCode.UNAUTHORIZED
+      );
+      return;
+    }
   }
 });
 

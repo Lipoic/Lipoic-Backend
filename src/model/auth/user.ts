@@ -9,6 +9,7 @@ interface IUser {
   email: string;
   verifiedEmail: boolean;
   passwordHash?: string;
+  lastSentVerifyEmailTime: Date;
   connects: Types.Array<ConnectAccount>;
   modes: Types.Array<string>;
   loginIps: Types.Array<string>;
@@ -20,6 +21,7 @@ interface IUser {
 interface IUserMethods {
   getPublicInfo: () => IPublicUser;
   generateJWTToken: () => string;
+  canSendVerifyEmail: () => boolean;
 }
 
 interface IPublicUser {
@@ -40,6 +42,7 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
     username: { type: String, required: true },
     email: { type: String, required: true },
     verifiedEmail: { type: Boolean, required: true },
+    lastSentVerifyEmailTime: { type: Date, required: false },
     passwordHash: { type: String, required: false },
     connects: {
       type: [
@@ -80,6 +83,18 @@ userSchema.method('getPublicInfo', function getPublicInfo(): IPublicUser {
 
 userSchema.method('generateJWTToken', function generateJWTToken(): string {
   return createJWTToken(this.id);
+});
+
+userSchema.method('canSendVerifyEmail', function canSendVerifyEmail(): boolean {
+  if (this.lastSentVerifyEmailTime) {
+    const now = new Date();
+    const diff = now.getTime() - this.lastSentVerifyEmailTime.getTime();
+
+    // over 10 minutes
+    return diff > 1000 * 60 * 10;
+  } else {
+    return true;
+  }
 });
 
 export const User = model<IUser, UserModel>('user', userSchema, undefined, {

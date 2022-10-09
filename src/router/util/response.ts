@@ -18,9 +18,5 @@ export function sendResponse<T>(
   body: APIResponseBody<T>,
   httpStatusCode = HttpStatusCode.OK
 ): void {
-  if (res.headersSent) {
-    return;
-  }
-
   res.status(httpStatusCode).json(body);
 }

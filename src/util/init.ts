@@ -3,10 +3,6 @@ import fs from 'fs';
 
 export function init() {
   dotenv.config();
-  findJWTKeys();
-}
-
-export function findJWTKeys() {
   findJWTPublicKey();
   findJWTPrivateKey();
 }

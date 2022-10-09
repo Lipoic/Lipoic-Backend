@@ -153,7 +153,7 @@ const doc = {
           },
           email: {
             type: 'string',
-            example: 'lipoic@lipoic.com',
+            example: 'user@lipoic.org',
           },
           password: {
             type: 'string',
@@ -161,6 +161,21 @@ const doc = {
           },
           locale: {
             $ref: '#/components/schemas/UserLocale',
+          },
+        },
+      },
+      LoginUserData: {
+        type: 'object',
+        description: 'The data for logging in user',
+        required: ['email', 'password'],
+        properties: {
+          email: {
+            type: 'string',
+            example: 'user@lipoic.org',
+          },
+          password: {
+            type: 'string',
+            example: "I'm a password",
           },
         },
       },

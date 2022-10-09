@@ -37,7 +37,7 @@ export async function authMiddleware(req: Request, res: Response) {
         sendResponse(
           res,
           { code: ResponseStatusCode.AUTH_ERROR },
-          HttpStatusCode.FORBIDDEN
+          HttpStatusCode.UNAUTHORIZED
         );
       }
     } else {

@@ -13,3 +13,8 @@ export interface SignUpUserData {
   password: string;
   locale: UserLocale;
 }
+
+export interface LoginUserData {
+  email: string;
+  password: string;
+}
