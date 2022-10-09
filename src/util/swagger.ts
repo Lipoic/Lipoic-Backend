@@ -1,6 +1,7 @@
 import { ResponseStatusCode } from '#/util/code';
 import swaggerAutogen from 'swagger-autogen';
 import { UserLocale } from '@/model/auth/user_locale';
+import { path } from 'app-root-path';
 
 /**
  * Generate the swagger file by OpenAPI specification 3.0.1.
@@ -194,8 +195,8 @@ export function generateSwaggerFile() {
     },
   };
 
-  const outputFile = './swagger-output.json';
-  const endpointsFiles = ['./src/router/index.ts'];
+  const outputFile = `${path}/swagger-output.json`;
+  const endpointsFiles = [`${path}/src/router/index.ts`];
 
   swaggerAutogen({ openapi: '3.0.3' })(outputFile, endpointsFiles, doc);
 
