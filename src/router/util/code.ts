@@ -6,6 +6,8 @@ export enum ResponseStatusCode {
   AUTH_ERROR,
   USER_NOT_FOUND,
   EDIT_USER_INFO_ERROR,
+  Sign_Up_Email_Already_Used,
+  Sign_Up_Error,
 }
 
 export enum HttpStatusCode {
@@ -15,4 +17,5 @@ export enum HttpStatusCode {
   FORBIDDEN = 403,
   NOT_FOUND = 404,
   INTERNAL_SERVER_ERROR = 500,
+  CONFLICT = 409,
 }

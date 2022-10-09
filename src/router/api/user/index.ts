@@ -1,8 +1,11 @@
-import { EditUserInfoData } from '#/api/user/data';
+import { createJWTToken } from '@/util/jwt';
+import { EditUserInfoData, SignUpUserData } from '#/api/user/data';
 import { HttpStatusCode, ResponseStatusCode, sendResponse } from '#/util';
-import { authMiddleware } from '#/util/util';
+import { authMiddleware, getIp } from '#/util/util';
 import { User } from '@/model/auth/user';
+import { passwordHash } from '@/util/bcrypt';
 import { Router } from 'express';
+import { sendVerifyEmail } from '@/util/email';
 
 const router = Router();
 
@@ -93,6 +96,7 @@ router.patch('/info', async (req, res) => {
     const editedData = {
       username: data.username,
       modes: data.modes,
+      locale: data.locale,
     };
 
     if (data.username) {
@@ -100,6 +104,9 @@ router.patch('/info', async (req, res) => {
     }
     if (data.modes) {
       editedData.modes = data.modes;
+    }
+    if (data.locale) {
+      editedData.locale = data.locale;
     }
 
     // Update the user info
@@ -146,6 +153,83 @@ router.patch('/info', async (req, res) => {
         HttpStatusCode.INTERNAL_SERVER_ERROR
       );
     }
+  }
+});
+
+router.post('/signup', async (req, res) => {
+  // #swagger.description = 'Sign up a new user via email and password'
+  /* #swagger.requestBody = {
+    required: true,
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/SignUpUserData',
+        },
+      },
+    },
+  }; */
+
+  const data: SignUpUserData = req.body;
+
+  if (!data.username || !data.email || !data.password || !data.locale) {
+    /* #swagger.responses[400] = {
+      schema: {
+        code: 8,
+      },
+    }; */
+
+    sendResponse(
+      res,
+      {
+        code: ResponseStatusCode.Sign_Up_Error,
+      },
+      HttpStatusCode.BAD_REQUEST
+    );
+    return;
+  }
+
+  const accountAlreadyExists = await User.exists({ email: data.email });
+
+  if (!accountAlreadyExists) {
+    const hash = await passwordHash(data.password);
+
+    const user = new User({
+      username: data.username,
+      email: data.email,
+      verifiedEmail: false,
+      passwordHash: hash,
+      connects: [],
+      modes: [],
+      loginIps: [getIp(req)],
+      locale: data.locale,
+    });
+    await user.save();
+
+    // The verify email code.
+    const code = createJWTToken(user.id, '10 minutes');
+
+    await sendVerifyEmail(data.username, data.email, code, data.locale);
+
+    /* #swagger.responses[200] = {
+      schema: {
+        code: 0,
+      },
+    }; */
+
+    sendResponse(res, { code: ResponseStatusCode.SUCCESS });
+  } else {
+    /* #swagger.responses[409] = {
+      description: 'The email has already been used',
+      schema: {
+        code: 7,
+      },
+    }; */
+
+    sendResponse(
+      res,
+      { code: ResponseStatusCode.Sign_Up_Email_Already_Used },
+      HttpStatusCode.CONFLICT
+    );
   }
 });
 

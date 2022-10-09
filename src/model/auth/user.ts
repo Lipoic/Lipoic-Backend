@@ -2,6 +2,7 @@ import { HydratedDocument, Model, model, Schema, Types } from 'mongoose';
 import { UserMode } from '@/model/auth/user_mode';
 import { ConnectAccount, ConnectType } from '@/model/auth/connect_account';
 import { createJWTToken } from '@/util/jwt';
+import { UserLocale } from '@/model/auth/user_locale';
 
 interface IUser {
   username: string;
@@ -11,6 +12,7 @@ interface IUser {
   connects: Types.Array<ConnectAccount>;
   modes: Types.Array<string>;
   loginIps: Types.Array<string>;
+  locale: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -25,6 +27,7 @@ interface IPublicUser {
   username: string;
   verifiedEmail: boolean;
   modes: Types.Array<string>;
+  locale: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -58,6 +61,7 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
       required: true,
     },
     loginIps: { type: [String], required: true },
+    locale: { type: String, enum: Object.values(UserLocale), required: true },
   },
   { timestamps: true }
 );
@@ -68,6 +72,7 @@ userSchema.method('getPublicInfo', function getPublicInfo(): IPublicUser {
     username: this.username,
     verifiedEmail: this.verifiedEmail,
     modes: this.modes,
+    locale: this.locale,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
   };
@@ -77,5 +82,7 @@ userSchema.method('generateJWTToken', function generateJWTToken(): string {
   return createJWTToken(this.id);
 });
 
-export const User = model<IUser, UserModel>('user', userSchema);
+export const User = model<IUser, UserModel>('user', userSchema, undefined, {
+  overwriteModels: true,
+});
 export type UserDocument = HydratedDocument<IUser, IUserMethods>;

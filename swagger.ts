@@ -1,5 +1,6 @@
 import { ResponseStatusCode } from './src/router/util/code';
 import swaggerAutogen from 'swagger-autogen';
+import { UserLocale } from './src/model/auth/user_locale';
 
 const doc = {
   info: {
@@ -72,6 +73,7 @@ const doc = {
           'username',
           'verifiedEmail',
           'modes',
+          'locale',
           'createdAt',
           'updatedAt',
         ],
@@ -94,6 +96,9 @@ const doc = {
               $ref: '#/components/schemas/UserMode',
             },
             example: ['Teacher', 'Parent'],
+          },
+          locale: {
+            ref: '#/components/schemas/UserLocale',
           },
           createdAt: {
             type: 'date',
@@ -125,6 +130,37 @@ const doc = {
               $ref: '#/components/schemas/UserMode',
             },
             example: ['Students'],
+          },
+          locale: {
+            $ref: '#/components/schemas/UserLocale',
+          },
+        },
+      },
+      UserLocale: {
+        type: 'string',
+        description: 'User locale',
+        enum: Object.values(UserLocale),
+        example: 'en-US',
+      },
+      SignUpUserData: {
+        type: 'object',
+        description: 'The data for signing up user',
+        required: ['username', 'email', 'password'],
+        properties: {
+          username: {
+            type: 'string',
+            example: 'Lipoic',
+          },
+          email: {
+            type: 'string',
+            example: 'lipoic@lipoic.com',
+          },
+          password: {
+            type: 'string',
+            example: "I'm a password",
+          },
+          locale: {
+            $ref: '#/components/schemas/UserLocale',
           },
         },
       },

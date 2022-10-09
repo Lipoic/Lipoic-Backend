@@ -44,6 +44,7 @@ const mockRestHandlers = [
           name: 'Google Test user',
           email: 'test@test.com',
           picture: 'test',
+          locale: 'en-US',
         })
       );
     }
@@ -119,9 +120,6 @@ describe('Google OAuth', () => {
         url: 'https://accounts.google.com/o/oauth2/auth?client_id=test&redirect_uri=https%3A%2F%2Flocalhost%3A3000%2Flogin&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&response_type=code',
       },
     });
-
-    delete process.env.GOOGLE_OAUTH_SECRET;
-    delete process.env.GOOGLE_OAUTH_ID;
   });
 
   test('Get google auth URL without redirectUri', async () => {
@@ -297,8 +295,6 @@ describe('Google OAuth', () => {
     expect(response.body).toEqual({
       code: 3,
     });
-
-    delete process.env.GOOGLE_OAUTH_SECRET;
   });
 
   test('Get access token by google oauth code without client id and secret', async () => {
@@ -359,9 +355,6 @@ describe('Facebook OAuth', () => {
         url: 'https://www.facebook.com/dialog/oauth?client_id=test&redirect_uri=https%3A%2F%2Flocalhost%3A3000%2Flogin&scope=public_profile%2Cemail&response_type=code',
       },
     });
-
-    delete process.env.FACEBOOK_OAUTH_SECRET;
-    delete process.env.FACEBOOK_OAUTH_ID;
   });
 
   test('Get facebook auth URL without redirectUri', async () => {

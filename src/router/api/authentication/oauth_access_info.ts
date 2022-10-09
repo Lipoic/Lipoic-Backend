@@ -1,4 +1,5 @@
 import { ConnectType } from '@/model/auth/connect_account';
+import { UserLocale } from '@/model/auth/user_locale';
 import axios from 'axios';
 
 export class OauthAccessInfo {
@@ -36,12 +37,17 @@ export class OauthAccessInfo {
     switch (accountType) {
       case ConnectType.Google: {
         const info = await this.#getGoogleUserInfo();
+        const locales = Object.values(UserLocale).map((l) => l.toString());
+        const locale = locales.includes(info.locale)
+          ? (info.locale as UserLocale)
+          : undefined;
 
         return {
           id: info.id,
           name: info.name,
           email: info.email,
           picture: info.picture,
+          locale,
         };
       }
       case ConnectType.Facebook: {
@@ -63,6 +69,7 @@ export interface OAuthAccountInfo {
   name: string;
   email: string;
   picture: string;
+  locale?: UserLocale;
 }
 
 interface GoogleUserInfo {

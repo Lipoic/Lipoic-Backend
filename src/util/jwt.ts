@@ -2,7 +2,10 @@ import { User, UserDocument } from '@/model/auth/user';
 import jwt from 'jsonwebtoken';
 import { Types } from 'mongoose';
 
-export function createJWTToken(id: Types.ObjectId): string {
+export function createJWTToken(
+  id: Types.ObjectId,
+  expiresIn: string | number = '7 days'
+): string {
   const privateKey = process.env.JWT_PRIVATE_KEY;
   if (!privateKey) {
     throw new Error('Missing JWT private key');
@@ -14,7 +17,7 @@ export function createJWTToken(id: Types.ObjectId): string {
 
   return jwt.sign(payload, privateKey, {
     algorithm: 'ES256',
-    expiresIn: '7 days',
+    expiresIn,
   });
 }
 

@@ -5,6 +5,7 @@ import {
   OAuthAccountInfo,
 } from '#/api/authentication/oauth_access_info';
 import { User } from '@/model/auth/user';
+import { UserLocale } from '@/model/auth/user_locale';
 
 export async function connectOAuthAccount(
   oauth: OauthData,
@@ -30,6 +31,7 @@ export async function connectOAuthAccount(
       connects: [],
       modes: [],
       loginIps: [],
+      locale: accountInfo.locale || UserLocale.TraditionalChinese,
     });
 
     await user.save();

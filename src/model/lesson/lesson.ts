@@ -42,5 +42,7 @@ const lessonSchema = new Schema<ILesson>(
   { timestamps: true }
 );
 
-export const Lesson = model<ILesson>('lesson', lessonSchema);
+export const Lesson = model<ILesson>('lesson', lessonSchema, undefined, {
+  overwriteModels: true,
+});
 export type LessonDocument = HydratedDocument<ILesson>;
