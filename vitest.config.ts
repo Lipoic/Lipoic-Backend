@@ -23,5 +23,6 @@ export default defineConfig({
         'src/util/swagger.ts',
       ],
     },
+    globalSetup: './test/global_setup.ts',
   },
 });

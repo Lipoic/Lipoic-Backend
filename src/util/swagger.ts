@@ -201,5 +201,3 @@ export function generateSwaggerFile() {
 
   console.log('Swagger output generated successfully!');
 }
-
-generateSwaggerFile();

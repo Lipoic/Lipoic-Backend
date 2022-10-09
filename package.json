@@ -14,10 +14,9 @@
     "dev": "concurrently yarn:dev:*",
     "start": "yarn build && node dist/src/index.js",
     "lint": "eslint src/**/*.ts --fix",
-    "test": "yarn swagger && vitest --no-threads",
+    "test": "vitest --no-threads",
     "test:ui": "yarn test --ui",
-    "coverage": "yarn swagger && vitest run --no-threads --coverage",
-    "swagger": "tsc && tsc-alias src/util/swagger.ts && node dist/src/util/swagger.js"
+    "coverage": "vitest run --no-threads --coverage"
   },
   "dependencies": {
     "app-root-path": "^3.1.0",
