@@ -2,9 +2,15 @@ import express, { Express } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import router from '#';
-import swaggerDocument from 'swagger-output.json';
 import swaggerUi from 'swagger-ui-express';
+import { path } from 'app-root-path';
+import { join } from 'path';
+import { readFileSync } from 'fs';
 
+/**
+ * Create a new express server
+ * @returns The express server instance
+ */
 export function createServer(): Express {
   const app: Express = express();
   const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',');
@@ -23,7 +29,7 @@ export function createServer(): Express {
       '/docs',
       swaggerUi.serve,
       swaggerUi.setup(
-        swaggerDocument,
+        JSON.parse(readFileSync(join(path, 'swagger-output.json'), 'utf8')),
         undefined,
         undefined,
         undefined,
