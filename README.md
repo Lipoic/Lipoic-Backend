@@ -35,6 +35,11 @@ ESLint:
 yarn lint
 ```
 
+Generate the `swagger-output.json` file:
+```shell
+yarn swagger
+```
+
 ## Configuration
 
 Create the `.env` file and add key-value pairs according to the table below.

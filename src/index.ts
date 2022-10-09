@@ -1,8 +1,10 @@
 import { createServer } from '@/util/server';
 import { connectDatabase } from '@/database';
 import { init } from '@/util/init';
+import { generateSwaggerFile } from '@/util/swagger';
 
 async function main() {
+  generateSwaggerFile();
   init();
   const app = createServer();
   const port = process.env.PORT || 8080;
