@@ -4,6 +4,11 @@ export default class Database {
   connection!: Connection;
 }
 
+/**
+ * Connect to the database.
+ * @param dbName The database name (default: 'lipoic_data')
+ * @returns The database instance
+ */
 export async function connectDatabase(
   dbName = 'lipoic_data'
 ): Promise<Database> {

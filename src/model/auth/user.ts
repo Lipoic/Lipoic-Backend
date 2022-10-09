@@ -19,11 +19,24 @@ interface IUser {
 }
 
 interface IUserMethods {
+  /**
+   * Get public user info (without privacy info).
+   */
   getPublicInfo: () => IPublicUser;
+  /**
+   * Get the auth jwt token.
+   */
   generateJWTToken: () => string;
+  /**
+   * Is it now possible to send a verification email
+   * Used to prevent mass spam emails
+   */
   canSendVerifyEmail: () => boolean;
 }
 
+/**
+ * The public user info.
+ */
 interface IPublicUser {
   id: string;
   username: string;
@@ -34,6 +47,9 @@ interface IPublicUser {
   updatedAt: Date;
 }
 
+/**
+ * The user database model
+ */
 // eslint-disable-next-line @typescript-eslint/ban-types
 type UserModel = Model<IUser, {}, IUserMethods>;
 
@@ -100,4 +116,7 @@ userSchema.method('canSendVerifyEmail', function canSendVerifyEmail(): boolean {
 export const User = model<IUser, UserModel>('user', userSchema, undefined, {
   overwriteModels: true,
 });
+/**
+ * The document of the user.
+ */
 export type UserDocument = HydratedDocument<IUser, IUserMethods>;

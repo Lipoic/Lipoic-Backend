@@ -2,9 +2,21 @@ import { ConnectType } from '@/model/auth/connect_account';
 import { UserLocale } from '@/model/auth/user_locale';
 import axios from 'axios';
 
+/**
+ * The access info of the third party OAuth service provider
+ */
 export class OauthAccessInfo {
+  /**
+   * The access token
+   */
   accessToken: string;
+  /**
+   * The access token expires time
+   */
   expiresIn: number;
+  /**
+   * The access token type
+   */
   tokenType: string;
 
   constructor(accessToken: string, expiresIn: number, tokenType: string) {
@@ -13,6 +25,10 @@ export class OauthAccessInfo {
     this.tokenType = tokenType;
   }
 
+  /**
+   * Get the user info from Google
+   * @returns The google user info
+   */
   async #getGoogleUserInfo(): Promise<GoogleUserInfo> {
     const response = await axios.get(
       'https://www.googleapis.com/oauth2/v1/userinfo?alt=json',
@@ -24,6 +40,10 @@ export class OauthAccessInfo {
     return response.data;
   }
 
+  /**
+   * Get the user info from Facebook
+   * @returns The facebook user info
+   */
   async #getFacebookUserInfo(): Promise<FacebookUserInfo> {
     const url = `https://graph.facebook.com/v14.0/me?fields=id,first_name,last_name,name,email,picture&access_token=${this.accessToken}`;
     const response = await axios.get(url);
@@ -31,6 +51,11 @@ export class OauthAccessInfo {
     return response.data;
   }
 
+  /**
+   * Get the account info from OAuth service provider
+   * @param accountType The OAuth account type
+   * @returns The account info
+   */
   public async getAccountInfo(
     accountType: ConnectType
   ): Promise<OAuthAccountInfo> {
@@ -64,6 +89,9 @@ export class OauthAccessInfo {
   }
 }
 
+/**
+ * The account info of the third party OAuth service provider
+ */
 export interface OAuthAccountInfo {
   id: string;
   name: string;
@@ -96,6 +124,9 @@ interface FacebookAccountPicture {
   data: FacebookAccountPictureData;
 }
 
+/**
+ * The data of the facebook account picture
+ */
 interface FacebookAccountPictureData {
   height: number;
   is_silhouette: boolean;

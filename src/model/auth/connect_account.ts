@@ -1,3 +1,6 @@
+/**
+ * The connect account of the user for save the third party OAuth info (e.g. google, facebook, etc.)
+ */
 export interface ConnectAccount {
   accountType: string;
   name: string;

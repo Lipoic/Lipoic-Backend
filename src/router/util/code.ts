@@ -1,3 +1,6 @@
+/**
+ * The custom status code of the response.
+ */
 export enum ResponseStatusCode {
   SUCCESS,
   NOT_FOUND,
@@ -13,6 +16,9 @@ export enum ResponseStatusCode {
   Login_User_Email_Not_Verified,
 }
 
+/**
+ * The HTTP status code of the response.
+ */
 export enum HttpStatusCode {
   OK = 200,
   BAD_REQUEST = 400,

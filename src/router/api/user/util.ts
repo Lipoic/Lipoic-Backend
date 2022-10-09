@@ -26,6 +26,12 @@ export async function verifyPassword(
   return compare(password, hash);
 }
 
+/**
+ * Create a code for verify the email
+ * @param id The user id
+ * @param email The user email
+ * @returns The verification code
+ */
 export function createVerifyEmailCode(id: string, email: string): string {
   const privateKey = process.env.JWT_PRIVATE_KEY;
   if (!privateKey) {
@@ -43,6 +49,11 @@ export function createVerifyEmailCode(id: string, email: string): string {
   });
 }
 
+/**
+ * Check if the code is valid
+ * @param code The verification code
+ * @returns The user document if the code is valid, null otherwise
+ */
 export async function checkVerifyEmailCode(
   code: string
 ): Promise<UserDocument | null> {

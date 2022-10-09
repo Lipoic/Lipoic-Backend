@@ -20,6 +20,10 @@ export class OauthData {
     this.redirectUri = redirectUri;
   }
 
+  /**
+   * Get the OAuth authorization uri
+   * @returns The OAuth authorization uri
+   */
   public getAuthUrl(): string {
     const uriPrefix = encodeURI(this.#getAuthUriPrefix());
     const clientId = encodeURIComponent(this.clientId);
@@ -29,6 +33,11 @@ export class OauthData {
     return `${uriPrefix}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code`;
   }
 
+  /**
+   * Get the access info from OAuth service provider
+   * @param code The OAuth code
+   * @returns The access info
+   */
   public async getAccessInfo(code: string): Promise<OauthAccessInfo> {
     const data: Record<string, string> = {
       client_id: this.clientId,
@@ -59,6 +68,10 @@ export class OauthData {
     );
   }
 
+  /**
+   * Get the user info scope
+   * @returns The user info scope
+   */
   #getScope() {
     switch (this.accountType) {
       case ConnectType.Google:
