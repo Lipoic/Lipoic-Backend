@@ -19,8 +19,10 @@ import {
 const router = Router();
 
 router.get('/info', async (req, res) => {
-  // #swagger.description = 'Get the info of the current user (authorization required)'
-  // #swagger.security = [{ "bearerAuth": [] }]
+  /*
+    #swagger.description = 'Get the info of the current user (authorization required)'
+    #swagger.security = [{ "bearerAuth": [] }]
+  */
 
   // This middleware will check the token and set the user info to req.user
   await authMiddleware(req, res);
@@ -81,8 +83,10 @@ router.get('/info/:userId', async (req, res) => {
 });
 
 router.patch('/info', async (req, res) => {
-  // #swagger.description = 'Edit the info of the current user (authorization required)'
-  // #swagger.security = [{ "bearerAuth": [] }]
+  /*
+    #swagger.description = 'Edit the info of the current user (authorization required)'
+    #swagger.security = [{ "bearerAuth": [] }]
+  */
 
   // This middleware will check the token and set the user info to req.user
   await authMiddleware(req, res);
@@ -90,7 +94,8 @@ router.patch('/info', async (req, res) => {
   const user = req.user;
 
   if (user) {
-    /* #swagger.requestBody = {
+    /*
+    #swagger.requestBody = {
       required: true,
       content: {
         'application/json': {
@@ -99,7 +104,8 @@ router.patch('/info', async (req, res) => {
           },
         },
       },
-    }; */
+    };
+    */
 
     const data: EditUserInfoData = req.body;
     const editedData = {
@@ -167,17 +173,19 @@ router.patch('/info', async (req, res) => {
 });
 
 router.post('/signup', async (req, res) => {
-  // #swagger.description = 'Sign up a new user via email and password'
-  /* #swagger.requestBody = {
-    required: true,
-    content: {
-      'application/json': {
-        schema: {
-          $ref: '#/components/schemas/SignUpUserData',
+  /*
+    #swagger.description = 'Sign up a new user via email and password'
+    #swagger.requestBody = {
+      required: true,
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/components/schemas/SignUpUserData',
+          },
         },
       },
-    },
-  }; */
+    }; 
+  */
 
   const data: SignUpUserData = req.body;
 
@@ -332,17 +340,19 @@ router.get('/verify', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-  // #swagger.description = 'Login via email and password'
-  /* #swagger.requestBody = {
-    required: true,
-    content: {
-      'application/json': {
-        schema: {
-          $ref: '#/components/schemas/LoginUserData',
+  /* 
+    #swagger.description = 'Login via email and password'
+    #swagger.requestBody = {
+      required: true,
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/components/schemas/LoginUserData',
+          },
         },
       },
-    },
-  }; */
+    };
+  */
 
   const data: LoginUserData = req.body;
 

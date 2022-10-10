@@ -3,9 +3,24 @@ import { ConnectType } from '@/model/auth/connect_account';
 import axios, { AxiosResponse } from 'axios';
 
 export class OauthData {
+  /**
+   * The OAuth account type.
+   */
   readonly accountType: ConnectType;
+
+  /**
+   * The client secret of the OAuth app.
+   */
   readonly clientSecret: string;
+
+  /**
+   * The client id of the OAuth app.
+   */
   readonly clientId: string;
+
+  /**
+   * The redirect uri of the OAuth app.
+   */
   readonly redirectUri: string;
 
   constructor(
