@@ -42,10 +42,10 @@ You can find an example in [`.env.example`](.env.example).
 
 | Key                     | Description                                                          | Default Value                         |
 | ----------------------- | -------------------------------------------------------------------- | ------------------------------------- |
-| `PORT`                  | The server port.                                                     | `8080`                                |
-| `DATABASE_URL`          | The URL to the MongoDB database.                                     | `mongodb://localhost:27017`           |
-| `DATABASE_USERNAME`     | The database auth username.                                          |                                       |
-| `DATABASE_PASSWORD`     | The database auth password.                                          |                                       |
+| `PORT`                  | The server port                                                      | `8080`                                |
+| `DATABASE_URL`          | The URL to the MongoDB database                                      | `mongodb://localhost:27017`           |
+| `DATABASE_USERNAME`     | The database auth username                                           |                                       |
+| `DATABASE_PASSWORD`     | The database auth password                                           |                                       |
 | `CLIENT_URL`            | The URL of the frontend or client                                    | `https://lipoic.org`                  |
 | `ALLOWED_ORIGINS`       | The server allowed origins (CORS)                                    |                                       |
 | `GOOGLE_OAUTH_SECRET`   | Google OAuth client secret                                           |                                       |
@@ -62,7 +62,7 @@ You can find an example in [`.env.example`](.env.example).
 | `VERIFY_EMAIL_FROM`     | The email address of the sender for send sign up verification emails | `Lipoic Account <contact@lipoic.org>` |
 
 ### Generate JWT keys
-Generate keys for signing and verifying JWT tokens
+Generate keys for signing and verifying JWT tokens.
 
 ```shell
 openssl ecparam -genkey -name secp256k1 -noout -out jwt_private_key.pem
