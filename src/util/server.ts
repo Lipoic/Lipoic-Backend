@@ -8,8 +8,8 @@ import { join } from 'path';
 import { readFileSync } from 'fs';
 
 /**
- * Create a new express server
- * @returns The express server instance
+ * Create a new express server.
+ * @returns The express server instance.
  */
 export function createServer(): Express {
   const app: Express = express();

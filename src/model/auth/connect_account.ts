@@ -1,5 +1,5 @@
 /**
- * The connect account of the user for save the third party OAuth info (e.g. google, facebook, etc.)
+ * The connect account of the user for save the third party OAuth info (e.g. google, facebook, etc.).
  */
 export interface ConnectAccount {
   accountType: string;
@@ -7,6 +7,9 @@ export interface ConnectAccount {
   email: string;
 }
 
+/**
+ * The connect account type.
+ */
 export enum ConnectType {
   Google,
   Facebook,

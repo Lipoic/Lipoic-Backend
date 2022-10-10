@@ -4,6 +4,9 @@ import type { ErrorRequestHandler } from 'express';
 import { apiRouter } from '#/api';
 import { HttpStatusCode, ResponseStatusCode, sendResponse } from '#/util';
 
+/**
+ * The root router.
+ */
 const router = Router();
 
 router.use(apiRouter);

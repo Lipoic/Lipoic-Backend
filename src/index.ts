@@ -3,6 +3,9 @@ import { connectDatabase } from '@/database';
 import { init } from '@/util/init';
 import { generateSwaggerFile } from '@/util/swagger';
 
+/**
+ * Main entry point.
+ */
 async function main() {
   generateSwaggerFile();
   init();

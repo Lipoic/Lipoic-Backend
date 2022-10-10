@@ -5,10 +5,10 @@ import { createTransport } from 'nodemailer';
 
 /**
  * Send the verification email to the user.
- * @param username The username
- * @param toEmail The email address to send
- * @param code The verification code
- * @param locale The user locale
+ * @param username The username.
+ * @param toEmail The email address to send.
+ * @param code The verification code.
+ * @param locale The user locale.
  */
 export async function sendVerifyEmail(
   username: string,

@@ -8,11 +8,11 @@ import { User } from '@/model/auth/user';
 import { UserLocale } from '@/model/auth/user_locale';
 
 /**
- * Connect the OAuth account to the user
- * @param oauth The OAuth data
- * @param code The OAuth code
- * @param ip The user IP address
- * @returns The OAuth account info if the account is connected successfully, otherwise return null
+ * Connect the OAuth account to the user.
+ * @param oauth The OAuth data.
+ * @param code The OAuth code.
+ * @param ip The user IP address.
+ * @returns The OAuth account info if the account is connected successfully, otherwise return null.
  */
 export async function connectOAuthAccount(
   oauth: OauthData,
@@ -50,7 +50,7 @@ export async function connectOAuthAccount(
     email: accountInfo.email,
   };
 
-  // Add the login ip and connect account
+  // Add the login ip and connect account.
   await User.updateOne(
     {
       email: accountInfo.email,

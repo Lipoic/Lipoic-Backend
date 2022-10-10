@@ -3,19 +3,21 @@ import { UserLocale } from '@/model/auth/user_locale';
 import axios from 'axios';
 
 /**
- * The access info of the third party OAuth service provider
+ * The access info of the third party OAuth service provider.
  */
 export class OauthAccessInfo {
   /**
-   * The access token
+   * The access token.
    */
   accessToken: string;
+
   /**
-   * The access token expires time
+   * The access token expires time.
    */
   expiresIn: number;
+
   /**
-   * The access token type
+   * The access token type.
    */
   tokenType: string;
 
@@ -26,8 +28,8 @@ export class OauthAccessInfo {
   }
 
   /**
-   * Get the user info from Google
-   * @returns The google user info
+   * Get the user info from Google.
+   * @returns The google user info.
    */
   async #getGoogleUserInfo(): Promise<GoogleUserInfo> {
     const response = await axios.get(
@@ -41,8 +43,8 @@ export class OauthAccessInfo {
   }
 
   /**
-   * Get the user info from Facebook
-   * @returns The facebook user info
+   * Get the user info from Facebook.
+   * @returns The facebook user info.
    */
   async #getFacebookUserInfo(): Promise<FacebookUserInfo> {
     const url = `https://graph.facebook.com/v14.0/me?fields=id,first_name,last_name,name,email,picture&access_token=${this.accessToken}`;
@@ -52,9 +54,9 @@ export class OauthAccessInfo {
   }
 
   /**
-   * Get the account info from OAuth service provider
-   * @param accountType The OAuth account type
-   * @returns The account info
+   * Get the account info from OAuth service provider.
+   * @param accountType The OAuth account type.
+   * @returns The account info.
    */
   public async getAccountInfo(
     accountType: ConnectType
@@ -90,7 +92,7 @@ export class OauthAccessInfo {
 }
 
 /**
- * The account info of the third party OAuth service provider
+ * The account info of the third party OAuth service provider.
  */
 export interface OAuthAccountInfo {
   id: string;
@@ -125,7 +127,7 @@ interface FacebookAccountPicture {
 }
 
 /**
- * The data of the facebook account picture
+ * The data of the facebook account picture.
  */
 interface FacebookAccountPictureData {
   height: number;

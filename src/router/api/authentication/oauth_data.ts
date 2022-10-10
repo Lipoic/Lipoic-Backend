@@ -21,8 +21,8 @@ export class OauthData {
   }
 
   /**
-   * Get the OAuth authorization uri
-   * @returns The OAuth authorization uri
+   * Get the OAuth authorization uri.
+   * @returns The OAuth authorization uri.
    */
   public getAuthUrl(): string {
     const uriPrefix = encodeURI(this.#getAuthUriPrefix());
@@ -34,9 +34,9 @@ export class OauthData {
   }
 
   /**
-   * Get the access info from OAuth service provider
-   * @param code The OAuth code
-   * @returns The access info
+   * Get the access info from OAuth service provider.
+   * @param code The OAuth code.
+   * @returns The access info.
    */
   public async getAccessInfo(code: string): Promise<OauthAccessInfo> {
     const data: Record<string, string> = {
@@ -69,8 +69,8 @@ export class OauthData {
   }
 
   /**
-   * Get the user info scope
-   * @returns The user info scope
+   * Get the user info scope.
+   * @returns The user info scope.
    */
   #getScope() {
     switch (this.accountType) {

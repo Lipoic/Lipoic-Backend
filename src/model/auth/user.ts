@@ -28,8 +28,8 @@ interface IUserMethods {
    */
   generateJWTToken: () => string;
   /**
-   * Is it now possible to send a verification email
-   * Used to prevent mass spam emails
+   * Is it now possible to send a verification email.
+   * Used to prevent mass spam emails.
    */
   canSendVerifyEmail: () => boolean;
 }
@@ -48,7 +48,7 @@ interface IPublicUser {
 }
 
 /**
- * The user database model
+ * The user database model.
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
 type UserModel = Model<IUser, {}, IUserMethods>;

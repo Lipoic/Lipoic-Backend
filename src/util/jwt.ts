@@ -4,8 +4,8 @@ import { Types } from 'mongoose';
 
 /**
  * Create a jwt auth token for the user.
- * @param id The user id
- * @returns The jwt token
+ * @param id The user id.
+ * @returns The jwt token.
  */
 export function createJWTToken(id: Types.ObjectId): string {
   const privateKey = process.env.JWT_PRIVATE_KEY;
@@ -25,8 +25,8 @@ export function createJWTToken(id: Types.ObjectId): string {
 
 /**
  * Verify the jwt auth token.
- * @param token The jwt auth token
- * @returns The user document if the token is valid
+ * @param token The jwt auth token.
+ * @returns The user document if the token is valid.
  */
 export async function verifyJWTToken(
   token: string
