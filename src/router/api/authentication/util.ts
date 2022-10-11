@@ -5,6 +5,7 @@ import {
   OAuthAccountInfo,
 } from '#/api/authentication/oauth_access_info';
 import { User } from '@/model/auth/user';
+import { UserLocale } from '@/model/auth/user_locale';
 
 /**
  * Connect the OAuth account to the user.
@@ -16,7 +17,8 @@ import { User } from '@/model/auth/user';
 export async function connectOAuthAccount(
   oauth: OauthData,
   code: string,
-  ip: string
+  ip: string,
+  locale: UserLocale
 ): Promise<OAuthAccountInfo | null> {
   let accessInfo: OauthAccessInfo;
 
@@ -37,7 +39,7 @@ export async function connectOAuthAccount(
       connects: [],
       modes: [],
       loginIps: [],
-      locale: accountInfo.locale || 'zh-TW',
+      locale: locale,
     });
 
     await user.save();

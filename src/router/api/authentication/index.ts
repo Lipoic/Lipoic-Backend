@@ -1,3 +1,4 @@
+import { isUserLocale } from './../../../model/auth/user_locale';
 import { ConnectType } from '@/model/auth/connect_account';
 import { OauthData } from '#/api/authentication/oauth_data';
 import { HttpStatusCode, ResponseStatusCode, sendResponse } from '#/util';
@@ -122,8 +123,13 @@ router.get('/google/callback', async (req, res) => {
 
   const code = req.query.code;
   const redirectUri = req.query.redirectUri;
+  const locale = req.query.locale;
 
-  if (typeof code !== 'string' || typeof redirectUri !== 'string') {
+  if (
+    typeof code !== 'string' ||
+    typeof redirectUri !== 'string' ||
+    !isUserLocale(locale)
+  ) {
     /* #swagger.responses[400] = {
       schema: {
         code: 3,
@@ -161,7 +167,12 @@ router.get('/google/callback', async (req, res) => {
     redirectUri
   );
 
-  const accountInfo = await connectOAuthAccount(oauth, code, getIp(req));
+  const accountInfo = await connectOAuthAccount(
+    oauth,
+    code,
+    getIp(req),
+    locale
+  );
 
   if (!accountInfo) {
     sendResponse(
@@ -202,8 +213,13 @@ router.get('/facebook/callback', async (req, res) => {
 
   const code = req.query.code;
   const redirectUri = req.query.redirectUri;
+  const locale = req.query.locale;
 
-  if (typeof code !== 'string' || typeof redirectUri !== 'string') {
+  if (
+    typeof code !== 'string' ||
+    typeof redirectUri !== 'string' ||
+    !isUserLocale(locale)
+  ) {
     /* #swagger.responses[400] = {
       schema: {
         code: 3,
@@ -241,7 +257,12 @@ router.get('/facebook/callback', async (req, res) => {
     redirectUri
   );
 
-  const accountInfo = await connectOAuthAccount(oauth, code, getIp(req));
+  const accountInfo = await connectOAuthAccount(
+    oauth,
+    code,
+    getIp(req),
+    locale
+  );
 
   if (!accountInfo) {
     sendResponse(

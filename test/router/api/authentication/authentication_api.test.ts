@@ -196,7 +196,11 @@ describe('Google OAuth', () => {
     const code = 'test code';
     const response = await supertest(server)
       .get('/authentication/google/callback')
-      .query({ code, redirectUri: 'https://localhost:3000/login' });
+      .query({
+        code,
+        redirectUri: 'https://localhost:3000/login',
+        locale: 'en-US',
+      });
 
     expect(response.status).toBe(200);
     expect(response.headers['content-type']).toBe(
@@ -207,7 +211,7 @@ describe('Google OAuth', () => {
     expect(response.body['data']['token'].length).toBe(214);
   });
 
-  test('Get access token by google oauth code without redirectUri', async () => {
+  test('Get access token by google oauth code without redirectUri and locale', async () => {
     process.env.GOOGLE_OAUTH_ID = 'TEST';
     process.env.GOOGLE_OAUTH_SECRET = 'TEST';
 
@@ -225,7 +229,7 @@ describe('Google OAuth', () => {
     });
   });
 
-  test('Get access token by google oauth code without code', async () => {
+  test('Get access token by google oauth code without code and locale', async () => {
     process.env.GOOGLE_OAUTH_ID = 'TEST';
     process.env.GOOGLE_OAUTH_SECRET = 'TEST';
 
@@ -242,7 +246,25 @@ describe('Google OAuth', () => {
     });
   });
 
-  test('Get access token by google oauth code without code and redirectUri', async () => {
+  test('Get access token by google oauth code without locale', async () => {
+    process.env.GOOGLE_OAUTH_ID = 'TEST';
+    process.env.GOOGLE_OAUTH_SECRET = 'TEST';
+
+    const code = 'test code';
+    const response = await supertest(server)
+      .get('/authentication/google/callback')
+      .query({ code, redirectUri: 'https://localhost:3000/login' });
+
+    expect(response.status).toBe(400);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 3,
+    });
+  });
+
+  test('Get access token by google oauth code without code and redirectUri and locale', async () => {
     process.env.GOOGLE_OAUTH_ID = 'TEST';
     process.env.GOOGLE_OAUTH_SECRET = 'TEST';
 
@@ -266,7 +288,11 @@ describe('Google OAuth', () => {
     const code = 'test code';
     const response = await supertest(server)
       .get('/authentication/google/callback')
-      .query({ code, redirectUri: 'https://localhost:3000/login' });
+      .query({
+        code,
+        redirectUri: 'https://localhost:3000/login',
+        locale: 'en-US',
+      });
 
     expect(response.status).toBe(500);
     expect(response.headers['content-type']).toBe(
@@ -284,9 +310,13 @@ describe('Google OAuth', () => {
     process.env.GOOGLE_OAUTH_SECRET = 'test';
 
     const code = 'test code';
-    const response = await supertest(server).get(
-      `/authentication/google/callback?code=${code}&redirectUri=https://localhost:3000/login`
-    );
+    const response = await supertest(server)
+      .get('/authentication/google/callback')
+      .query({
+        code,
+        redirectUri: 'https://localhost:3000/login',
+        locale: 'en-US',
+      });
 
     expect(response.status).toBe(500);
     expect(response.headers['content-type']).toBe(
@@ -302,9 +332,13 @@ describe('Google OAuth', () => {
     delete process.env.GOOGLE_OAUTH_SECRET;
 
     const code = 'test code';
-    const response = await supertest(server).get(
-      `/authentication/google/callback?code=${code}&redirectUri=https://localhost:3000/login`
-    );
+    const response = await supertest(server)
+      .get('/authentication/google/callback')
+      .query({
+        code,
+        redirectUri: 'https://localhost:3000/login',
+        locale: 'en-US',
+      });
 
     expect(response.status).toBe(500);
     expect(response.headers['content-type']).toBe(
@@ -320,9 +354,35 @@ describe('Google OAuth', () => {
     process.env.GOOGLE_OAUTH_SECRET = 'TEST';
 
     const code = 'invalid code';
-    const response = await supertest(server).get(
-      `/authentication/google/callback?code=${code}&redirectUri=https://localhost:3000/login`
+    const response = await supertest(server)
+      .get('/authentication/google/callback')
+      .query({
+        code,
+        redirectUri: 'https://localhost:3000/login',
+        locale: 'en-US',
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
     );
+    expect(response.body).toEqual({
+      code: 3,
+    });
+  });
+
+  test('Get access token by google oauth code with invalid locale', async () => {
+    process.env.GOOGLE_OAUTH_ID = 'TEST';
+    process.env.GOOGLE_OAUTH_SECRET = 'TEST';
+
+    const code = 'test code';
+    const response = await supertest(server)
+      .get('/authentication/google/callback')
+      .query({
+        code,
+        redirectUri: 'https://localhost:3000/login',
+        locale: 'invalid locale',
+      });
 
     expect(response.status).toBe(400);
     expect(response.headers['content-type']).toBe(
@@ -431,9 +491,13 @@ describe('Facebook OAuth', () => {
     process.env.FACEBOOK_OAUTH_SECRET = 'TEST';
 
     const code = 'test code';
-    const response = await supertest(server).get(
-      `/authentication/facebook/callback?code=${code}&redirectUri=https://localhost:3000/login`
-    );
+    const response = await supertest(server)
+      .get('/authentication/facebook/callback')
+      .query({
+        code,
+        redirectUri: 'https://localhost:3000/login',
+        locale: 'en-US',
+      });
 
     expect(response.status).toBe(200);
     expect(response.headers['content-type']).toBe(
@@ -444,11 +508,14 @@ describe('Facebook OAuth', () => {
     expect(response.body['data']['token'].length).toBe(214);
   });
 
-  test('Get access token by facebook oauth code without redirectUri', async () => {
+  test('Get access token by facebook oauth code without redirectUri and locale', async () => {
+    process.env.FACEBOOK_OAUTH_ID = 'TEST';
+    process.env.FACEBOOK_OAUTH_SECRET = 'TEST';
+
     const code = 'test code';
-    const response = await supertest(server).get(
-      `/authentication/facebook/callback?code=${code}`
-    );
+    const response = await supertest(server)
+      .get('/authentication/facebook/callback')
+      .query({ code });
 
     expect(response.status).toBe(400);
     expect(response.headers['content-type']).toBe(
@@ -459,10 +526,13 @@ describe('Facebook OAuth', () => {
     });
   });
 
-  test('Get access token by facebook oauth code without code', async () => {
-    const response = await supertest(server).get(
-      `/authentication/facebook/callback?redirectUri=https://localhost:3000/login`
-    );
+  test('Get access token by facebook oauth code without code and locale', async () => {
+    process.env.FACEBOOK_OAUTH_ID = 'TEST';
+    process.env.FACEBOOK_OAUTH_SECRET = 'TEST';
+
+    const response = await supertest(server)
+      .get('/authentication/facebook/callback')
+      .query({ redirectUri: 'https://localhost:3000/login' });
 
     expect(response.status).toBe(400);
     expect(response.headers['content-type']).toBe(
@@ -473,10 +543,31 @@ describe('Facebook OAuth', () => {
     });
   });
 
-  test('Get access token by facebook oauth code without code and redirectUri', async () => {
+  test('Get access token by facebook oauth code without code and redirectUri and locale', async () => {
+    process.env.FACEBOOK_OAUTH_ID = 'TEST';
+    process.env.FACEBOOK_OAUTH_SECRET = 'TEST';
+
     const response = await supertest(server).get(
       `/authentication/facebook/callback`
     );
+
+    expect(response.status).toBe(400);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 3,
+    });
+  });
+
+  test('Get access token by facebook oauth code without locale', async () => {
+    process.env.FACEBOOK_OAUTH_ID = 'TEST';
+    process.env.FACEBOOK_OAUTH_SECRET = 'TEST';
+
+    const code = 'test code';
+    const response = await supertest(server)
+      .get('/authentication/facebook/callback')
+      .query({ code, redirectUri: 'https://localhost:3000/login' });
 
     expect(response.status).toBe(400);
     expect(response.headers['content-type']).toBe(
@@ -492,9 +583,13 @@ describe('Facebook OAuth', () => {
     process.env.FACEBOOK_OAUTH_ID = 'TEST';
 
     const code = 'test code';
-    const response = await supertest(server).get(
-      `/authentication/facebook/callback?code=${code}&redirectUri=https://localhost:3000/login`
-    );
+    const response = await supertest(server)
+      .get('/authentication/facebook/callback')
+      .query({
+        code,
+        redirectUri: 'https://localhost:3000/login',
+        locale: 'en-US',
+      });
 
     expect(response.status).toBe(500);
     expect(response.headers['content-type']).toBe(
@@ -512,9 +607,13 @@ describe('Facebook OAuth', () => {
     process.env.FACEBOOK_OAUTH_SECRET = 'TEST';
 
     const code = 'test code';
-    const response = await supertest(server).get(
-      `/authentication/facebook/callback?code=${code}&redirectUri=https://localhost:3000/login`
-    );
+    const response = await supertest(server)
+      .get('/authentication/facebook/callback')
+      .query({
+        code,
+        redirectUri: 'https://localhost:3000/login',
+        locale: 'en-US',
+      });
 
     expect(response.status).toBe(500);
     expect(response.headers['content-type']).toBe(
@@ -532,9 +631,13 @@ describe('Facebook OAuth', () => {
     delete process.env.FACEBOOK_OAUTH_SECRET;
 
     const code = 'test code';
-    const response = await supertest(server).get(
-      `/authentication/facebook/callback?code=${code}&redirectUri=https://localhost:3000/login`
-    );
+    const response = await supertest(server)
+      .get('/authentication/facebook/callback')
+      .query({
+        code,
+        redirectUri: 'https://localhost:3000/login',
+        locale: 'en-US',
+      });
 
     expect(response.status).toBe(500);
     expect(response.headers['content-type']).toBe(
@@ -560,5 +663,27 @@ describe('Facebook OAuth', () => {
     );
     expect(response.body['code']).toBe(3);
     expect(response.body['data']).toBeUndefined();
+  });
+
+  test('Get access token by facebook oauth code with invalid locale', async () => {
+    process.env.FACEBOOK_OAUTH_ID = 'TEST';
+    process.env.FACEBOOK_OAUTH_SECRET = 'TEST';
+
+    const code = 'test code';
+    const response = await supertest(server)
+      .get('/authentication/facebook/callback')
+      .query({
+        code,
+        redirectUri: 'https://localhost:3000/login',
+        locale: 'invalid locale',
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 3,
+    });
   });
 });
