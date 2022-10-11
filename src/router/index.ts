@@ -11,7 +11,7 @@ const router = Router();
 
 router.use(apiRouter);
 router.use((_, res) => {
-  /* handle not found page error */
+  /* Handle not found page error. */
   sendResponse(
     res,
     { code: ResponseStatusCode.NOT_FOUND },

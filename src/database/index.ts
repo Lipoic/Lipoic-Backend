@@ -6,8 +6,8 @@ export default class Database {
 
 /**
  * Connect to the database.
- * @param dbName The database name (default: 'lipoic_data')
- * @returns The database instance
+ * @param dbName The database name (default: 'lipoic_data').
+ * @returns The database instance.
  */
 export async function connectDatabase(
   dbName = 'lipoic_data'

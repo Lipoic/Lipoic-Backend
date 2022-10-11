@@ -21,7 +21,7 @@ export interface SignUpUserData {
 }
 
 /**
- * The data for logging in user
+ * The data for logging in user.
  */
 export interface LoginUserData {
   email: string;

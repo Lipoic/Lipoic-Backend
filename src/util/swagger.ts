@@ -123,7 +123,7 @@ export function generateSwaggerFile() {
         },
         EditUserInfoData: {
           type: 'object',
-          description: 'The data for editing user info',
+          description: 'The data for editing user info.',
           properties: {
             username: {
               type: 'string',
@@ -143,7 +143,7 @@ export function generateSwaggerFile() {
         },
         UserLocale: {
           type: 'string',
-          description: 'User locale',
+          description: 'the user locale.',
           enum: USER_LOCALES,
           example: 'en-US',
         },
@@ -171,7 +171,7 @@ export function generateSwaggerFile() {
         },
         LoginUserData: {
           type: 'object',
-          description: 'The data for logging in user',
+          description: 'The data for logging in user.',
           required: ['email', 'password'],
           properties: {
             email: {
