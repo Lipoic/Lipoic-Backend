@@ -1,4 +1,4 @@
-import { isUserLocale } from './../../../model/auth/user_locale';
+import { isUserLocale } from '@/model/auth/user_locale';
 import { ConnectType } from '@/model/auth/connect_account';
 import { OauthData } from '#/api/authentication/oauth_data';
 import { HttpStatusCode, ResponseStatusCode, sendResponse } from '#/util';
