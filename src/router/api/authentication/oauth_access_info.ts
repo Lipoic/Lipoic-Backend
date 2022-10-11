@@ -1,5 +1,5 @@
 import { ConnectType } from '@/model/auth/connect_account';
-import { UserLocale } from '@/model/auth/user_locale';
+import { UserLocale, USER_LOCALES } from '@/model/auth/user_locale';
 import axios from 'axios';
 
 /**
@@ -64,8 +64,7 @@ export class OauthAccessInfo {
     switch (accountType) {
       case ConnectType.Google: {
         const info = await this.#getGoogleUserInfo();
-        const locales = Object.values(UserLocale).map((l) => l.toString());
-        const locale = locales.includes(info.locale)
+        const locale = USER_LOCALES.includes(info.locale)
           ? (info.locale as UserLocale)
           : undefined;
 

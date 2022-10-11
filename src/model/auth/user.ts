@@ -2,20 +2,29 @@ import { HydratedDocument, Model, model, Schema, Types } from 'mongoose';
 import { UserMode } from '@/model/auth/user_mode';
 import { ConnectAccount, ConnectType } from '@/model/auth/connect_account';
 import { createJWTToken } from '@/util/jwt';
-import { UserLocale } from '@/model/auth/user_locale';
+import { USER_LOCALES } from '@/model/auth/user_locale';
 
 interface IUser {
   username: string;
   email: string;
   verifiedEmail: boolean;
   passwordHash?: string;
-  lastSentVerifyEmailTime: Date;
-  connects: Types.Array<ConnectAccount>;
-  modes: Types.Array<string>;
-  loginIps: Types.Array<string>;
+  lastSentVerifyEmailTime?: Date;
+  connects: ConnectAccount[];
+  modes: string[];
+  loginIps: string[];
   locale: string;
-  createdAt: Date;
-  updatedAt: Date;
+
+  /**
+   * The date when the user is created.
+   * Mongoose will automatically add this field.
+   */
+  createdAt?: Date;
+  /**
+   * The date when the user is updated.
+   * Mongoose will automatically add this field.
+   */
+  updatedAt?: Date;
 }
 
 interface IUserMethods {
@@ -47,13 +56,10 @@ interface IPublicUser {
   updatedAt: Date;
 }
 
-/**
- * The user database model.
- */
 // eslint-disable-next-line @typescript-eslint/ban-types
-type UserModel = Model<IUser, {}, IUserMethods>;
+type UserModelType = Model<IUser, {}, IUserMethods>;
 
-const userSchema = new Schema<IUser, UserModel, IUserMethods>(
+const userSchema = new Schema<IUser, UserModelType, IUserMethods>(
   {
     username: { type: String, required: true },
     email: { type: String, required: true },
@@ -80,7 +86,7 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
       required: true,
     },
     loginIps: { type: [String], required: true },
-    locale: { type: String, enum: Object.values(UserLocale), required: true },
+    locale: { type: String, enum: USER_LOCALES, required: true },
   },
   { timestamps: true }
 );
@@ -113,10 +119,21 @@ userSchema.method('canSendVerifyEmail', function canSendVerifyEmail(): boolean {
   }
 });
 
-export const User = model<IUser, UserModel>('user', userSchema, undefined, {
-  overwriteModels: true,
-});
 /**
- * The document of the user.
+ * The user database model.
+ */
+export const UserModel = model<IUser, UserModelType>(
+  'user',
+  userSchema,
+  undefined,
+  {
+    overwriteModels: true,
+  }
+);
+
+export const User = UserModel<IUser>;
+
+/**
+ * The document type of the user.
  */
 export type UserDocument = HydratedDocument<IUser, IUserMethods>;

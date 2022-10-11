@@ -1,5 +1,4 @@
 import { User } from '@/model/auth/user';
-import { UserLocale } from '@/model/auth/user_locale';
 import {
   checkVerifyEmailCode,
   createVerifyEmailCode,
@@ -61,7 +60,7 @@ describe('Create verify email code', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
 
     const token = createVerifyEmailCode(user.id, user.email);
@@ -79,7 +78,7 @@ describe('Create verify email code', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
 
     expect(process.env.JWT_PRIVATE_KEY).toBeUndefined();
@@ -98,7 +97,7 @@ describe('Check verify email code', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
 
     await user.save();
@@ -131,7 +130,7 @@ describe('Check verify email code', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
 
     await user.save();
@@ -178,7 +177,7 @@ describe('Check verify email code', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
 
     const code = createVerifyEmailCode(user.id, user.email);
@@ -196,7 +195,7 @@ describe('Check verify email code', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
     await user.save();
 

@@ -14,7 +14,6 @@ import { init } from '@/util/init';
 import Database, { connectDatabase } from '@/database';
 import { User } from '@/model/auth/user';
 import supertest from 'supertest';
-import { UserLocale } from '@/model/auth/user_locale';
 import Mail from 'nodemailer/lib/mailer';
 
 let server: Express;
@@ -42,7 +41,7 @@ describe('Get the info of the current user', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
 
     await user.save();
@@ -65,8 +64,8 @@ describe('Get the info of the current user', () => {
         verifiedEmail: true,
         modes: [],
         locale: 'en-US',
-        createdAt: user.createdAt.toISOString(),
-        updatedAt: user.updatedAt.toISOString(),
+        createdAt: user.createdAt?.toISOString(),
+        updatedAt: user.updatedAt?.toISOString(),
       },
     });
   });
@@ -125,7 +124,7 @@ describe('Get the user info by user id', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
 
     await user.save();
@@ -144,8 +143,8 @@ describe('Get the user info by user id', () => {
         verifiedEmail: true,
         modes: [],
         locale: 'en-US',
-        createdAt: user.createdAt.toISOString(),
-        updatedAt: user.updatedAt.toISOString(),
+        createdAt: user.createdAt?.toISOString(),
+        updatedAt: user.updatedAt?.toISOString(),
       },
     });
   });
@@ -172,7 +171,7 @@ describe('Edit the info of the current user', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
 
     await user.save();
@@ -199,7 +198,7 @@ describe('Edit the info of the current user', () => {
         verifiedEmail: true,
         modes: ['Student'],
         locale: 'zh-TW',
-        createdAt: user.createdAt.toISOString(),
+        createdAt: user.createdAt?.toISOString(),
       },
     });
   });
@@ -272,7 +271,7 @@ describe('Edit the info of the current user', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
 
     await user.save();
@@ -297,7 +296,7 @@ describe('Edit the info of the current user', () => {
         verifiedEmail: true,
         modes: [],
         locale: 'en-US',
-        createdAt: user.createdAt.toISOString(),
+        createdAt: user.createdAt?.toISOString(),
       },
     });
   });
@@ -310,7 +309,7 @@ describe('Edit the info of the current user', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
 
     await user.save();
@@ -335,7 +334,7 @@ describe('Edit the info of the current user', () => {
         verifiedEmail: true,
         modes: ['Student'],
         locale: 'en-US',
-        createdAt: user.createdAt.toISOString(),
+        createdAt: user.createdAt?.toISOString(),
       },
     });
   });
@@ -348,7 +347,7 @@ describe('Edit the info of the current user', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
 
     await user.save();
@@ -373,7 +372,7 @@ describe('Edit the info of the current user', () => {
         verifiedEmail: true,
         modes: [],
         locale: 'zh-TW',
-        createdAt: user.createdAt.toISOString(),
+        createdAt: user.createdAt?.toISOString(),
       },
     });
   });
@@ -386,7 +385,7 @@ describe('Edit the info of the current user', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
 
     await user.save();
@@ -408,7 +407,7 @@ describe('Edit the info of the current user', () => {
         verifiedEmail: true,
         modes: [],
         locale: 'en-US',
-        createdAt: user.createdAt.toISOString(),
+        createdAt: user.createdAt?.toISOString(),
       },
     });
   });
@@ -742,7 +741,7 @@ describe('Verify the email by the code', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
     await user.save();
 
@@ -805,7 +804,7 @@ describe('Login via email and password', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
     await user.save();
 
@@ -835,7 +834,7 @@ describe('Login via email and password', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
     await user.save();
 
@@ -879,7 +878,7 @@ describe('Login via email and password', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
     await user.save();
 

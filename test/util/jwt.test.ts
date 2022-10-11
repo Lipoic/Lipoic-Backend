@@ -11,7 +11,6 @@ import {
 import { User } from '@/model/auth/user';
 import { init } from '@/util/init';
 import jwt from 'jsonwebtoken';
-import { UserLocale } from '@/model/auth/user_locale';
 
 let db: Database;
 
@@ -34,7 +33,7 @@ describe('Create JWT Token', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
 
     const token = createJWTToken(user.id);
@@ -53,7 +52,7 @@ describe('Create JWT Token', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
 
     expect(process.env.JWT_PRIVATE_KEY).toBeUndefined();
@@ -72,7 +71,7 @@ describe('Verify JWT Token', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
 
     await user.save();
@@ -108,7 +107,7 @@ describe('Verify JWT Token', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
 
     await user.save();
@@ -156,7 +155,7 @@ describe('Verify JWT Token', () => {
       connects: [],
       modes: [],
       loginIps: [],
-      locale: UserLocale.AmericanEnglish,
+      locale: 'en-US',
     });
 
     const token = createJWTToken(user.id);

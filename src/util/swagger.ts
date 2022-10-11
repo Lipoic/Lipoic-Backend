@@ -1,6 +1,6 @@
 import { ResponseStatusCode } from '#/util/code';
 import swaggerAutogen from 'swagger-autogen';
-import { UserLocale } from '@/model/auth/user_locale';
+import { USER_LOCALES } from '@/model/auth/user_locale';
 import { path } from 'app-root-path';
 
 /**
@@ -144,7 +144,7 @@ export function generateSwaggerFile() {
         UserLocale: {
           type: 'string',
           description: 'User locale',
-          enum: Object.values(UserLocale),
+          enum: USER_LOCALES,
           example: 'en-US',
         },
         SignUpUserData: {
