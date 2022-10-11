@@ -1,4 +1,4 @@
-export const USER_LOCALES = ['en-US', 'zh-CN', 'zh-TW'];
+export const USER_LOCALES = ['en-US', 'zh-CN', 'zh-TW'] as const;
 
 /**
  * The user's locale code.
