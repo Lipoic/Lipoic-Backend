@@ -1,8 +1,9 @@
 import { connectDatabase } from '@/database';
 import { init } from '@/util/init';
-import { test, expect, beforeAll } from 'vitest';
+import { test, expect, beforeEach } from 'vitest';
 
-beforeAll(() => init());
+// Reset data after each test "important for test isolation"
+beforeEach(() => init());
 
 test('Connect to the database', async () => {
   const db = await connectDatabase();

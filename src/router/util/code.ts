@@ -1,15 +1,24 @@
+/**
+ * The custom status code of the response.
+ */
 export enum ResponseStatusCode {
   SUCCESS,
-  OAUTH_CODE_ERROR,
-  OAUTH_GET_USER_INFO_ERROR,
-  LOGIN_USER_NOT_FOUND_ERROR,
-  LOGIN_PASSWORD_ERROR,
-  SING_UP_EMAIL_ALREADY_REGISTERED,
-  VERIFY_EMAIL_ERROR,
-  AUTH_ERROR,
   NOT_FOUND,
+  GET_AUTH_URL_ERROR,
+  OAUTH_CODE_CALLBACK_ERROR,
+  AUTH_ERROR,
+  USER_NOT_FOUND,
+  EDIT_USER_INFO_ERROR,
+  Sign_Up_Email_Already_Used,
+  Sign_Up_Error,
+  Verify_Email_Error,
+  Login_User_Error,
+  Login_User_Email_Not_Verified,
 }
 
+/**
+ * The HTTP status code of the response.
+ */
 export enum HttpStatusCode {
   OK = 200,
   BAD_REQUEST = 400,
@@ -17,5 +26,5 @@ export enum HttpStatusCode {
   FORBIDDEN = 403,
   NOT_FOUND = 404,
   INTERNAL_SERVER_ERROR = 500,
-  BAD_GATEWAY = 502,
+  CONFLICT = 409,
 }

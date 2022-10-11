@@ -2,6 +2,9 @@ import { Response } from 'express';
 
 import { ResponseStatusCode, HttpStatusCode } from '#';
 
+/**
+ * The response body of the API response.
+ */
 export interface APIResponseBody<T> {
   code: ResponseStatusCode;
   data?: T;

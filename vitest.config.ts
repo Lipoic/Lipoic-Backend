@@ -19,7 +19,10 @@ export default defineConfig({
         'src/index.ts',
         '.eslintrc.js',
         'vitest.config.ts',
+        '**/*.d.ts',
+        'src/util/swagger.ts',
       ],
     },
+    globalSetup: './test/global_setup.ts',
   },
 });

@@ -2,6 +2,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
     'plugin:prettier/recommended',
   ],
   parser: '@typescript-eslint/parser',
@@ -9,6 +10,6 @@ module.exports = {
   root: true,
   rules: {
     '@typescript-eslint/ban-ts-comment': 'off',
-    'prettier/prettier': ['error'],
+    'prettier/prettier': ['warn', { endOfLine: 'auto' }],
   },
 };

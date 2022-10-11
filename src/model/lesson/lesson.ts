@@ -1,45 +1,70 @@
-import { model, Schema, Types } from 'mongoose';
+import { HydratedDocument, model, Schema, Types } from 'mongoose';
 import {
   LessonPermission,
   LessonPermissionType,
 } from '@/model/lesson/lesson_permission';
 import { LessonState } from '@/model/lesson/lesson_state';
-import { User } from '@/model/auth/user';
+import { UserModel } from '@/model/auth/user';
 
-export interface ILesson {
+interface ILesson {
   name: string;
   description?: string;
-  created_at: Date;
-  updated_at: Date;
-  create_by: Types.ObjectId;
+  createBy: Types.ObjectId;
   speakers: Types.ObjectId[];
   state: string;
   permission: LessonPermission;
 
-  classroom_id?: Types.ObjectId;
+  classroomId?: Types.ObjectId;
+
+  /**
+   * The date when the lesson is created.
+   * Mongoose will automatically add this field.
+   */
+  createdAt: Date;
+
+  /**
+   * The date when the lesson is updated.
+   * Mongoose will automatically add this field.
+   */
+  updatedAt: Date;
 }
 
 const lessonSchema = new Schema<ILesson>(
   {
     name: { type: String, required: true },
     description: { type: String, required: false },
-    create_by: { type: Schema.Types.ObjectId, required: true, ref: User },
-    speakers: { type: [Schema.Types.ObjectId], required: true, ref: User },
+    createBy: { type: Schema.Types.ObjectId, required: true, ref: UserModel },
+    speakers: { type: [Schema.Types.ObjectId], required: true, ref: UserModel },
     state: { type: String, enum: Object.values(LessonState), required: true },
     permission: {
       type: {
-        permission_type: {
+        permissionType: {
           type: String,
           enum: Object.values(LessonPermissionType),
           required: true,
         },
-        allows: { type: [Schema.Types.ObjectId], required: false, ref: User },
+        allows: {
+          type: [Schema.Types.ObjectId],
+          required: false,
+          ref: UserModel,
+        },
       },
       required: true,
     },
-    classroom_id: { type: Schema.Types.ObjectId, required: false },
+    classroomId: { type: Schema.Types.ObjectId, required: false },
   },
   { timestamps: true }
 );
 
-export const Lesson = model<ILesson>('lesson', lessonSchema);
+/**
+ * The lesson database model.
+ */
+export const LessonModel = model<ILesson>('lesson', lessonSchema, undefined, {
+  overwriteModels: true,
+});
+
+export const Lesson = LessonModel<ILesson>;
+/**
+ * The document type of the lesson.
+ */
+export type LessonDocument = HydratedDocument<ILesson>;

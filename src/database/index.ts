@@ -1,9 +1,14 @@
-import { Connection, createConnection } from 'mongoose';
+import { connect, Connection } from 'mongoose';
 
 export default class Database {
   connection!: Connection;
 }
 
+/**
+ * Connect to the database.
+ * @param dbName The database name (default: 'lipoic_data').
+ * @returns The database instance.
+ */
 export async function connectDatabase(
   dbName = 'lipoic_data'
 ): Promise<Database> {
@@ -11,7 +16,7 @@ export async function connectDatabase(
   const username = process.env.DATABASE_USERNAME;
   const password = process.env.DATABASE_PASSWORD;
 
-  const connection = await createConnection(url, {
+  const database = await connect(url, {
     dbName,
     auth: {
       username,
@@ -22,7 +27,5 @@ export async function connectDatabase(
     autoIndex: true,
   });
 
-  await connection.asPromise();
-
-  return { connection };
+  return { connection: database.connection };
 }
