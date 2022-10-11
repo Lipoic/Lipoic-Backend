@@ -19,7 +19,7 @@ router.use((_, res) => {
   );
 });
 
-// Error handling
+// Error handling middleware.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   console.error(err);
