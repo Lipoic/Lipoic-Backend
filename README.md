@@ -76,4 +76,4 @@ Use Docker to deploy the backend.
 3. Follow [the configuration tutorial](#configuration) to set the variables.
 4. Run [`./script/deploy.sh`](./script/deploy.sh).
 
-Note: If you are using Windows use [cygwin](https://www.cygwin.com) to run the script
+Note: If you are using Windows use [cygwin](https://www.cygwin.com) to run the script.
