@@ -69,3 +69,11 @@ openssl ecparam -genkey -name secp256k1 -noout -out jwt_private_key.pem
 openssl ec -in jwt_private_key.pem -pubout -out jwt_public_key.pem
 ```
 
+## Deployment
+Use Docker to deploy the backend.
+1. Install [docker-compose](https://docs.docker.com/compose/install/).
+2. Run [`./script/gen_ecdsa_key.sh`](./script/gen_ecdsa_key.sh) generate ECDSA private key and public key.
+3. Follow [the configuration tutorial](#configuration) to set the variables.
+4. Run [`./script/deploy.sh`](./script/deploy.sh).
+
+Note: If you are using Windows use [cygwin](https://www.cygwin.com) to run the script.
