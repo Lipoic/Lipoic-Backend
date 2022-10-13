@@ -16,7 +16,8 @@
     "lint": "eslint src/**/*.ts --fix",
     "test": "vitest --no-threads",
     "test:ui": "yarn test --ui",
-    "coverage": "vitest run --no-threads --coverage"
+    "coverage": "vitest run --no-threads --coverage",
+    "swagger": "yarn build && node dist/script/swagger.js"
   },
   "dependencies": {
     "app-root-path": "^3.1.0",
