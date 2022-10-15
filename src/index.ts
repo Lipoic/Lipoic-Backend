@@ -10,7 +10,7 @@ async function main() {
   generateSwaggerFile();
   init();
   const app = createServer();
-  const port = process.env.PORT || 8080;
+  const port = process.env.PORT ?? 8080;
 
   app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
