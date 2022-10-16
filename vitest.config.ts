@@ -20,6 +20,7 @@ export default defineConfig({
         'vitest.config.ts',
         '**/*.d.ts',
         'scripts/**',
+        'src/util/swagger.ts',
       ],
     },
     globalSetup: './test/global_setup.ts',

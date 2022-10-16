@@ -92,3 +92,11 @@ describe('Get client ip', () => {
     delete process.env.CLOUDFLARE;
   });
 });
+
+test('Request API docs', async () => {
+  const response = await supertest(server).get(`/docs/`);
+
+  expect(response.headers['content-type']).toBe('text/html; charset=utf-8');
+  expect(response.status).toBe(200);
+  expect(response.text).toContain('Lipoic API Docs');
+});
