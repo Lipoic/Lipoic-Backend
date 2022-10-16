@@ -2,7 +2,7 @@ import { UserDocument } from '@/model/auth/user';
 
 declare global {
   namespace Express {
-    interface Request {
+    export interface Request {
       /**
        * The user document of the authenticated request.
        * If the request is not authenticated, this will be null.

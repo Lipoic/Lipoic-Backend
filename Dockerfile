@@ -1,16 +1,13 @@
 FROM node:16
 
-# Create app directory.
-WORKDIR /usr/src/app
-
 # Bundle app source.
 COPY . .
 
 # Install app dependencies.
 RUN yarn install
 
-# Generate the swagger file.
-RUN yarn swagger
+# Generate ECDSA keys.
+RUN script/gen_ecdsa_key.sh
 
 EXPOSE 8080
 
