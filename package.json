@@ -2,22 +2,18 @@
   "name": "lipoic-backend",
   "version": "1.0.0",
   "description": "The backend repository for lipoic, built with node.js + typescript + express.js.",
-  "main": "dist/src/index.js",
+  "main": "src/index.ts",
   "repository": "https://github.com/Lipoic/Lipoic-Backend.git",
   "author": "Lipoic backend team",
   "license": "GPL-3.0",
   "scripts": {
-    "build": "tsc && tsc-alias",
-    "dev:build": "tsc -w",
-    "dev:build-alias": "tsc-alias -w",
-    "dev:run": "nodemon dist/src/index.js",
-    "dev": "concurrently yarn:dev:*",
-    "start": "yarn build && node dist/src/index.js",
-    "lint": "eslint src/**/*.ts --fix",
+    "dev": "yarn swagger && concurrently \"nodemon -x yarn swagger\" \"nodemon\"",
+    "start": "yarn swagger && ts-node src/index.ts",
+    "lint": "yarn swagger && eslint src/**/*.ts --fix",
     "test": "vitest --no-threads",
     "test:ui": "yarn test --ui",
     "coverage": "vitest run --no-threads --coverage",
-    "swagger": "yarn build && node dist/script/swagger.js"
+    "swagger": "ts-node script/swagger.ts"
   },
   "dependencies": {
     "app-root-path": "^3.1.0",
@@ -25,7 +21,7 @@
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.2",
-    "express": "^4.18.1",
+    "express": "^4.18.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.6.0",
     "morgan": "^1.10.0",
@@ -58,15 +54,16 @@
     "prettier": "2.7.1",
     "supertest": "6.2.4",
     "ts-node": "^10.9.1",
-    "tsc-alias": "1.7.0",
+    "tsconfig-paths": "^4.1.0",
     "typescript": "4.8.3",
     "vitest": "0.23.2"
   },
   "nodemonConfig": {
-    "ext": "js",
-    "ignore": [
-      "*.test.ts",
-      "swagger-output.json"
+    "exec": "ts-node src/index.ts",
+    "ext": "ts",
+    "watch": [
+      "src",
+      "assets"
     ],
     "delay": "2"
   }

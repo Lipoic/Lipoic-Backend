@@ -14,12 +14,12 @@ export default defineConfig({
       all: true,
       exclude: [
         'node_modules/**',
-        'dist/**',
         'test/**',
         'src/index.ts',
         '.eslintrc.js',
         'vitest.config.ts',
         '**/*.d.ts',
+        'scripts/**',
         'src/util/swagger.ts',
       ],
     },

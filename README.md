@@ -25,11 +25,6 @@ Start server (product):
 yarn start
 ```
 
-Build:
-```shell
-yarn build
-```
-
 ESLint:
 ```shell
 yarn lint

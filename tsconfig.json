@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2021",
+    "target": "es2022",
     "module": "commonjs",
     "baseUrl": ".",
     "paths": {
@@ -28,5 +28,13 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "files": [
+    "src/types.d.ts"
+  ],
+  "ts-node": {
+    "require": [
+      "tsconfig-paths/register"
+    ]
+  }
 }

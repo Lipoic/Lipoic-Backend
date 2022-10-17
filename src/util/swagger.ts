@@ -6,7 +6,7 @@ import { path } from 'app-root-path';
 /**
  * Generate the swagger file by OpenAPI specification 3.0.1.
  */
-export function generateSwaggerFile() {
+export async function generateSwaggerFile() {
   const doc = {
     info: {
       title: 'Lipoic API Docs',
@@ -198,7 +198,7 @@ export function generateSwaggerFile() {
   const outputFile = `${path}/swagger-output.json`;
   const endpointsFiles = [`${path}/src/router/index.ts`];
 
-  swaggerAutogen({ openapi: '3.0.3' })(outputFile, endpointsFiles, doc);
+  await swaggerAutogen({ openapi: '3.0.3' })(outputFile, endpointsFiles, doc);
 
   console.log('Swagger output generated successfully!');
 }

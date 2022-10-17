@@ -1,4 +1,4 @@
-import { HydratedDocument, Model, model, Schema, Types } from 'mongoose';
+import { HydratedDocument, Model, model, Schema } from 'mongoose';
 import { UserMode } from '@/model/auth/user_mode';
 import { ConnectAccount, ConnectType } from '@/model/auth/connect_account';
 import { createJWTToken } from '@/util/jwt';
@@ -50,7 +50,7 @@ interface IPublicUser {
   id: string;
   username: string;
   verifiedEmail: boolean;
-  modes: Types.Array<string>;
+  modes: string[];
   locale: string;
   createdAt: Date;
   updatedAt: Date;
