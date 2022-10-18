@@ -1,0 +1,41 @@
+name: Deploy API docs
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  generate-spec:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: yarn install
+      - name: Generate file
+        run: yarn swagger
+      - name: Upload file
+        uses: actions/upload-artifact@v3
+        with:
+          name: spec-file
+          path: swagger-output.json
+
+  deploy:
+    needs: generate-spec
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download file
+        uses: actions/download-artifact@v3
+        with:
+          name: spec-file
+      - name: Generate Swagger UI
+        uses: Legion2/swagger-ui-action@v1
+        with:
+          output: swagger-ui
+          spec-file: swagger-output.json
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ github.token }}
+          publish_dir: swagger-ui
