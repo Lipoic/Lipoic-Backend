@@ -7,7 +7,8 @@ COPY . .
 RUN yarn install
 
 # Generate ECDSA keys.
-RUN script/gen_ecdsa_key.sh
+RUN chmod +x ./script/gen_ecdsa_keys.sh
+RUN ./script/gen_ecdsa_key.sh
 
 EXPOSE 8080
 
