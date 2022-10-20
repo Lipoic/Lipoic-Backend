@@ -39,7 +39,7 @@ router.get('/info', async (req, res) => {
 
     sendResponse(res, {
       code: ResponseStatusCode.SUCCESS,
-      data: user.getPublicInfo(),
+      data: user.getAuthInfo(),
     });
   }
 });

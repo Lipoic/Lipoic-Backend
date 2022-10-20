@@ -2,7 +2,7 @@ import { HydratedDocument, Model, model, Schema } from 'mongoose';
 import { UserMode } from '@/model/auth/user_mode';
 import { ConnectAccount, ConnectType } from '@/model/auth/connect_account';
 import { createJWTToken } from '@/util/jwt';
-import { USER_LOCALES } from '@/model/auth/user_locale';
+import { UserLocale, USER_LOCALES } from '@/model/auth/user_locale';
 
 interface IUser {
   username: string;
@@ -29,13 +29,20 @@ interface IUser {
 
 interface IUserMethods {
   /**
-   * Get public user info (without privacy info).
+   * Get the public user information (without privacy information).
    */
   getPublicInfo: () => IPublicUser;
+
+  /**
+   * Get the authenticated user information.
+   */
+  getAuthInfo: () => IAuthUser;
+
   /**
    * Get the auth jwt token.
    */
   generateJWTToken: () => string;
+
   /**
    * Is it now possible to send a verification email.
    * Used to prevent mass spam emails.
@@ -44,16 +51,24 @@ interface IUserMethods {
 }
 
 /**
- * The public user info.
+ * The public user information.
  */
 interface IPublicUser {
   id: string;
   username: string;
   verifiedEmail: boolean;
-  modes: string[];
-  locale: string;
+  modes: UserMode[];
+  locale: UserLocale;
   createdAt: Date;
   updatedAt: Date;
+}
+
+/**
+ * The authenticated user information.
+ */
+interface IAuthUser extends IPublicUser {
+  email: string;
+  connects: ConnectAccount[];
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -100,6 +115,14 @@ userSchema.method('getPublicInfo', function getPublicInfo(): IPublicUser {
     locale: this.locale,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
+  };
+});
+
+userSchema.method('getAuthInfo', function getAuthInfo(): IAuthUser {
+  return {
+    ...this.getPublicInfo(),
+    email: this.email,
+    connects: this.connects,
   };
 });
 
