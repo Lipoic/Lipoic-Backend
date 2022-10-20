@@ -115,6 +115,63 @@ export async function generateSwaggerFile() {
             },
           },
         },
+        AuthUser: {
+          type: 'object',
+          description: 'The authenticated user information',
+          required: [
+            'id',
+            'username',
+            'email',
+            'verifiedEmail',
+            'modes',
+            'connects',
+            'locale',
+            'createdAt',
+            'updatedAt',
+          ],
+          properties: {
+            id: {
+              type: 'string',
+              example: 'MongoDB ObjectId',
+            },
+            username: {
+              type: 'string',
+              example: 'John Doe',
+            },
+            email: {
+              type: 'string',
+              example: 'user@lipoic.org',
+            },
+            verifiedEmail: {
+              type: 'boolean',
+              example: true,
+            },
+            modes: {
+              type: 'array',
+              items: {
+                $ref: '#/components/schemas/UserMode',
+              },
+              example: ['Teacher', 'Parent'],
+            },
+            connects: {
+              type: 'array',
+              items: {
+                $ref: '#/components/schemas/ConnectAccount',
+              },
+            },
+            locale: {
+              ref: '#/components/schemas/UserLocale',
+            },
+            createdAt: {
+              type: 'date',
+              example: '2022-01-01T00:00:00.000Z',
+            },
+            updatedAt: {
+              type: 'date',
+              example: '2022-01-01T00:00:00.000Z',
+            },
+          },
+        },
         UserMode: {
           type: 'string',
           description: 'User mode',
@@ -183,6 +240,30 @@ export async function generateSwaggerFile() {
               example: "I'm a password",
             },
           },
+        },
+        ConnectAccount: {
+          type: 'object',
+          description:
+            'The connect account of the user for save the third party OAuth info (e.g. google, facebook, etc.).',
+          required: ['accountType', 'name', 'email'],
+          properties: {
+            accountType: {
+              $ref: '#/components/schemas/ConnectType',
+            },
+            name: {
+              type: 'string',
+              example: 'John Doe',
+            },
+            email: {
+              type: 'string',
+              example: 'user@lipoic.org',
+            },
+          },
+        },
+        ConnectType: {
+          type: 'string',
+          description: 'The connect account type.',
+          enum: ['Google', 'Facebook'],
         },
       },
       securitySchemes: {

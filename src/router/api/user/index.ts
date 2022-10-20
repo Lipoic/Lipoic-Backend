@@ -33,7 +33,7 @@ router.get('/info', async (req, res) => {
     /* #swagger.responses[200] = {
       schema: {
         code: 0,
-        data: { $ref: '#/components/schemas/User' },
+        data: { $ref: '#/components/schemas/AuthUser' },
       },
     }; */
 
