@@ -66,6 +66,8 @@ describe('Get the info of the current user', () => {
         locale: 'en-US',
         createdAt: user.createdAt?.toISOString(),
         updatedAt: user.updatedAt?.toISOString(),
+        email: 'test@test.com',
+        connects: [],
       },
     });
   });
