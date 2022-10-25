@@ -16,9 +16,6 @@ import {
   verifyPassword,
 } from '#/api/user/util';
 
-
-
-
 export const getInfo = async (req: Request, res: Response) => {
   /*
     #swagger.description = 'Get the info of the current user (authorization required)'
@@ -43,9 +40,7 @@ export const getInfo = async (req: Request, res: Response) => {
       data: user.getAuthInfo(),
     });
   }
-}
-
-
+};
 
 export const getInfoByUserId = async (req: Request, res: Response) => {
   // #swagger.description = 'Get the user info by user id'
@@ -83,9 +78,7 @@ export const getInfoByUserId = async (req: Request, res: Response) => {
       );
     }
   }
-}
-
-
+};
 
 export const updateInfo = async (req: Request, res: Response) => {
   /*
@@ -175,9 +168,7 @@ export const updateInfo = async (req: Request, res: Response) => {
       );
     }
   }
-}
-
-
+};
 
 export const signup = async (req: Request, res: Response) => {
   /*
@@ -276,9 +267,7 @@ export const signup = async (req: Request, res: Response) => {
     );
     return;
   }
-}
-
-
+};
 
 export const verify = async (req: Request, res: Response) => {
   // #swagger.description = 'Verify the email account by the code'
@@ -346,9 +335,7 @@ export const verify = async (req: Request, res: Response) => {
     );
     return;
   }
-}
-
-
+};
 
 export const login = async (req: Request, res: Response) => {
   /* 
@@ -471,4 +458,4 @@ export const login = async (req: Request, res: Response) => {
       return;
     }
   }
-}
+};

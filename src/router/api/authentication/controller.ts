@@ -7,8 +7,6 @@ import { connectOAuthAccount } from '#/api/authentication/util';
 import { getIp } from '#/util/util';
 import { User } from '@/model/auth/user';
 
-
-
 export const googleAuth = async (req: Request, res: Response) => {
   // #swagger.description = 'Get google oauth url'
 
@@ -62,9 +60,7 @@ export const googleAuth = async (req: Request, res: Response) => {
     code: ResponseStatusCode.SUCCESS,
     data: { url: oauth.getAuthUrl() },
   });
-}
-
-
+};
 
 export const googleAuthCallback = async (req: Request, res: Response) => {
   // #swagger.description = 'Get access token by google oauth code'
@@ -154,9 +150,7 @@ export const googleAuthCallback = async (req: Request, res: Response) => {
     code: ResponseStatusCode.SUCCESS,
     data: { token: token },
   });
-}
-
-
+};
 
 export const facebookAuth = async (req: Request, res: Response) => {
   // #swagger.description = 'Get facebook oauth url'
@@ -210,9 +204,7 @@ export const facebookAuth = async (req: Request, res: Response) => {
     code: ResponseStatusCode.SUCCESS,
     data: { url: oauth.getAuthUrl() },
   });
-}
-
-
+};
 
 export const facebookAuthCallback = async (req: Request, res: Response) => {
   // #swagger.description = 'Get access token by facebook oauth code'
@@ -302,4 +294,4 @@ export const facebookAuthCallback = async (req: Request, res: Response) => {
     code: ResponseStatusCode.SUCCESS,
     data: { token: token },
   });
-}
+};
