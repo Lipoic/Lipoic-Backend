@@ -82,7 +82,7 @@ export const getInfoByUserId = async (req: Request, res: Response) => {
 
 export const updateInfo = async (req: Request, res: Response) => {
   /*
-    #swagger.description = 'Edit the info of the current user (authorization required)'
+    #swagger.description = 'Update the info of the current user (authorization required)'
     #swagger.security = [{ "bearerAuth": [] }]
   */
 
