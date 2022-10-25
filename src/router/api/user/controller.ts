@@ -162,7 +162,7 @@ export const updateInfo = async (req: Request, res: Response) => {
       sendResponse(
         res,
         {
-          code: ResponseStatusCode.EDIT_USER_INFO_ERROR,
+          code: ResponseStatusCode.UPDATE_USER_INFO_ERROR,
         },
         HttpStatusCode.INTERNAL_SERVER_ERROR
       );
