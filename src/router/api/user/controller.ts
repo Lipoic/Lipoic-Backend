@@ -1,6 +1,6 @@
 import { createJWTToken } from '@/util/jwt';
 import {
-  EditUserInfoData,
+  UpdateUserInfoData,
   LoginUserData,
   SignUpUserData,
 } from '#/api/user/data';
@@ -105,21 +105,21 @@ export const updateInfo = async (req: Request, res: Response) => {
     };
     */
 
-    const data: EditUserInfoData = req.body;
-    const editedData = {
+    const data: UpdateUserInfoData = req.body;
+    const updateData = {
       username: data.username,
       modes: data.modes,
       locale: data.locale,
     };
 
     if (data.username) {
-      editedData.username = data.username;
+      updateData.username = data.username;
     }
     if (data.modes) {
-      editedData.modes = data.modes;
+      updateData.modes = data.modes;
     }
     if (data.locale) {
-      editedData.locale = data.locale;
+      updateData.locale = data.locale;
     }
 
     // Update the user info
@@ -128,7 +128,7 @@ export const updateInfo = async (req: Request, res: Response) => {
         id: user.id,
       },
       {
-        $set: editedData,
+        $set: updateData,
         $addToSet: {
           loginIps: req.ip,
         },

@@ -4,7 +4,7 @@ import { UserMode } from '@/model/auth/user_mode';
 /**
  * The data for editing user info.
  */
-export interface EditUserInfoData {
+export interface UpdateUserInfoData {
   username?: string;
   modes?: UserMode[];
   locale?: UserLocale;
