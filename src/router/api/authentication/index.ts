@@ -3,12 +3,12 @@ import * as authController from './controller';
 
 const router = Router();
 
-router.get('/google/url', authController.googleAuth);
+router.get('/google/url', authController.googleOAuth);
 
-router.get('/facebook/url', authController.facebookAuth);
+router.get('/facebook/url', authController.facebookOAuth);
 
-router.get('/google/callback', authController.googleAuthCallback);
+router.get('/google/callback', authController.googleOAuthCallback);
 
-router.get('/facebook/callback', authController.facebookAuthCallback);
+router.get('/facebook/callback', authController.facebookOAuthCallback);
 
 export { router as authenticationRouter };

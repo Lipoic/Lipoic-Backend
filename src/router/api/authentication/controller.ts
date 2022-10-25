@@ -7,7 +7,7 @@ import { connectOAuthAccount } from '#/api/authentication/util';
 import { getIp } from '#/util/util';
 import { User } from '@/model/auth/user';
 
-export const googleAuth = async (req: Request, res: Response) => {
+export const googleOAuth = async (req: Request, res: Response) => {
   // #swagger.description = 'Get google oauth url'
 
   const redirectUri = req.query.redirectUri;
@@ -62,7 +62,7 @@ export const googleAuth = async (req: Request, res: Response) => {
   });
 };
 
-export const googleAuthCallback = async (req: Request, res: Response) => {
+export const googleOAuthCallback = async (req: Request, res: Response) => {
   // #swagger.description = 'Get access token by google oauth code'
 
   const code = req.query.code;
@@ -152,7 +152,7 @@ export const googleAuthCallback = async (req: Request, res: Response) => {
   });
 };
 
-export const facebookAuth = async (req: Request, res: Response) => {
+export const facebookOAuth = async (req: Request, res: Response) => {
   // #swagger.description = 'Get facebook oauth url'
 
   const redirectUri = req.query.redirectUri;
@@ -206,7 +206,7 @@ export const facebookAuth = async (req: Request, res: Response) => {
   });
 };
 
-export const facebookAuthCallback = async (req: Request, res: Response) => {
+export const facebookOAuthCallback = async (req: Request, res: Response) => {
   // #swagger.description = 'Get access token by facebook oauth code'
 
   const code = req.query.code;
