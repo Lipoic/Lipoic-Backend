@@ -45,6 +45,7 @@ apiRouter.use(
   authenticationRouter
   // #swagger.tags = ['Authentication']
 );
+
 apiRouter.use(
   '/user',
   userRouter

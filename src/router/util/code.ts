@@ -8,7 +8,7 @@ export enum ResponseStatusCode {
   OAUTH_CODE_CALLBACK_ERROR,
   AUTH_ERROR,
   USER_NOT_FOUND,
-  EDIT_USER_INFO_ERROR,
+  UPDATE_USER_INFO_ERROR,
   Sign_Up_Email_Already_Used,
   Sign_Up_Error,
   Verify_Email_Error,
