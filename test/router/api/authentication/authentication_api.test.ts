@@ -392,6 +392,44 @@ describe('Google OAuth', () => {
       code: 3,
     });
   });
+
+  // https://github.com/Lipoic/Lipoic-Backend/issues/17
+  test('Repeated get access token by google oauth code', async () => {
+    process.env.GOOGLE_OAUTH_ID = 'TEST';
+    process.env.GOOGLE_OAUTH_SECRET = 'TEST';
+
+    const code = 'test code';
+
+    async function getAccessToken(): Promise<string> {
+      const response = await supertest(server)
+        .get('/authentication/google/callback')
+        .query({
+          code,
+          redirectUri: 'https://localhost:3000/login',
+          locale: 'en-US',
+        });
+
+      return response.body['data']['token'];
+    }
+
+    const token = await getAccessToken();
+    await getAccessToken();
+
+    // Check only created one OAuth connection
+    const userInfoResponse = await supertest(server)
+      .get('/user/info')
+      .auth(token, { type: 'bearer' });
+
+    expect(userInfoResponse.status).toBe(200);
+    expect(userInfoResponse.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(userInfoResponse.body['code']).toBe(0);
+    expect(userInfoResponse.body['data']['connects']).toHaveLength(1);
+    expect(userInfoResponse.body['data']['connects'][0]['accountType']).toBe(
+      'Google'
+    );
+  });
 });
 
 describe('Facebook OAuth', () => {
@@ -685,5 +723,43 @@ describe('Facebook OAuth', () => {
     expect(response.body).toEqual({
       code: 3,
     });
+  });
+
+  // https://github.com/Lipoic/Lipoic-Backend/issues/17
+  test('Repeated get access token by google oauth code', async () => {
+    process.env.FACEBOOK_OAUTH_ID = 'TEST';
+    process.env.FACEBOOK_OAUTH_SECRET = 'TEST';
+
+    const code = 'test code';
+
+    async function getAccessToken(): Promise<string> {
+      const response = await supertest(server)
+        .get('/authentication/facebook/callback')
+        .query({
+          code,
+          redirectUri: 'https://localhost:3000/login',
+          locale: 'en-US',
+        });
+
+      return response.body['data']['token'];
+    }
+
+    const token = await getAccessToken();
+    await getAccessToken();
+
+    // Check only created one OAuth connection
+    const userInfoResponse = await supertest(server)
+      .get('/user/info')
+      .auth(token, { type: 'bearer' });
+
+    expect(userInfoResponse.status).toBe(200);
+    expect(userInfoResponse.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(userInfoResponse.body['code']).toBe(0);
+    expect(userInfoResponse.body['data']['connects']).toHaveLength(1);
+    expect(userInfoResponse.body['data']['connects'][0]['accountType']).toBe(
+      'Facebook'
+    );
   });
 });

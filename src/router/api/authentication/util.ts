@@ -31,6 +31,7 @@ export async function connectOAuthAccount(
   const accountInfo = await accessInfo.getAccountInfo(oauth.accountType);
   const accountAlreadyExists = await User.exists({ email: accountInfo.email });
 
+  // If the account doesn't exist, create a new user.
   if (!accountAlreadyExists) {
     const user = new User({
       username: accountInfo.name,
@@ -45,11 +46,25 @@ export async function connectOAuthAccount(
     await user.save();
   }
 
+  const accountType = ConnectType[oauth.accountType];
   const connectAccount: ConnectAccount = {
-    accountType: ConnectType[oauth.accountType],
+    accountType,
     name: accountInfo.name,
     email: accountInfo.email,
   };
+
+  let isConnected = false;
+
+  if (accountAlreadyExists) {
+    const user = await User.findById(accountAlreadyExists._id);
+
+    if (user) {
+      isConnected =
+        user.connects.find(
+          (c) => c.accountType === accountType && c.email === accountInfo.email
+        ) !== undefined;
+    }
+  }
 
   // Add the login ip and connect account.
   await User.updateOne(
@@ -59,7 +74,7 @@ export async function connectOAuthAccount(
     {
       $addToSet: {
         loginIps: ip,
-        connects: connectAccount,
+        connects: isConnected ? undefined : connectAccount,
       },
     }
   );
