@@ -31,7 +31,7 @@ export async function connectOAuthAccount(
   const accountInfo = await accessInfo.getAccountInfo(oauth.accountType);
   const accountAlreadyExists = await User.exists({ email: accountInfo.email });
 
-  // If the account not exists, create a new user.
+  // If the account doesn't exist, create a new user.
   if (!accountAlreadyExists) {
     const user = new User({
       username: accountInfo.name,
