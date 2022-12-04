@@ -1,7 +1,9 @@
 import { connect, Connection } from 'mongoose';
+import { GridFSBucket } from 'mongodb';
 
-export default class Database {
+export class Database {
   connection!: Connection;
+  avatarGfs!: GridFSBucket;
 }
 
 /**
@@ -27,5 +29,10 @@ export async function connectDatabase(
     autoIndex: true,
   });
 
-  return { connection: database.connection };
+  return {
+    connection: database.connection,
+    avatarGfs: new GridFSBucket(database.connection.db, {
+      bucketName: 'avatarFiles',
+    }),
+  };
 }

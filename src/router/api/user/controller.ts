@@ -15,6 +15,7 @@ import {
   passwordHash,
   verifyPassword,
 } from '#/api/user/util';
+import { db } from '@/index';
 
 export const getInfo = async (req: Request, res: Response) => {
   /*
@@ -457,5 +458,47 @@ export const login = async (req: Request, res: Response) => {
       );
       return;
     }
+  }
+};
+
+export const avatarUpload = async (req: Request, res: Response) => {
+  /*
+    #swagger.description = 'Upload the avatar of the user (authorization required)'
+    #swagger.security = [{ "bearerAuth": [] }]
+  */
+  await authMiddleware(req, res);
+
+  const user = req.user;
+
+  const file = req.file;
+
+  if (user) {
+    if (!file) {
+      /* #swagger.responses[400] = {
+        description: 'The user avatar ',
+        schema: {
+          code: 12,
+        },
+      }; */
+
+      sendResponse(
+        res,
+        {
+          code: ResponseStatusCode.USER_AVATAR_FILE_NOT_FOUND,
+        },
+        HttpStatusCode.BAD_REQUEST
+      );
+      return;
+    }
+
+    file.stream.pipe(
+      db.avatarGfs.openUploadStream(user.id, {
+        metadata: {
+          id: user.id,
+          updateAt: new Date().getTime(),
+          createAt: new Date().getTime(),
+        },
+      })
+    );
   }
 };

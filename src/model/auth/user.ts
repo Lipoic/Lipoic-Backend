@@ -14,6 +14,7 @@ interface IUser {
   modes: string[];
   loginIps: string[];
   locale: string;
+  avatarURL?: string;
 
   /**
    * The date when the user is created.
@@ -59,6 +60,7 @@ interface IPublicUser {
   verifiedEmail: boolean;
   modes: UserMode[];
   locale: UserLocale;
+  avatarURL?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -113,6 +115,7 @@ userSchema.method('getPublicInfo', function getPublicInfo(): IPublicUser {
     verifiedEmail: this.verifiedEmail,
     modes: this.modes,
     locale: this.locale,
+    avatarURL: this.avatarURL,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
   };
