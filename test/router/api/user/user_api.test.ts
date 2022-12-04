@@ -15,6 +15,7 @@ import { Database, connectDatabase } from '@/database';
 import { User } from '@/model/auth/user';
 import supertest from 'supertest';
 import Mail from 'nodemailer/lib/mailer';
+import * as fs from 'fs';
 
 let server: Express;
 let db: Database;
@@ -923,6 +924,37 @@ describe('Login via email and password', () => {
     );
     expect(response.body).toEqual({
       code: 10,
+    });
+  });
+});
+describe('Upload the user avatar', () => {
+  test('Upload the user avatar', async () => {
+    const user = new User({
+      username: 'user 1',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+
+    await user.save();
+    const token = user.generateJWTToken();
+
+    const response = await supertest(server)
+      .post('/user/avatar')
+      .auth(token, { type: 'bearer' })
+      .attach('avatarFile', fs.createReadStream('test/assets/logo.png'), {
+        filename: 'avatar.png',
+      });
+
+    expect(response.status).toBe(200);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toMatchObject({
+      code: 0,
     });
   });
 });

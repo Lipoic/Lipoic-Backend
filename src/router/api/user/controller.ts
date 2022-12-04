@@ -18,6 +18,7 @@ import {
 import { db } from '@/database';
 import { UserAvatarFileMetadata } from '@/model/auth/user_avatar';
 import { randomUUID } from 'crypto';
+import * as fs from 'fs';
 
 export const getInfo = async (req: Request, res: Response) => {
   // This middleware will check the token and set the user info to req.user
@@ -454,11 +455,18 @@ export const avatarUpload = async (req: Request, res: Response) => {
     };
 
     // Write the file into the database.
-    file.stream.pipe(
-      db.avatarGfs.openUploadStream(randomUUID(), {
-        metadata,
-      })
+    const uuid = randomUUID();
+    const readStream = fs.createReadStream(file.path);
+    const result = readStream.pipe(
+      db.avatarGfs.openUploadStream(uuid, { metadata })
     );
+
+    const promise = new Promise(function (resolve, reject) {
+      result.on('finish', () => resolve(true));
+      result.on('error', reject);
+    });
+
+    await promise;
 
     sendResponse(res, { code: ResponseStatusCode.SUCCESS });
   }
