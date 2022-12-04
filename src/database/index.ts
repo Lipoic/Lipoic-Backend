@@ -7,6 +7,11 @@ export class Database {
 }
 
 /**
+ * Current database instance.
+ */
+export let db: Database;
+
+/**
  * Connect to the database.
  * @param dbName The database name (default: 'lipoic_data').
  * @returns The database instance.
@@ -29,10 +34,14 @@ export async function connectDatabase(
     autoIndex: true,
   });
 
-  return {
+  const instance = {
     connection: database.connection,
     avatarGfs: new GridFSBucket(database.connection.db, {
       bucketName: 'avatarFiles',
     }),
   };
+
+  db = instance;
+
+  return instance;
 }

@@ -15,7 +15,7 @@ import {
   passwordHash,
   verifyPassword,
 } from '#/api/user/util';
-import { db } from '@/index';
+import { db } from '@/database';
 import { UserAvatarFileMetadata } from '@/model/auth/user_avatar';
 import { randomUUID } from 'crypto';
 
