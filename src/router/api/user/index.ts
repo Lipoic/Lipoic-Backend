@@ -5,18 +5,86 @@ import multer from 'multer';
 const router = Router();
 const upload = multer({ dest: '/uploads' });
 
-router.get('/info', userController.getInfo);
+router.get(
+  /*
+    #swagger.description = 'Get the info of the current user (authorization required)'
+    #swagger.security = [{ "bearerAuth": [] }]
+  */
+  '/info',
+  userController.getInfo
+);
 
-router.get('/info/:userId', userController.getInfoByUserId);
+router.get(
+  // #swagger.description = 'Get the user info by user id'
+  '/info/:userId',
+  userController.getInfoByUserId
+);
 
-router.patch('/info', userController.updateInfo);
+router.patch(
+  /*
+    #swagger.description = 'Update the info of the current user (authorization required)'
+    #swagger.security = [{ "bearerAuth": [] }]
+  */
+  '/info',
+  userController.updateInfo
+);
 
-router.post('/signup', userController.signup);
+router.post(
+  /*
+    #swagger.description = 'Sign up a new user via email and password'
+    #swagger.requestBody = {
+      required: true,
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/components/schemas/SignUpUserData',
+          },
+        },
+      },
+    }; 
+  */
+  '/signup',
+  userController.signup
+);
 
-router.get('/verify', userController.verify);
+router.get(
+  // #swagger.description = 'Verify the email account by the code'
+  '/verify',
+  userController.verify
+);
 
-router.post('/login', userController.login);
+router.post(
+  /* 
+    #swagger.description = 'Login via email and password'
+    #swagger.requestBody = {
+      required: true,
+      content: {
+        'application/json': {
+          schema: {
+            $ref: '#/components/schemas/LoginUserData',
+          },
+        },
+      },
+    };
+  */
+  '/login',
+  userController.login
+);
 
-router.post('/avatar', upload.single('avatar'), userController.avatarUpload);
+router.post(
+  /*
+    #swagger.description = 'Upload the avatar of the user (authorization required)'
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.parameters['avatarFile'] = {
+            in: 'formData',
+            type: 'file',
+            required: 'true',
+            description: 'The avatar file of the user',
+      }
+  */
+  '/avatar',
+  upload.single('avatarFile'),
+  userController.avatarUpload
+);
 
 export { router as userRouter };

@@ -16,13 +16,10 @@ import {
   verifyPassword,
 } from '#/api/user/util';
 import { db } from '@/index';
+import { UserAvatarFileMetadata } from '@/model/auth/user_avatar';
+import { randomUUID } from 'crypto';
 
 export const getInfo = async (req: Request, res: Response) => {
-  /*
-    #swagger.description = 'Get the info of the current user (authorization required)'
-    #swagger.security = [{ "bearerAuth": [] }]
-  */
-
   // This middleware will check the token and set the user info to req.user
   await authMiddleware(req, res);
 
@@ -44,8 +41,6 @@ export const getInfo = async (req: Request, res: Response) => {
 };
 
 export const getInfoByUserId = async (req: Request, res: Response) => {
-  // #swagger.description = 'Get the user info by user id'
-
   const id = req.params.userId;
 
   if (id) {
@@ -82,11 +77,6 @@ export const getInfoByUserId = async (req: Request, res: Response) => {
 };
 
 export const updateInfo = async (req: Request, res: Response) => {
-  /*
-    #swagger.description = 'Update the info of the current user (authorization required)'
-    #swagger.security = [{ "bearerAuth": [] }]
-  */
-
   // This middleware will check the token and set the user info to req.user
   await authMiddleware(req, res);
 
@@ -172,20 +162,6 @@ export const updateInfo = async (req: Request, res: Response) => {
 };
 
 export const signup = async (req: Request, res: Response) => {
-  /*
-    #swagger.description = 'Sign up a new user via email and password'
-    #swagger.requestBody = {
-      required: true,
-      content: {
-        'application/json': {
-          schema: {
-            $ref: '#/components/schemas/SignUpUserData',
-          },
-        },
-      },
-    }; 
-  */
-
   const data: SignUpUserData = req.body;
 
   if (!data.username || !data.email || !data.password || !data.locale) {
@@ -271,8 +247,6 @@ export const signup = async (req: Request, res: Response) => {
 };
 
 export const verify = async (req: Request, res: Response) => {
-  // #swagger.description = 'Verify the email account by the code'
-
   const code = req.query.code;
 
   if (typeof code !== 'string') {
@@ -339,20 +313,6 @@ export const verify = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
-  /* 
-    #swagger.description = 'Login via email and password'
-    #swagger.requestBody = {
-      required: true,
-      content: {
-        'application/json': {
-          schema: {
-            $ref: '#/components/schemas/LoginUserData',
-          },
-        },
-      },
-    };
-  */
-
   const data: LoginUserData = req.body;
 
   if (!data.email || !data.password) {
@@ -462,20 +422,15 @@ export const login = async (req: Request, res: Response) => {
 };
 
 export const avatarUpload = async (req: Request, res: Response) => {
-  /*
-    #swagger.description = 'Upload the avatar of the user (authorization required)'
-    #swagger.security = [{ "bearerAuth": [] }]
-  */
   await authMiddleware(req, res);
-
   const user = req.user;
 
-  const file = req.file;
-
   if (user) {
+    const file = req.file;
+
     if (!file) {
       /* #swagger.responses[400] = {
-        description: 'The user avatar ',
+        description: 'The user avatar file not found',
         schema: {
           code: 12,
         },
@@ -491,14 +446,20 @@ export const avatarUpload = async (req: Request, res: Response) => {
       return;
     }
 
+    const metadata: UserAvatarFileMetadata = {
+      userId: user.id,
+      updateAt: new Date(),
+      createAt: new Date(),
+      fileName: file.originalname,
+    };
+
+    // Write the file into the database.
     file.stream.pipe(
-      db.avatarGfs.openUploadStream(user.id, {
-        metadata: {
-          id: user.id,
-          updateAt: new Date().getTime(),
-          createAt: new Date().getTime(),
-        },
+      db.avatarGfs.openUploadStream(randomUUID(), {
+        metadata,
       })
     );
+
+    sendResponse(res, { code: ResponseStatusCode.SUCCESS });
   }
 };

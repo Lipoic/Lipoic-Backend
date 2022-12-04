@@ -11,7 +11,7 @@ import {
 } from 'vitest';
 import { Express } from 'express-serve-static-core';
 import { init } from '@/util/init';
-import Database, { connectDatabase } from '@/database';
+import { Database, connectDatabase } from '@/database';
 import { User } from '@/model/auth/user';
 import supertest from 'supertest';
 import Mail from 'nodemailer/lib/mailer';

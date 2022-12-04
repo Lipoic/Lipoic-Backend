@@ -15,7 +15,7 @@ import {
   beforeEach,
 } from 'vitest';
 import jwt from 'jsonwebtoken';
-import Database, { connectDatabase } from '@/database';
+import { Database, connectDatabase } from '@/database';
 import { init } from '@/util/init';
 
 let db: Database;
