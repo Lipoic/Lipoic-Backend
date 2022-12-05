@@ -422,7 +422,7 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-export const avatarUpload = async (req: Request, res: Response) => {
+export const uploadAvatar = async (req: Request, res: Response) => {
   await authMiddleware(req, res);
   const user = req.user;
 
@@ -469,5 +469,14 @@ export const avatarUpload = async (req: Request, res: Response) => {
     await promise;
 
     sendResponse(res, { code: ResponseStatusCode.SUCCESS });
+  }
+};
+
+export const downloadAvatar = async (req: Request, res: Response) => {
+  await authMiddleware(req, res);
+  const user = req.user;
+
+  if (user) {
+    throw new Error('Not implemented');
   }
 };

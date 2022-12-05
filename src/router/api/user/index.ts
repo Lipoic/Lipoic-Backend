@@ -84,7 +84,9 @@ router.post(
   */
   '/avatar',
   upload.single('avatarFile'),
-  userController.avatarUpload
+  userController.uploadAvatar
 );
+
+router.get('/avatar', userController.downloadAvatar);
 
 export { router as userRouter };
