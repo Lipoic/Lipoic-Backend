@@ -5,7 +5,7 @@ import multer from 'multer';
 const router = Router();
 
 const avatarUpload = multer({
-  // The file limits are set to 1MB
+  // The file size limits are set to 1MB
   limits: { fileSize: 1000000 },
 });
 
