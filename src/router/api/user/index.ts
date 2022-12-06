@@ -98,4 +98,10 @@ router.get(
   userController.downloadAvatar
 );
 
+router.delete(
+  // #swagger.description = 'Delete the user avatar (authorization required)'
+  '/avatar',
+  userController.deleteAvatar
+);
+
 export { router as userRouter };

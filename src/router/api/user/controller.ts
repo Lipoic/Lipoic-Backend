@@ -528,3 +528,15 @@ export const downloadAvatar = async (req: Request, res: Response) => {
     }
   }
 };
+
+export const deleteAvatar = async (req: Request, res: Response) => {
+  await authMiddleware(req, res);
+  const user = req.user;
+
+  if (user) {
+    user.avatar = undefined;
+    await user.save();
+
+    sendResponse(res, { code: ResponseStatusCode.SUCCESS });
+  }
+};

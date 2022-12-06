@@ -1070,6 +1070,34 @@ describe('Upload the user avatar', () => {
           })
     ).rejects.toThrowError();
   });
+
+  test('Upload the user avatar & without authorization', async () => {
+    const user = new User({
+      username: 'user 1',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+
+    await user.save();
+
+    const response = await supertest(server)
+      .post('/user/avatar')
+      .attach('avatarFile', fs.createReadStream('test/assets/logo.png'), {
+        filename: 'avatar.png',
+      });
+
+    expect(response.status).toBe(401);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toMatchObject({
+      code: 4,
+    });
+  });
 });
 
 describe('Download the user avatar', () => {
@@ -1128,6 +1156,67 @@ describe('Download the user avatar', () => {
     );
     expect(response.body).toMatchObject({
       code: 14,
+    });
+  });
+});
+
+describe('Delete the user avatar', () => {
+  test('Delete the user avatar', async () => {
+    const avatarBuffer = fs.readFileSync('test/assets/logo.png');
+    const user = new User({
+      username: 'user 1',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+      avatar: avatarBuffer,
+    });
+
+    await user.save();
+    const token = user.generateJWTToken();
+
+    const response = await supertest(server)
+      .delete(`/user/avatar`)
+      .auth(token, { type: 'bearer' });
+
+    expect(response.status).toBe(200);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toMatchObject({
+      code: 0,
+    });
+
+    const updatedUser = await User.findById(user.id);
+    expect(updatedUser).toBeDefined();
+    expect(updatedUser?.avatar).toBeUndefined();
+  });
+
+  test('Delete the user avatar & without authorization', async () => {
+    const avatarBuffer = fs.readFileSync('test/assets/logo.png');
+    const user = new User({
+      username: 'user 1',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+      avatar: avatarBuffer,
+    });
+
+    await user.save();
+
+    const response = await supertest(server).delete(`/user/avatar`);
+
+    expect(response.status).toBe(401);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toMatchObject({
+      code: 4,
     });
   });
 });
