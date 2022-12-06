@@ -1014,4 +1014,60 @@ describe('Upload the user avatar', () => {
       code: 12,
     });
   });
+
+  test('Upload the user avatar & too large file', async () => {
+    const user = new User({
+      username: 'user 1',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+
+    await user.save();
+    const token = user.generateJWTToken();
+
+    const response = await supertest(server)
+      .post('/user/avatar')
+      .auth(token, { type: 'bearer' })
+      // Create a more than 1MB array as a buffer to upload
+      .attach('avatarFile', Buffer.from(new Array(1000000 + 1)), {
+        filename: 'avatar.png',
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toMatchObject({
+      code: 13,
+    });
+  });
+
+  test('Upload the user avatar & invalid form flied name', async () => {
+    const user = new User({
+      username: 'user 1',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+
+    await user.save();
+    const token = user.generateJWTToken();
+
+    expect(
+      async () =>
+        await supertest(server)
+          .post('/user/avatar')
+          .auth(token, { type: 'bearer' })
+          .attach('test', Buffer.from([]), {
+            filename: 'avatar.png',
+          })
+    ).rejects.toThrowError();
+  });
 });

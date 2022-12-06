@@ -1,9 +1,7 @@
 import { connect, Connection } from 'mongoose';
-import { GridFSBucket } from 'mongodb';
 
 export class Database {
   connection!: Connection;
-  avatarGfs!: GridFSBucket;
 }
 
 /**
@@ -36,9 +34,6 @@ export async function connectDatabase(
 
   const instance = {
     connection: database.connection,
-    avatarGfs: new GridFSBucket(database.connection.db, {
-      bucketName: 'avatarFiles',
-    }),
   };
 
   db = instance;

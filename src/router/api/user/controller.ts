@@ -7,7 +7,7 @@ import {
 import { HttpStatusCode, ResponseStatusCode, sendResponse } from '#/util';
 import { authMiddleware, getIp } from '#/util/util';
 import { User } from '@/model/auth/user';
-import { Request, Response } from 'express';
+import { ErrorRequestHandler, Request, Response } from 'express';
 import { sendVerifyEmail } from '@/util/email';
 import {
   checkVerifyEmailCode,
@@ -15,10 +15,7 @@ import {
   passwordHash,
   verifyPassword,
 } from '#/api/user/util';
-import { db } from '@/database';
-import { UserAvatarFileMetadata } from '@/model/auth/user_avatar';
-import { randomUUID } from 'crypto';
-import * as fs from 'fs';
+import { MulterError } from 'multer';
 
 export const getInfo = async (req: Request, res: Response) => {
   // This middleware will check the token and set the user info to req.user
@@ -447,36 +444,58 @@ export const uploadAvatar = async (req: Request, res: Response) => {
       return;
     }
 
-    const metadata: UserAvatarFileMetadata = {
-      userId: user.id,
-      updateAt: new Date(),
-      createAt: new Date(),
-      fileName: file.originalname,
-    };
-
     // Write the file into the database.
-    const uuid = randomUUID();
-    const readStream = fs.createReadStream(file.path);
-    const result = readStream.pipe(
-      db.avatarGfs.openUploadStream(uuid, { metadata })
-    );
-
-    const promise = new Promise(function (resolve, reject) {
-      result.on('finish', () => resolve(true));
-      result.on('error', reject);
-    });
-
-    await promise;
+    // TODO: Use the file system on the system to store the file.
+    user.avatar = file.buffer;
+    await user.save();
 
     sendResponse(res, { code: ResponseStatusCode.SUCCESS });
   }
 };
 
-export const downloadAvatar = async (req: Request, res: Response) => {
-  await authMiddleware(req, res);
-  const user = req.user;
+export const uploadAvatarError: ErrorRequestHandler = (err, req, res, next) => {
+  if (err instanceof MulterError && err.code == 'LIMIT_FILE_SIZE') {
+    /* #swagger.responses[400] = {
+      description: 'The user avatar file is too large',
+      schema: {
+        code: 13,
+      },
+    }; */
 
-  if (user) {
-    throw new Error('Not implemented');
+    sendResponse(
+      res,
+      {
+        code: ResponseStatusCode.USER_AVATAR_FILE_TOO_LARGE,
+      },
+      HttpStatusCode.BAD_REQUEST
+    );
+  } else {
+    next(err);
+  }
+};
+
+export const downloadAvatar = async (req: Request, res: Response) => {
+  const id = req.params.userId;
+
+  if (id) {
+    const user = await User.findOne({ id });
+
+    if (user) {
+      sendResponse(res, { code: ResponseStatusCode.SUCCESS });
+    } else {
+      /* #swagger.responses[404] = {
+        schema: {
+          code: 5,
+        },
+      }; */
+
+      sendResponse(
+        res,
+        {
+          code: ResponseStatusCode.USER_NOT_FOUND,
+        },
+        HttpStatusCode.NOT_FOUND
+      );
+    }
   }
 };

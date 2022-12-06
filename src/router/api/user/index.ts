@@ -4,10 +4,9 @@ import multer from 'multer';
 
 const router = Router();
 
-// The file limits are set to 3MB
 const avatarUpload = multer({
-  dest: '/avatar_uploads',
-  limits: { fileSize: 3000000 },
+  // The file limits are set to 1MB
+  limits: { fileSize: 1000000 },
 });
 
 router.get(
@@ -89,9 +88,10 @@ router.post(
   */
   '/avatar',
   avatarUpload.single('avatarFile'),
-  userController.uploadAvatar
+  userController.uploadAvatar,
+  userController.uploadAvatarError
 );
 
-router.get('/avatar', userController.downloadAvatar);
+router.get('/avatar/:userId', userController.downloadAvatar);
 
 export { router as userRouter };
