@@ -957,4 +957,61 @@ describe('Upload the user avatar', () => {
       code: 0,
     });
   });
+
+  test('Upload the user avatar & missing file', async () => {
+    const user = new User({
+      username: 'user 1',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+
+    await user.save();
+    const token = user.generateJWTToken();
+
+    const response = await supertest(server)
+      .post('/user/avatar')
+      .auth(token, { type: 'bearer' });
+
+    expect(response.status).toBe(400);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toMatchObject({
+      code: 12,
+    });
+  });
+
+  test('Upload the user avatar & invalid file', async () => {
+    const user = new User({
+      username: 'user 1',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+
+    await user.save();
+    const token = user.generateJWTToken();
+
+    const response = await supertest(server)
+      .post('/user/avatar')
+      .auth(token, { type: 'bearer' })
+      .attach('avatarFile', Buffer.from([]), {
+        filename: 'avatar.png',
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toMatchObject({
+      code: 12,
+    });
+  });
 });

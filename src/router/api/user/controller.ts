@@ -429,9 +429,9 @@ export const uploadAvatar = async (req: Request, res: Response) => {
   if (user) {
     const file = req.file;
 
-    if (!file) {
+    if (!file || file.size === 0) {
       /* #swagger.responses[400] = {
-        description: 'The user avatar file not found',
+        description: 'The user avatar file is missing or invalid',
         schema: {
           code: 12,
         },
@@ -440,7 +440,7 @@ export const uploadAvatar = async (req: Request, res: Response) => {
       sendResponse(
         res,
         {
-          code: ResponseStatusCode.USER_AVATAR_FILE_NOT_FOUND,
+          code: ResponseStatusCode.UNKNOWN_USER_AVATAR_FILE,
         },
         HttpStatusCode.BAD_REQUEST
       );
