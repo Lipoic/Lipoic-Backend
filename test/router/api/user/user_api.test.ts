@@ -1071,3 +1071,63 @@ describe('Upload the user avatar', () => {
     ).rejects.toThrowError();
   });
 });
+
+describe('Download the user avatar', () => {
+  test('Download the user avatar', async () => {
+    const avatarBuffer = fs.readFileSync('test/assets/logo.png');
+    const user = new User({
+      username: 'user 1',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+      avatar: avatarBuffer,
+    });
+
+    await user.save();
+
+    const response = await supertest(server).get(`/user/${user.id}/avatar`);
+
+    expect(response.status).toBe(200);
+    expect(response.headers['content-type']).toBe('image');
+    expect(response.body).toEqual(avatarBuffer);
+  });
+
+  test('Download the user avatar & invalid id', async () => {
+    const response = await supertest(server).get(`/user/invalid_id/avatar`);
+
+    expect(response.status).toBe(404);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toMatchObject({
+      code: 5,
+    });
+  });
+
+  test('Download the user avatar & not set avatar', async () => {
+    const user = new User({
+      username: 'user 1',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+
+    await user.save();
+
+    const response = await supertest(server).get(`/user/${user.id}/avatar`);
+
+    expect(response.status).toBe(404);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toMatchObject({
+      code: 14,
+    });
+  });
+});

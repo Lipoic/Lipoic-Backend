@@ -437,7 +437,7 @@ export const uploadAvatar = async (req: Request, res: Response) => {
       sendResponse(
         res,
         {
-          code: ResponseStatusCode.UNKNOWN_USER_AVATAR_FILE,
+          code: ResponseStatusCode.INVALID_USER_AVATAR_FILE,
         },
         HttpStatusCode.BAD_REQUEST
       );
@@ -481,7 +481,36 @@ export const downloadAvatar = async (req: Request, res: Response) => {
     const user = await User.findOne({ id });
 
     if (user) {
-      sendResponse(res, { code: ResponseStatusCode.SUCCESS });
+      const avatar = user.avatar;
+
+      if (avatar) {
+        /*
+        #swagger.responses[200] = {
+          description: 'Success to download the avatar',
+          content: {
+            'image/png': {}
+          }
+        };
+        */
+
+        res.setHeader('Content-Type', 'image');
+        res.send(avatar);
+      } else {
+        /* #swagger.responses[404] = {
+          description: 'The user avatar is not found or not set',
+          schema: {
+            code: 14,
+          },
+        }; */
+
+        sendResponse(
+          res,
+          {
+            code: ResponseStatusCode.USER_AVATAR_NOT_FOUND,
+          },
+          HttpStatusCode.NOT_FOUND
+        );
+      }
     } else {
       /* #swagger.responses[404] = {
         schema: {

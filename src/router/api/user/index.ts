@@ -92,6 +92,10 @@ router.post(
   userController.uploadAvatarError
 );
 
-router.get('/avatar/:userId', userController.downloadAvatar);
+router.get(
+  // #swagger.description = 'Download the user avatar by user id'
+  '/:userId/avatar',
+  userController.downloadAvatar
+);
 
 export { router as userRouter };
