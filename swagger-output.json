@@ -1305,6 +1305,159 @@
           }
         }
       }
+    },
+    "/user/avatar": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "Upload the avatar of the user (authorization required)",
+        "parameters": [
+          {
+            "name": "avatarFile",
+            "in": "formData",
+            "required": true,
+            "description": "The avatar file of the user",
+            "schema": {
+              "type": "file"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "The user avatar file is too large",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 12
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 12
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "number",
+                  "example": 13
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "description": "Delete the user avatar (authorization required)",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/user/{userId}/avatar": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Download the user avatar by user id",
+        "produces": [
+          "image"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success to download the avatar",
+            "content": {
+              "image/png": {}
+            }
+          },
+          "404": {
+            "description": "The user avatar is not found or not set",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 14
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 14
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "number",
+                  "example": 5
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1346,7 +1499,10 @@
           "Sign_Up_Error (8)",
           "Verify_Email_Error (9)",
           "Login_User_Error (10)",
-          "Login_User_Email_Not_Verified (11)"
+          "Login_User_Email_Not_Verified (11)",
+          "INVALID_USER_AVATAR_FILE (12)",
+          "USER_AVATAR_FILE_TOO_LARGE (13)",
+          "USER_AVATAR_NOT_FOUND (14)"
         ]
       },
       "AuthURL": {
