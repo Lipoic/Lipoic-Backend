@@ -14,6 +14,7 @@ interface IUser {
   modes: string[];
   loginIps: string[];
   locale: string;
+  avatar?: Buffer;
 
   /**
    * The date when the user is created.
@@ -102,6 +103,7 @@ const userSchema = new Schema<IUser, UserModelType, IUserMethods>(
     },
     loginIps: { type: [String], required: true },
     locale: { type: String, enum: USER_LOCALES, required: true },
+    avatar: { type: Buffer, required: false },
   },
   { timestamps: true }
 );

@@ -7,7 +7,7 @@ import {
 import { HttpStatusCode, ResponseStatusCode, sendResponse } from '#/util';
 import { authMiddleware, getIp } from '#/util/util';
 import { User } from '@/model/auth/user';
-import { Request, Response } from 'express';
+import { ErrorRequestHandler, Request, Response } from 'express';
 import { sendVerifyEmail } from '@/util/email';
 import {
   checkVerifyEmailCode,
@@ -15,13 +15,9 @@ import {
   passwordHash,
   verifyPassword,
 } from '#/api/user/util';
+import { MulterError } from 'multer';
 
 export const getInfo = async (req: Request, res: Response) => {
-  /*
-    #swagger.description = 'Get the info of the current user (authorization required)'
-    #swagger.security = [{ "bearerAuth": [] }]
-  */
-
   // This middleware will check the token and set the user info to req.user
   await authMiddleware(req, res);
 
@@ -43,8 +39,6 @@ export const getInfo = async (req: Request, res: Response) => {
 };
 
 export const getInfoByUserId = async (req: Request, res: Response) => {
-  // #swagger.description = 'Get the user info by user id'
-
   const id = req.params.userId;
 
   if (id) {
@@ -81,11 +75,6 @@ export const getInfoByUserId = async (req: Request, res: Response) => {
 };
 
 export const updateInfo = async (req: Request, res: Response) => {
-  /*
-    #swagger.description = 'Update the info of the current user (authorization required)'
-    #swagger.security = [{ "bearerAuth": [] }]
-  */
-
   // This middleware will check the token and set the user info to req.user
   await authMiddleware(req, res);
 
@@ -171,20 +160,6 @@ export const updateInfo = async (req: Request, res: Response) => {
 };
 
 export const signup = async (req: Request, res: Response) => {
-  /*
-    #swagger.description = 'Sign up a new user via email and password'
-    #swagger.requestBody = {
-      required: true,
-      content: {
-        'application/json': {
-          schema: {
-            $ref: '#/components/schemas/SignUpUserData',
-          },
-        },
-      },
-    }; 
-  */
-
   const data: SignUpUserData = req.body;
 
   if (!data.username || !data.email || !data.password || !data.locale) {
@@ -270,8 +245,6 @@ export const signup = async (req: Request, res: Response) => {
 };
 
 export const verify = async (req: Request, res: Response) => {
-  // #swagger.description = 'Verify the email account by the code'
-
   const code = req.query.code;
 
   if (typeof code !== 'string') {
@@ -338,20 +311,6 @@ export const verify = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
-  /* 
-    #swagger.description = 'Login via email and password'
-    #swagger.requestBody = {
-      required: true,
-      content: {
-        'application/json': {
-          schema: {
-            $ref: '#/components/schemas/LoginUserData',
-          },
-        },
-      },
-    };
-  */
-
   const data: LoginUserData = req.body;
 
   if (!data.email || !data.password) {
@@ -457,5 +416,127 @@ export const login = async (req: Request, res: Response) => {
       );
       return;
     }
+  }
+};
+
+export const uploadAvatar = async (req: Request, res: Response) => {
+  await authMiddleware(req, res);
+  const user = req.user;
+
+  if (user) {
+    const file = req.file;
+
+    if (!file || file.size === 0) {
+      /* #swagger.responses[400] = {
+        description: 'The user avatar file is missing or invalid',
+        schema: {
+          code: 12,
+        },
+      }; */
+
+      sendResponse(
+        res,
+        {
+          code: ResponseStatusCode.INVALID_USER_AVATAR_FILE,
+        },
+        HttpStatusCode.BAD_REQUEST
+      );
+      return;
+    }
+
+    // Write the file into the database.
+    // TODO: Use the file system on the system to store the file.
+    user.avatar = file.buffer;
+    await user.save();
+
+    sendResponse(res, { code: ResponseStatusCode.SUCCESS });
+  }
+};
+
+export const uploadAvatarError: ErrorRequestHandler = (err, req, res, next) => {
+  if (err instanceof MulterError && err.code == 'LIMIT_FILE_SIZE') {
+    /* #swagger.responses[400] = {
+      description: 'The user avatar file is too large',
+      schema: {
+        code: 13,
+      },
+    }; */
+
+    sendResponse(
+      res,
+      {
+        code: ResponseStatusCode.USER_AVATAR_FILE_TOO_LARGE,
+      },
+      HttpStatusCode.BAD_REQUEST
+    );
+  } else {
+    next(err);
+  }
+};
+
+export const downloadAvatar = async (req: Request, res: Response) => {
+  const id = req.params.userId;
+
+  if (id) {
+    const user = await User.findOne({ id });
+
+    if (user) {
+      const avatar = user.avatar;
+
+      if (avatar) {
+        /*
+        #swagger.responses[200] = {
+          description: 'Success to download the avatar',
+          content: {
+            'image/png': {}
+          }
+        };
+        */
+
+        res.setHeader('Content-Type', 'image');
+        res.send(avatar);
+      } else {
+        /* #swagger.responses[404] = {
+          description: 'The user avatar is not found or not set',
+          schema: {
+            code: 14,
+          },
+        }; */
+
+        sendResponse(
+          res,
+          {
+            code: ResponseStatusCode.USER_AVATAR_NOT_FOUND,
+          },
+          HttpStatusCode.NOT_FOUND
+        );
+      }
+    } else {
+      /* #swagger.responses[404] = {
+        schema: {
+          code: 5,
+        },
+      }; */
+
+      sendResponse(
+        res,
+        {
+          code: ResponseStatusCode.USER_NOT_FOUND,
+        },
+        HttpStatusCode.NOT_FOUND
+      );
+    }
+  }
+};
+
+export const deleteAvatar = async (req: Request, res: Response) => {
+  await authMiddleware(req, res);
+  const user = req.user;
+
+  if (user) {
+    user.avatar = undefined;
+    await user.save();
+
+    sendResponse(res, { code: ResponseStatusCode.SUCCESS });
   }
 };

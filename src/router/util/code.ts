@@ -14,6 +14,9 @@ export enum ResponseStatusCode {
   Verify_Email_Error,
   Login_User_Error,
   Login_User_Email_Not_Verified,
+  INVALID_USER_AVATAR_FILE,
+  USER_AVATAR_FILE_TOO_LARGE,
+  USER_AVATAR_NOT_FOUND,
 }
 
 /**

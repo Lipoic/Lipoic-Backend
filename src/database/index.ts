@@ -1,8 +1,13 @@
 import { connect, Connection } from 'mongoose';
 
-export default class Database {
+export class Database {
   connection!: Connection;
 }
+
+/**
+ * Current database instance.
+ */
+export let db: Database;
 
 /**
  * Connect to the database.
@@ -27,5 +32,11 @@ export async function connectDatabase(
     autoIndex: true,
   });
 
-  return { connection: database.connection };
+  const instance = {
+    connection: database.connection,
+  };
+
+  db = instance;
+
+  return instance;
 }

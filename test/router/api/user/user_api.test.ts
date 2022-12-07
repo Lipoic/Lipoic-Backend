@@ -11,10 +11,11 @@ import {
 } from 'vitest';
 import { Express } from 'express-serve-static-core';
 import { init } from '@/util/init';
-import Database, { connectDatabase } from '@/database';
+import { Database, connectDatabase } from '@/database';
 import { User } from '@/model/auth/user';
 import supertest from 'supertest';
 import Mail from 'nodemailer/lib/mailer';
+import * as fs from 'fs';
 
 let server: Express;
 let db: Database;
@@ -923,6 +924,299 @@ describe('Login via email and password', () => {
     );
     expect(response.body).toEqual({
       code: 10,
+    });
+  });
+});
+describe('Upload the user avatar', () => {
+  test('Upload the user avatar', async () => {
+    const user = new User({
+      username: 'user 1',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+
+    await user.save();
+    const token = user.generateJWTToken();
+
+    const response = await supertest(server)
+      .post('/user/avatar')
+      .auth(token, { type: 'bearer' })
+      .attach('avatarFile', fs.createReadStream('test/assets/logo.png'), {
+        filename: 'avatar.png',
+      });
+
+    expect(response.status).toBe(200);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toMatchObject({
+      code: 0,
+    });
+  });
+
+  test('Upload the user avatar & missing file', async () => {
+    const user = new User({
+      username: 'user 1',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+
+    await user.save();
+    const token = user.generateJWTToken();
+
+    const response = await supertest(server)
+      .post('/user/avatar')
+      .auth(token, { type: 'bearer' });
+
+    expect(response.status).toBe(400);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toMatchObject({
+      code: 12,
+    });
+  });
+
+  test('Upload the user avatar & invalid file', async () => {
+    const user = new User({
+      username: 'user 1',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+
+    await user.save();
+    const token = user.generateJWTToken();
+
+    const response = await supertest(server)
+      .post('/user/avatar')
+      .auth(token, { type: 'bearer' })
+      .attach('avatarFile', Buffer.from([]), {
+        filename: 'avatar.png',
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toMatchObject({
+      code: 12,
+    });
+  });
+
+  test('Upload the user avatar & too large file', async () => {
+    const user = new User({
+      username: 'user 1',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+
+    await user.save();
+    const token = user.generateJWTToken();
+
+    const response = await supertest(server)
+      .post('/user/avatar')
+      .auth(token, { type: 'bearer' })
+      // Create a more than 1MB array as a buffer to upload
+      .attach('avatarFile', Buffer.from(new Array(1000000 + 1)), {
+        filename: 'avatar.png',
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toMatchObject({
+      code: 13,
+    });
+  });
+
+  test('Upload the user avatar & invalid form flied name', async () => {
+    const user = new User({
+      username: 'user 1',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+
+    await user.save();
+    const token = user.generateJWTToken();
+
+    expect(
+      async () =>
+        await supertest(server)
+          .post('/user/avatar')
+          .auth(token, { type: 'bearer' })
+          .attach('test', Buffer.from([]), {
+            filename: 'avatar.png',
+          })
+    ).rejects.toThrowError();
+  });
+
+  test('Upload the user avatar & without authorization', async () => {
+    const user = new User({
+      username: 'user 1',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+
+    await user.save();
+
+    const response = await supertest(server)
+      .post('/user/avatar')
+      .attach('avatarFile', fs.createReadStream('test/assets/logo.png'), {
+        filename: 'avatar.png',
+      });
+
+    expect(response.status).toBe(401);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toMatchObject({
+      code: 4,
+    });
+  });
+});
+
+describe('Download the user avatar', () => {
+  test('Download the user avatar', async () => {
+    const avatarBuffer = fs.readFileSync('test/assets/logo.png');
+    const user = new User({
+      username: 'user 1',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+      avatar: avatarBuffer,
+    });
+
+    await user.save();
+
+    const response = await supertest(server).get(`/user/${user.id}/avatar`);
+
+    expect(response.status).toBe(200);
+    expect(response.headers['content-type']).toBe('image');
+    expect(response.body).toEqual(avatarBuffer);
+  });
+
+  test('Download the user avatar & invalid id', async () => {
+    const response = await supertest(server).get(`/user/invalid_id/avatar`);
+
+    expect(response.status).toBe(404);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toMatchObject({
+      code: 5,
+    });
+  });
+
+  test('Download the user avatar & not set avatar', async () => {
+    const user = new User({
+      username: 'user 1',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+
+    await user.save();
+
+    const response = await supertest(server).get(`/user/${user.id}/avatar`);
+
+    expect(response.status).toBe(404);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toMatchObject({
+      code: 14,
+    });
+  });
+});
+
+describe('Delete the user avatar', () => {
+  test('Delete the user avatar', async () => {
+    const avatarBuffer = fs.readFileSync('test/assets/logo.png');
+    const user = new User({
+      username: 'user 1',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+      avatar: avatarBuffer,
+    });
+
+    await user.save();
+    const token = user.generateJWTToken();
+
+    const response = await supertest(server)
+      .delete(`/user/avatar`)
+      .auth(token, { type: 'bearer' });
+
+    expect(response.status).toBe(200);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toMatchObject({
+      code: 0,
+    });
+
+    const updatedUser = await User.findById(user.id);
+    expect(updatedUser).toBeDefined();
+    expect(updatedUser?.avatar).toBeUndefined();
+  });
+
+  test('Delete the user avatar & without authorization', async () => {
+    const avatarBuffer = fs.readFileSync('test/assets/logo.png');
+    const user = new User({
+      username: 'user 1',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+      avatar: avatarBuffer,
+    });
+
+    await user.save();
+
+    const response = await supertest(server).delete(`/user/avatar`);
+
+    expect(response.status).toBe(401);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toMatchObject({
+      code: 4,
     });
   });
 });

@@ -1,4 +1,4 @@
-import Database, { connectDatabase } from '@/database';
+import { Database, connectDatabase } from '@/database';
 import { createJWTToken, verifyJWTToken } from '@/util/jwt';
 import {
   describe,

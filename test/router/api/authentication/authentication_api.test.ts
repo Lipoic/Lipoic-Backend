@@ -13,7 +13,7 @@ import {
 import supertest from 'supertest';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
-import Database, { connectDatabase } from '@/database';
+import { Database, connectDatabase } from '@/database';
 
 let server: Express;
 let db: Database;
