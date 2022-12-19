@@ -17,7 +17,7 @@ export interface ClassroomMember {
  * The role of a classroom member.
  * Note that this role is relative to the classroom and has nothing to do with {@link UserMode | the mode} set by the user.
  */
-enum ClassroomMemberRole {
+export enum ClassroomMemberRole {
   Teacher,
   Student,
 }

@@ -56,6 +56,7 @@ const classroomSchema = new Schema<
   ClassroomModelType,
   IClassroomMethods
 >();
+// TODO: 定義完整的 schema
 
 /**
  * The classroom database model.
