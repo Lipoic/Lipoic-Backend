@@ -35,12 +35,12 @@ const lessonSchema = new Schema<ILesson>(
     description: { type: String, required: false },
     createBy: { type: Schema.Types.ObjectId, required: true, ref: UserModel },
     speakers: { type: [Schema.Types.ObjectId], required: true, ref: UserModel },
-    state: { type: String, enum: Object.values(LessonState), required: true },
+    state: { type: String, enum: LessonState, required: true },
     permission: {
       type: {
         permissionType: {
           type: String,
-          enum: Object.values(LessonPermissionType),
+          enum: LessonPermissionType,
           required: true,
         },
         allows: {

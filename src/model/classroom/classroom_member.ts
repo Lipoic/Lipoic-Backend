@@ -9,8 +9,9 @@ export interface ClassroomMember {
   id: Types.ObjectId;
   /**
    * The role of the member.
+   * @see ClassroomMemberRole
    */
-  role: ClassroomMemberRole;
+  role: string;
 }
 
 /**

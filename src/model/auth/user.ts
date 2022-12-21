@@ -87,7 +87,7 @@ const userSchema = new Schema<IUser, UserModelType, IUserMethods>(
         {
           accountType: {
             type: String,
-            enum: Object.values(ConnectType),
+            enum: ConnectType,
             required: true,
           },
           name: { type: String, required: true },
@@ -98,7 +98,7 @@ const userSchema = new Schema<IUser, UserModelType, IUserMethods>(
     },
     modes: {
       type: [String],
-      enum: Object.values(UserMode),
+      enum: UserMode,
       required: true,
     },
     loginIps: { type: [String], required: true },

@@ -1,7 +1,10 @@
 import { UserDocument } from '@/model/auth/user';
 import { Model, Types, Schema, HydratedDocument, model } from 'mongoose';
 import { ClassroomVisibility } from '@/model/classroom/classroom_visibility';
-import { ClassroomMember } from '@/model/classroom/classroom_member';
+import {
+  ClassroomMember,
+  ClassroomMemberRole,
+} from '@/model/classroom/classroom_member';
 
 interface IClassroom {
   /**
@@ -17,7 +20,7 @@ interface IClassroom {
   /**
    * The visibility of the classroom.
    */
-  visibility: ClassroomVisibility;
+  visibility: string;
 
   /**
    * The members of the classroom.
@@ -55,8 +58,44 @@ const classroomSchema = new Schema<
   IClassroom,
   ClassroomModelType,
   IClassroomMethods
->();
-// TODO: 定義完整的 schema
+>(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    visibility: {
+      type: String,
+      enum: ClassroomVisibility,
+      required: true,
+    },
+    members: {
+      type: [
+        {
+          id: {
+            type: Schema.Types.ObjectId,
+            required: true,
+          },
+          role: {
+            type: String,
+            enum: ClassroomMemberRole,
+            required: true,
+          },
+        },
+      ],
+      required: true,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
 
 /**
  * The classroom database model.
