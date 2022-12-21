@@ -1,5 +1,5 @@
 /**
- * The permission of a classroom.
+ * The visibility of the classroom.
  */
 export enum ClassroomVisibility {
   /**
