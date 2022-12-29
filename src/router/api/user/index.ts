@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as userController from './controller';
+import * as userController from '#/api/user/controller';
 import multer from 'multer';
 
 const router = Router();

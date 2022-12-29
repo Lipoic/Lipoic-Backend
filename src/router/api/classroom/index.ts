@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as classroomController from './controller';
+import * as classroomController from '#/api/classroom/controller';
 
 const router = Router();
 
@@ -18,7 +18,7 @@ router.post(
       },
     };
    */
-  '/create',
+  '/',
   classroomController.createClassroom
 );
 

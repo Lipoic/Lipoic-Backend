@@ -1,4 +1,4 @@
-import { CreateClassroomData } from './data.d';
+import { CreateClassroomData } from '#/api/classroom/data.d';
 import { sendResponse, ResponseStatusCode, HttpStatusCode } from '#/util';
 import { authMiddleware } from '@/router/util/util';
 import { Request, Response } from 'express';
