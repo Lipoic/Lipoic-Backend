@@ -40,11 +40,12 @@ export const createClassroom = async (req: Request, res: Response) => {
     !body.name ||
     !body.description ||
     !body.visibility ||
+    // Check if the visibility exists in ClassroomVisibility enum
     !(body.visibility in ClassroomVisibility)
   ) {
     /*
       #swagger.responses[400] = {
-        description: 'Missing parameters',
+        description: 'Missing or invalid parameters',
         schema: {
           code: 15,
         }
@@ -54,7 +55,7 @@ export const createClassroom = async (req: Request, res: Response) => {
     sendResponse(
       res,
       {
-        code: ResponseStatusCode.MISSING_PARAMETERS,
+        code: ResponseStatusCode.MISSING_OR_INVALID_PARAMETERS,
       },
       HttpStatusCode.BAD_REQUEST
     );
