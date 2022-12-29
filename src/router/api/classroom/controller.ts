@@ -36,7 +36,12 @@ export const createClassroom = async (req: Request, res: Response) => {
 
   const body: CreateClassroomData = req.body;
 
-  if (!body.name || !body.description || !body.visibility) {
+  if (
+    !body.name ||
+    !body.description ||
+    !body.visibility ||
+    !(body.visibility in ClassroomVisibility)
+  ) {
     /*
       #swagger.responses[400] = {
         description: 'Missing parameters',
@@ -45,8 +50,6 @@ export const createClassroom = async (req: Request, res: Response) => {
         }
       }
     */
-
-    // TODO: 修改其他用於偵測不完整的請求參數或資料改為回傳 ResponseStatusCode.MISSING_PARAMETERS
 
     sendResponse(
       res,
