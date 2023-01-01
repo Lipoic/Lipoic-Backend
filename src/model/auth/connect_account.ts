@@ -3,7 +3,7 @@
  */
 export interface ConnectAccount {
   /**
-   * Type of the connect account.
+   * The type of the connected account.
    * @see ConnectType
    */
   accountType: string;
