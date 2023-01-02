@@ -14,11 +14,11 @@ export const createClassroom = async (req: Request, res: Response) => {
 
   if (!user) return;
 
-  // If the user's email was not verified, send a response with status code 403
+  // If the user's email was not verified, send a response with status code 403.
   if (!user.verifiedEmail) {
     /*
      #swagger.responses[403] = {
-        description: 'The user\'s email was not verified',
+        description: 'The user\'s email was not verified.',
         schema: {
           code: 16,
         }
@@ -40,12 +40,12 @@ export const createClassroom = async (req: Request, res: Response) => {
     !body.name ||
     !body.description ||
     !body.visibility ||
-    // Check if the visibility exists in ClassroomVisibility enum
+    // Check if the visibility exists in ClassroomVisibility enum.
     !(body.visibility in ClassroomVisibility)
   ) {
     /*
       #swagger.responses[400] = {
-        description: 'Missing or invalid parameters',
+        description: 'Missing or invalid parameters.',
         schema: {
           code: 15,
         }
@@ -65,7 +65,7 @@ export const createClassroom = async (req: Request, res: Response) => {
   if (getCharactersLength(body.name) > 100) {
     /*
       #swagger.responses[400] = {
-        description: 'The classroom name is too long',
+        description: 'The classroom name is too long.',
         schema: {
           code: 17,
         }
@@ -85,7 +85,7 @@ export const createClassroom = async (req: Request, res: Response) => {
   if (getCharactersLength(body.description) > 500) {
     /*
       #swagger.responses[400] = {
-        description: 'The classroom description is too long',
+        description: 'The classroom description is too long.',
         schema: {
           code: 18,
         }
@@ -116,7 +116,7 @@ export const createClassroom = async (req: Request, res: Response) => {
 
   /*
     #swagger.responses[200] = {
-      description: 'Create a new classroom successfully',
+      description: 'Create a new classroom successfully.',
       schema: {
         code: 0,
       }
