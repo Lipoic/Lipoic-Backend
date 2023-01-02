@@ -19,7 +19,7 @@ export default defineConfig({
         '.eslintrc.js',
         'vitest.config.ts',
         '**/*.d.ts',
-        'scripts/**',
+        'script/**',
         'src/util/swagger.ts',
       ],
     },

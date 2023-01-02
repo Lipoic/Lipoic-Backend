@@ -2,6 +2,10 @@ import { ResponseStatusCode } from '#/util/code';
 import swaggerAutogen from 'swagger-autogen';
 import { USER_LOCALES } from '@/model/auth/user_locale';
 import { path } from 'app-root-path';
+import { ClassroomVisibility } from '@/model/classroom/classroom_visibility';
+import { UserMode } from '@/model/auth/user_mode';
+import { getEnumValues } from '@/util/util';
+import { ConnectType } from '@/model/auth/connect_account';
 
 /**
  * Generate the swagger file by OpenAPI specification 3.0.1.
@@ -175,7 +179,7 @@ export async function generateSwaggerFile() {
         UserMode: {
           type: 'string',
           description: 'User mode',
-          enum: ['Student', 'Teacher', 'Parent'],
+          enum: getEnumValues(UserMode),
           example: 'Teacher',
         },
         EditUserInfoData: {
@@ -263,7 +267,30 @@ export async function generateSwaggerFile() {
         ConnectType: {
           type: 'string',
           description: 'The connect account type.',
-          enum: ['Google', 'Facebook'],
+          enum: getEnumValues(ConnectType),
+        },
+        CreateClassroomData: {
+          type: 'object',
+          description: 'The data for creating classroom.',
+          required: ['name', 'description', 'visibility'],
+          properties: {
+            name: {
+              type: 'string',
+              example: 'Classroom A',
+            },
+            description: {
+              type: 'string',
+              example: 'This is a classroom.',
+            },
+            visibility: {
+              $ref: '#/components/schemas/ClassroomVisibility',
+            },
+          },
+        },
+        ClassroomVisibility: {
+          type: 'string',
+          description: 'The visibility of the classroom.',
+          enum: getEnumValues(ClassroomVisibility),
         },
       },
       securitySchemes: {

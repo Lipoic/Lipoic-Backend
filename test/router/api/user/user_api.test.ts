@@ -1072,18 +1072,6 @@ describe('Upload the user avatar', () => {
   });
 
   test('Upload the user avatar & without authorization', async () => {
-    const user = new User({
-      username: 'user 1',
-      email: 'test@test.com',
-      verifiedEmail: true,
-      connects: [],
-      modes: [],
-      loginIps: [],
-      locale: 'en-US',
-    });
-
-    await user.save();
-
     const response = await supertest(server)
       .post('/user/avatar')
       .attach('avatarFile', fs.createReadStream('test/assets/logo.png'), {
