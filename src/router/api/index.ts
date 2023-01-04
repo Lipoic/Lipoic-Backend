@@ -4,7 +4,7 @@ import { Router } from 'express';
 
 import { ResponseStatusCode, sendResponse } from '#';
 import { userRouter } from '#/api/user';
-import { classroomRouter } from '#/api/classroom';
+import { classRouter } from '@/router/api/class';
 
 export const apiRouter = Router();
 
@@ -54,7 +54,7 @@ apiRouter.use(
 );
 
 apiRouter.use(
-  '/classroom',
-  classroomRouter
-  // #swagger.tags = ['Classroom']
+  '/class',
+  classRouter
+  // #swagger.tags = ['Class']
 );

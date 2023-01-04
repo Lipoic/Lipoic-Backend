@@ -22,7 +22,7 @@ afterEach(async () => {
   await db.connection.dropDatabase();
 });
 
-describe('Create a classroom', () => {
+describe('Create a class', () => {
   it('Should create it successful', async () => {
     const user = new User({
       username: 'test',
@@ -39,11 +39,11 @@ describe('Create a classroom', () => {
     const token = user.generateJWTToken();
 
     const response = await supertest(server)
-      .post('/classroom')
+      .post('/class')
       .auth(token, { type: 'bearer' })
       .send({
-        name: 'Test classroom',
-        description: 'This is a test classroom',
+        name: 'Test class',
+        description: 'This is a test class',
         visibility: 'NonPublic',
       });
 
@@ -57,9 +57,9 @@ describe('Create a classroom', () => {
   });
 
   it('Without authorization', async () => {
-    const response = await supertest(server).post('/classroom').send({
-      name: 'Test classroom',
-      description: 'This is a test classroom',
+    const response = await supertest(server).post('/class').send({
+      name: 'Test class',
+      description: 'This is a test class',
       visibility: 'NonPublic',
     });
 
@@ -88,11 +88,11 @@ describe('Create a classroom', () => {
     const token = user.generateJWTToken();
 
     const response = await supertest(server)
-      .post('/classroom')
+      .post('/class')
       .auth(token, { type: 'bearer' })
       .send({
         name: 'A'.repeat(101),
-        description: 'This is a test classroom',
+        description: 'This is a test class',
         visibility: 'NonPublic',
       });
 
@@ -121,10 +121,10 @@ describe('Create a classroom', () => {
     const token = user.generateJWTToken();
 
     const response = await supertest(server)
-      .post('/classroom')
+      .post('/class')
       .auth(token, { type: 'bearer' })
       .send({
-        name: 'Test classroom',
+        name: 'Test class',
         description: 'A'.repeat(501),
         visibility: 'NonPublic',
       });
@@ -154,11 +154,11 @@ describe('Create a classroom', () => {
     const token = user.generateJWTToken();
 
     const response = await supertest(server)
-      .post('/classroom')
+      .post('/class')
       .auth(token, { type: 'bearer' })
       .send({
-        name: 'Test classroom',
-        description: 'This is a test classroom',
+        name: 'Test class',
+        description: 'This is a test class',
         visibility: 'Invalid',
       });
 
@@ -187,11 +187,11 @@ describe('Create a classroom', () => {
     const token = user.generateJWTToken();
 
     const response = await supertest(server)
-      .post('/classroom')
+      .post('/class')
       .auth(token, { type: 'bearer' })
       .send({
         name: '',
-        description: 'This is a test classroom',
+        description: 'This is a test class',
         visibility: 'NonPublic',
       });
 
@@ -220,10 +220,10 @@ describe('Create a classroom', () => {
     const token = user.generateJWTToken();
 
     const response = await supertest(server)
-      .post('/classroom')
+      .post('/class')
       .auth(token, { type: 'bearer' })
       .send({
-        name: 'Test classroom',
+        name: 'Test class',
         description: '',
         visibility: 'NonPublic',
       });
@@ -253,11 +253,11 @@ describe('Create a classroom', () => {
     const token = user.generateJWTToken();
 
     const response = await supertest(server)
-      .post('/classroom')
+      .post('/class')
       .auth(token, { type: 'bearer' })
       .send({
-        name: 'Test classroom',
-        description: 'This is a test classroom',
+        name: 'Test class',
+        description: 'This is a test class',
       });
 
     expect(response.status).toBe(400);
@@ -285,11 +285,11 @@ describe('Create a classroom', () => {
     const token = user.generateJWTToken();
 
     const response = await supertest(server)
-      .post('/classroom')
+      .post('/class')
       .auth(token, { type: 'bearer' })
       .send({
-        name: 'Test classroom',
-        description: 'This is a test classroom',
+        name: 'Test class',
+        description: 'This is a test class',
         visibility: 'NonPublic',
       });
 

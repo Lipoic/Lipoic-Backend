@@ -1,13 +1,13 @@
-import { CreateClassroomData } from '#/api/classroom/data.d';
+import { CreateClassData } from '@/router/api/class/data';
 import { sendResponse, ResponseStatusCode, HttpStatusCode } from '#/util';
 import { authMiddleware } from '@/router/util/util';
 import { Request, Response } from 'express';
-import { Classroom } from '@/model/classroom/classroom';
-import { ClassroomVisibility } from '@/model/classroom/classroom_visibility';
+import { Class } from '@/model/class/class';
+import { ClassVisibility } from '@/model/class/class_visibility';
 import { getCharactersLength } from '@/util/util';
-import { ClassroomMemberRole } from '@/model/classroom/classroom_member';
+import { ClassMemberRole } from '@/model/class/class_member';
 
-export const createClassroom = async (req: Request, res: Response) => {
+export const createClass = async (req: Request, res: Response) => {
   await authMiddleware(req, res);
 
   const user = req.user;
@@ -34,14 +34,14 @@ export const createClassroom = async (req: Request, res: Response) => {
     return;
   }
 
-  const body: CreateClassroomData = req.body;
+  const body: CreateClassData = req.body;
 
   if (
     !body.name ||
     !body.description ||
     !body.visibility ||
-    // Check if the visibility exists in ClassroomVisibility enum.
-    !(body.visibility in ClassroomVisibility)
+    // Check if the visibility exists in ClassVisibility enum.
+    !(body.visibility in ClassVisibility)
   ) {
     /*
       #swagger.responses[400] = {
@@ -65,7 +65,7 @@ export const createClassroom = async (req: Request, res: Response) => {
   if (getCharactersLength(body.name) > 100) {
     /*
       #swagger.responses[400] = {
-        description: 'The classroom name is too long.',
+        description: 'The class name is too long.',
         schema: {
           code: 17,
         }
@@ -75,7 +75,7 @@ export const createClassroom = async (req: Request, res: Response) => {
     sendResponse(
       res,
       {
-        code: ResponseStatusCode.CLASSROOM_NAME_TOO_LONG,
+        code: ResponseStatusCode.CLASS_NAME_TOO_LONG,
       },
       HttpStatusCode.BAD_REQUEST
     );
@@ -85,7 +85,7 @@ export const createClassroom = async (req: Request, res: Response) => {
   if (getCharactersLength(body.description) > 500) {
     /*
       #swagger.responses[400] = {
-        description: 'The classroom description is too long.',
+        description: 'The class description is too long.',
         schema: {
           code: 18,
         }
@@ -95,28 +95,26 @@ export const createClassroom = async (req: Request, res: Response) => {
     sendResponse(
       res,
       {
-        code: ResponseStatusCode.CLASSROOM_DESCRIPTION_TOO_LONG,
+        code: ResponseStatusCode.CLASS_DESCRIPTION_TOO_LONG,
       },
       HttpStatusCode.BAD_REQUEST
     );
     return;
   }
 
-  const classroom = new Classroom({
+  const instance = new Class({
     name: body.name,
     description: body.description,
-    visibility: ClassroomVisibility[body.visibility],
-    members: [
-      { id: user.id, role: ClassroomMemberRole[ClassroomMemberRole.Teacher] },
-    ],
+    visibility: ClassVisibility[body.visibility],
+    members: [{ id: user.id, role: ClassMemberRole[ClassMemberRole.Teacher] }],
     owner: user.id,
   });
 
-  await classroom.save();
+  await instance.save();
 
   /*
     #swagger.responses[200] = {
-      description: 'Create a new classroom successfully.',
+      description: 'Create a new class successfully.',
       schema: {
         code: 0,
       }

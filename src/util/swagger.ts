@@ -2,7 +2,7 @@ import { ResponseStatusCode } from '#/util/code';
 import swaggerAutogen from 'swagger-autogen';
 import { USER_LOCALES } from '@/model/auth/user_locale';
 import { path } from 'app-root-path';
-import { ClassroomVisibility } from '@/model/classroom/classroom_visibility';
+import { ClassVisibility } from '@/model/class/class_visibility';
 import { UserMode } from '@/model/auth/user_mode';
 import { getEnumValues } from '@/util/util';
 import { ConnectType } from '@/model/auth/connect_account';
@@ -269,28 +269,28 @@ export async function generateSwaggerFile() {
           description: 'The connect account type.',
           enum: getEnumValues(ConnectType),
         },
-        CreateClassroomData: {
+        CreateClassData: {
           type: 'object',
-          description: 'The data for creating classroom.',
+          description: 'The data for creating class.',
           required: ['name', 'description', 'visibility'],
           properties: {
             name: {
               type: 'string',
-              example: 'Classroom A',
+              example: 'Class A',
             },
             description: {
               type: 'string',
-              example: 'This is a classroom.',
+              example: 'This is a class.',
             },
             visibility: {
-              $ref: '#/components/schemas/ClassroomVisibility',
+              $ref: '#/components/schemas/ClassVisibility',
             },
           },
         },
-        ClassroomVisibility: {
+        ClassVisibility: {
           type: 'string',
-          description: 'The visibility of the classroom.',
-          enum: getEnumValues(ClassroomVisibility),
+          description: 'The visibility of the class.',
+          enum: getEnumValues(ClassVisibility),
         },
       },
       securitySchemes: {
