@@ -28,17 +28,17 @@ interface IClassroom {
   members: ClassroomMember[];
 
   /**
-   * The owner of the classroom, and the unit is the user id.
+   * The user id of the owner of the classroom.
    */
   owner: Types.ObjectId;
 
   /**
-   * The date when the classroom is created.
+   * The date the classroom was created.
    * Mongoose will automatically add this field.
    */
   createdAt?: Date;
   /**
-   * The date when the classroom is updated.
+   * The date the classroom was last updated.
    * Mongoose will automatically add this field.
    */
   updatedAt?: Date;

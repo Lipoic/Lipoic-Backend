@@ -17,13 +17,13 @@ interface ILesson {
   classroomId?: Types.ObjectId;
 
   /**
-   * The date when the lesson is created.
+   * The date the lesson was created.
    * Mongoose will automatically add this field.
    */
   createdAt: Date;
 
   /**
-   * The date when the lesson is updated.
+   * The date the lesson was last updated.
    * Mongoose will automatically add this field.
    */
   updatedAt: Date;
