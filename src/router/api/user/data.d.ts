@@ -2,7 +2,7 @@ import { UserLocale } from '@/model/auth/user_locale';
 import { UserMode } from '@/model/auth/user_mode';
 
 /**
- * The data for updating user info.
+ * The data for updating user information.
  */
 export interface UpdateUserInfoData {
   username?: string;

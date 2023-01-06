@@ -28,7 +28,7 @@ interface IClassroom {
   members: ClassroomMember[];
 
   /**
-   * The user id of the owner of the classroom.
+   * The user ID of the owner of the classroom.
    */
   owner: Types.ObjectId;
 

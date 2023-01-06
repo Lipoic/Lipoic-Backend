@@ -40,7 +40,7 @@ interface IUserMethods {
   getAuthInfo: () => IAuthUser;
 
   /**
-   * Get the auth jwt token.
+   * Get the auth JWT token.
    */
   generateJWTToken: () => string;
 
