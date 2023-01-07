@@ -34,12 +34,12 @@ interface IClassroom {
 
   /**
    * The date the classroom was created.
-   * Mongoose will automatically add this field.
+   * Automatically added by Mongoose.
    */
   createdAt?: Date;
   /**
    * The date the classroom was last updated.
-   * Mongoose will automatically add this field.
+   * Automatically added by Mongoose.
    */
   updatedAt?: Date;
 }

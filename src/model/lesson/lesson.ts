@@ -18,13 +18,13 @@ interface ILesson {
 
   /**
    * The date the lesson was created.
-   * Mongoose will automatically add this field.
+   * Automatically added by Mongoose.
    */
   createdAt: Date;
 
   /**
    * The date the lesson was last updated.
-   * Mongoose will automatically add this field.
+   * Automatically added by Mongoose.
    */
   updatedAt: Date;
 }

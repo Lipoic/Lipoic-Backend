@@ -18,12 +18,12 @@ interface IUser {
 
   /**
    * The date the user was created.
-   * Mongoose will automatically add this field.
+   * Automatically added by Mongoose.
    */
   createdAt?: Date;
   /**
    * The date the user was last updated.
-   * Mongoose will automatically add this field.
+   * Automatically added by Mongoose.
    */
   updatedAt?: Date;
 }
