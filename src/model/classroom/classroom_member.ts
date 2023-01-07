@@ -4,7 +4,7 @@ import { UserMode } from '@/model/auth/user_mode';
 
 export interface ClassroomMember {
   /**
-   * The user id of the member.
+   * The user ID of the member.
    */
   id: Types.ObjectId;
   /**
