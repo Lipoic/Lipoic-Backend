@@ -49,9 +49,9 @@ export class OauthData {
   }
 
   /**
-   * Get the access info from OAuth service provider.
+   * Get the access information from OAuth service provider.
    * @param code The OAuth code.
-   * @returns The access info.
+   * @returns The access information.
    */
   public async getAccessInfo(code: string): Promise<OauthAccessInfo> {
     const data: Record<string, string> = {
@@ -84,8 +84,8 @@ export class OauthData {
   }
 
   /**
-   * Get the user info scope.
-   * @returns The user info scope.
+   * Get the user information scope.
+   * @returns The user information scope.
    */
   #getScope() {
     switch (this.accountType) {

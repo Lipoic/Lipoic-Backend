@@ -2,13 +2,13 @@ import { ConnectType } from '@/model/auth/connect_account';
 import axios from 'axios';
 
 /**
- * The access info of the third party OAuth service provider.
+ * The access information of third party OAuth service providers.
  */
 export class OauthAccessInfo {
   accessToken: string;
 
   /**
-   * The access token expires time.
+   * The access token expiration time.
    */
   expiresIn: number;
 
@@ -24,8 +24,8 @@ export class OauthAccessInfo {
   }
 
   /**
-   * Get the user info from Google.
-   * @returns The google user info.
+   * Get the user information from Google.
+   * @returns The google user information.
    */
   async #getGoogleUserInfo(): Promise<GoogleUserInfo> {
     const response = await axios.get(
@@ -39,8 +39,8 @@ export class OauthAccessInfo {
   }
 
   /**
-   * Get the user info from Facebook.
-   * @returns The facebook user info.
+   * Get the user information from Facebook.
+   * @returns The facebook user information.
    */
   async #getFacebookUserInfo(): Promise<FacebookUserInfo> {
     const url = `https://graph.facebook.com/v14.0/me?fields=id,first_name,last_name,name,email,picture&access_token=${this.accessToken}`;
@@ -50,9 +50,9 @@ export class OauthAccessInfo {
   }
 
   /**
-   * Get the account info from OAuth service provider.
+   * Get the account information from an OAuth service provider.
    * @param accountType The OAuth account type.
-   * @returns The account info.
+   * @returns The account information.
    */
   public async getAccountInfo(
     accountType: ConnectType
@@ -83,7 +83,7 @@ export class OauthAccessInfo {
 }
 
 /**
- * The account info of the third party OAuth service provider.
+ * The account information of a third party OAuth service provider.
  */
 export interface OAuthAccountInfo {
   id: string;
