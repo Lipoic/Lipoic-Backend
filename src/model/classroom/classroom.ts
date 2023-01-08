@@ -8,23 +8,17 @@ import {
 
 interface IClassroom {
   /**
-   * The name of the classroom.
    * Limited to 100 characters.
    */
   name: string;
+
   /**
-   * The description of the classroom.
    * Limited to 500 characters.
    */
   description: string;
-  /**
-   * The visibility of the classroom.
-   */
+
   visibility: string;
 
-  /**
-   * The members of the classroom.
-   */
   members: ClassroomMember[];
 
   /**
@@ -37,6 +31,7 @@ interface IClassroom {
    * Automatically added by Mongoose.
    */
   createdAt?: Date;
+
   /**
    * The date the classroom was last updated.
    * Automatically added by Mongoose.

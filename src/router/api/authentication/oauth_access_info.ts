@@ -5,9 +5,6 @@ import axios from 'axios';
  * The access info of the third party OAuth service provider.
  */
 export class OauthAccessInfo {
-  /**
-   * The access token.
-   */
   accessToken: string;
 
   /**

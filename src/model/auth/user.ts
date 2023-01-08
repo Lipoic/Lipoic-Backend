@@ -39,9 +39,6 @@ interface IUserMethods {
    */
   getAuthInfo: () => IAuthUser;
 
-  /**
-   * Get the auth JWT token.
-   */
   generateJWTToken: () => string;
 
   /**
