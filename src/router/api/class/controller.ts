@@ -102,7 +102,7 @@ export const createClass = async (req: Request, res: Response) => {
     return;
   }
 
-  const instance = new Class({
+  const aClass = new Class({
     name: body.name,
     description: body.description,
     visibility: ClassVisibility[body.visibility],
@@ -110,7 +110,7 @@ export const createClass = async (req: Request, res: Response) => {
     owner: user.id,
   });
 
-  await instance.save();
+  await aClass.save();
 
   /*
     #swagger.responses[200] = {
