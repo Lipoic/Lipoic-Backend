@@ -1459,16 +1459,16 @@
         }
       }
     },
-    "/classroom/": {
+    "/class/": {
       "post": {
         "tags": [
-          "Classroom"
+          "Class"
         ],
-        "description": "Create a new classroom",
+        "description": "Create a new class",
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Create a new classroom successfully.",
+            "description": "Create a new class successfully.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1501,7 +1501,7 @@
             }
           },
           "400": {
-            "description": "The classroom description is too long.",
+            "description": "The class description is too long.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1589,7 +1589,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateClassroomData"
+                "$ref": "#/components/schemas/CreateClassData"
               }
             }
           }
@@ -1642,8 +1642,8 @@
           "USER_AVATAR_NOT_FOUND (14)",
           "MISSING_OR_INVALID_PARAMETERS (15)",
           "EMAIL_NOT_VERIFIED (16)",
-          "CLASSROOM_NAME_TOO_LONG (17)",
-          "CLASSROOM_DESCRIPTION_TOO_LONG (18)"
+          "CLASS_NAME_TOO_LONG (17)",
+          "CLASS_DESCRIPTION_TOO_LONG (18)"
         ]
       },
       "AuthURL": {
@@ -1893,9 +1893,9 @@
           "Facebook"
         ]
       },
-      "CreateClassroomData": {
+      "CreateClassData": {
         "type": "object",
-        "description": "The data for creating classroom.",
+        "description": "The data for creating class.",
         "required": [
           "name",
           "description",
@@ -1904,20 +1904,20 @@
         "properties": {
           "name": {
             "type": "string",
-            "example": "Classroom A"
+            "example": "Class A"
           },
           "description": {
             "type": "string",
-            "example": "This is a classroom."
+            "example": "This is a class."
           },
           "visibility": {
-            "$ref": "#/components/schemas/ClassroomVisibility"
+            "$ref": "#/components/schemas/ClassVisibility"
           }
         }
       },
-      "ClassroomVisibility": {
+      "ClassVisibility": {
         "type": "string",
-        "description": "The visibility of the classroom.",
+        "description": "The visibility of the class.",
         "enum": [
           "Public",
           "NonPublic",
