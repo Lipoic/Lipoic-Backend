@@ -17,12 +17,12 @@ interface IUser {
   avatar?: Buffer;
 
   /**
-   * The date the user was created.
+   * The time the user was created.
    * Automatically added by Mongoose.
    */
   createdAt?: Date;
   /**
-   * The date the user was last updated.
+   * The time the user was last updated.
    * Automatically added by Mongoose.
    */
   updatedAt?: Date;

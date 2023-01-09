@@ -27,13 +27,13 @@ interface IClassroom {
   owner: Types.ObjectId;
 
   /**
-   * The date the classroom was created.
+   * The time the classroom was created.
    * Automatically added by Mongoose.
    */
   createdAt?: Date;
 
   /**
-   * The date the classroom was last updated.
+   * The time the classroom was last updated.
    * Automatically added by Mongoose.
    */
   updatedAt?: Date;
