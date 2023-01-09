@@ -5,13 +5,13 @@ import multer from 'multer';
 const router = Router();
 
 const avatarUpload = multer({
-  // The file size limits are set to 1MB
+  // The file size limits to 1MB.
   limits: { fileSize: 1000000 },
 });
 
 router.get(
   /*
-    #swagger.description = 'Get the info of the current user (authorization required)'
+    #swagger.description = 'Get the information of the current user (authorization required).'
     #swagger.security = [{ "bearerAuth": [] }]
   */
   '/info',
@@ -19,14 +19,14 @@ router.get(
 );
 
 router.get(
-  // #swagger.description = 'Get the user info by user id'
+  // #swagger.description = 'Get the user information by user ID.'
   '/info/:userId',
   userController.getInfoByUserId
 );
 
 router.patch(
   /*
-    #swagger.description = 'Update the info of the current user (authorization required)'
+    #swagger.description = 'Update the information of the current user (authorization required).'
     #swagger.security = [{ "bearerAuth": [] }]
   */
   '/info',
@@ -35,7 +35,7 @@ router.patch(
 
 router.post(
   /*
-    #swagger.description = 'Sign up a new user via email and password'
+    #swagger.description = 'Sign up a new user via email and password.'
     #swagger.requestBody = {
       required: true,
       content: {
@@ -52,14 +52,14 @@ router.post(
 );
 
 router.get(
-  // #swagger.description = 'Verify the email account by the code'
+  // #swagger.description = 'Verify the email account by the code.'
   '/verify',
   userController.verify
 );
 
 router.post(
   /* 
-    #swagger.description = 'Login via email and password'
+    #swagger.description = 'Login via email and password.'
     #swagger.requestBody = {
       required: true,
       content: {
@@ -77,7 +77,7 @@ router.post(
 
 router.post(
   /*
-    #swagger.description = 'Upload the avatar of the user (authorization required)'
+    #swagger.description = 'Upload the avatar of the user (authorization required).'
     #swagger.security = [{ "bearerAuth": [] }]
     #swagger.parameters['avatarFile'] = {
             in: 'formData',
@@ -93,13 +93,13 @@ router.post(
 );
 
 router.get(
-  // #swagger.description = 'Download the user avatar by user id'
+  // #swagger.description = 'Download the user avatar by user ID.'
   '/:userId/avatar',
   userController.downloadAvatar
 );
 
 router.delete(
-  // #swagger.description = 'Delete the user avatar (authorization required)'
+  // #swagger.description = 'Delete the user avatar (authorization required).'
   '/avatar',
   userController.deleteAvatar
 );
