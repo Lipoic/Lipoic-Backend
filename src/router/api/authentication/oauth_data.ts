@@ -14,12 +14,12 @@ export class OauthData {
   readonly clientSecret: string;
 
   /**
-   * The client id of the OAuth app.
+   * The client ID of the OAuth app.
    */
   readonly clientId: string;
 
   /**
-   * The redirect uri of the OAuth app.
+   * The redirect URI of the OAuth app.
    */
   readonly redirectUri: string;
 
@@ -36,8 +36,8 @@ export class OauthData {
   }
 
   /**
-   * Get the OAuth authorization uri.
-   * @returns The OAuth authorization uri.
+   * Get the OAuth authorization URI.
+   * @returns The OAuth authorization URI.
    */
   public getAuthUrl(): string {
     const uriPrefix = encodeURI(this.#getAuthUriPrefix());

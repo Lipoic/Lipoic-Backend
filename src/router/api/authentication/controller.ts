@@ -8,7 +8,7 @@ import { getIp } from '#/util/util';
 import { User } from '@/model/auth/user';
 
 export const googleOAuth = async (req: Request, res: Response) => {
-  // #swagger.description = 'Get google oauth url'
+  // #swagger.description = 'Get Google OAuth URL.'
 
   const redirectUri = req.query.redirectUri;
 

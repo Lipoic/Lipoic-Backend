@@ -14,7 +14,7 @@ export function createServer(): Express {
 
   app.use(
     morgan('dev', {
-      // Skip logging for api documentation.
+      // Skip logging for API documentation.
       skip: (req) => req.originalUrl.startsWith('/docs'),
     })
   );

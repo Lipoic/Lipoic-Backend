@@ -4,7 +4,7 @@ import { Types } from 'mongoose';
 
 /**
  * Create a JWT token for the user.
- * @param id The user id.
+ * @param id The user ID.
  * @returns The JWT token.
  */
 export function createJWTToken(id: Types.ObjectId): string {
