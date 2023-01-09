@@ -1,64 +1,57 @@
 import { UserDocument } from '@/model/auth/user';
 import { Model, Types, Schema, HydratedDocument, model } from 'mongoose';
-import { ClassroomVisibility } from '@/model/classroom/classroom_visibility';
-import {
-  ClassroomMember,
-  ClassroomMemberRole,
-} from '@/model/classroom/classroom_member';
+import { ClassVisibility } from '@/model/class/class_visibility';
+import { ClassMember, ClassMemberRole } from '@/model/class/class_member';
 
-interface IClassroom {
+interface IClass {
   /**
-   * The name of the classroom.
+   * The name of the class.
    * Limited to 100 characters.
    */
   name: string;
   /**
-   * The description of the classroom.
+   * The description of the class.
    * Limited to 500 characters.
    */
   description: string;
   /**
-   * The visibility of the classroom.
+   * The visibility of the class.
    */
   visibility: string;
 
   /**
-   * The members of the classroom.
+   * The members of the class.
    */
-  members: ClassroomMember[];
+  members: ClassMember[];
 
   /**
-   * The owner of the classroom, and the unit is the user id.
+   * The owner of the class, and the unit is the user id.
    */
   owner: Types.ObjectId;
 
   /**
-   * The date when the classroom is created.
+   * The date when the class is created.
    * Mongoose will automatically add this field.
    */
   createdAt?: Date;
   /**
-   * The date when the classroom is updated.
+   * The date when the class is updated.
    * Mongoose will automatically add this field.
    */
   updatedAt?: Date;
 }
 
-interface IClassroomMethods {
+interface IClassMethods {
   /**
-   * Get the owner user document of the classroom.
+   * Get the owner user document of the class.
    */
   getOwner(): Promise<UserDocument>;
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-type ClassroomModelType = Model<IClassroom, {}, IClassroomMethods>;
+type ClassModelType = Model<IClass, {}, IClassMethods>;
 
-const classroomSchema = new Schema<
-  IClassroom,
-  ClassroomModelType,
-  IClassroomMethods
->(
+const classSchema = new Schema<IClass, ClassModelType, IClassMethods>(
   {
     name: {
       type: String,
@@ -70,7 +63,7 @@ const classroomSchema = new Schema<
     },
     visibility: {
       type: String,
-      enum: ClassroomVisibility,
+      enum: ClassVisibility,
       required: true,
     },
     members: {
@@ -82,7 +75,7 @@ const classroomSchema = new Schema<
           },
           role: {
             type: String,
-            enum: ClassroomMemberRole,
+            enum: ClassMemberRole,
             required: true,
           },
         },
@@ -98,20 +91,20 @@ const classroomSchema = new Schema<
 );
 
 /**
- * The classroom database model.
+ * The class database model.
  */
-export const ClassroomModel = model<IClassroom, ClassroomModelType>(
-  'classroom',
-  classroomSchema,
+export const ClassModel = model<IClass, ClassModelType>(
+  'class',
+  classSchema,
   undefined,
   {
     overwriteModels: true,
   }
 );
 
-export const Classroom = ClassroomModel<IClassroom>;
+export const Class = ClassModel<IClass>;
 
 /**
- * The document type of the classroom.
+ * The document type of the class.
  */
-export type ClassroomDocument = HydratedDocument<IClassroom, IClassroomMethods>;
+export type ClassDocument = HydratedDocument<IClass, IClassMethods>;
