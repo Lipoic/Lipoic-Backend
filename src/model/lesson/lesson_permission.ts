@@ -6,10 +6,16 @@ export interface LessonPermission {
 }
 
 export enum LessonPermissionType {
-  /// All users can access this lesson.
+  /**
+   * All users can access this lesson.
+   */
   All,
-  /// Only users in the class can access this lesson.
+  /**
+   * Only users in the class can access this lesson.
+   */
   Class,
-  /// Only users in the allows list can access this lesson.
+  /**
+   * Only users on the allow list can access this lesson.
+   */
   Select,
 }
