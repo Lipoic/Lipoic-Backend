@@ -1,12 +1,9 @@
 import { UserDocument } from '@/model/auth/user';
 import { Model, Types, Schema, HydratedDocument, model } from 'mongoose';
-import { ClassroomVisibility } from '@/model/classroom/classroom_visibility';
-import {
-  ClassroomMember,
-  ClassroomMemberRole,
-} from '@/model/classroom/classroom_member';
+import { ClassVisibility } from '@/model/class/class_visibility';
+import { ClassMember, ClassMemberRole } from '@/model/class/class_member';
 
-interface IClassroom {
+interface IClass {
   /**
    * Limited to 100 characters.
    */
@@ -19,7 +16,7 @@ interface IClassroom {
 
   visibility: string;
 
-  members: ClassroomMember[];
+  members: ClassMember[];
 
   /**
    * The user ID of the owner of the classroom.
@@ -27,33 +24,29 @@ interface IClassroom {
   owner: Types.ObjectId;
 
   /**
-   * The time the classroom was created.
+   * The time the class was created.
    * Automatically added by Mongoose.
    */
   createdAt?: Date;
 
   /**
-   * The time the classroom was last updated.
+   * The time the class was last updated.
    * Automatically added by Mongoose.
    */
   updatedAt?: Date;
 }
 
-interface IClassroomMethods {
+interface IClassMethods {
   /**
-   * Get the owner user document of the classroom.
+   * Get the owner user document of the class.
    */
   getOwner(): Promise<UserDocument>;
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-type ClassroomModelType = Model<IClassroom, {}, IClassroomMethods>;
+type ClassModelType = Model<IClass, {}, IClassMethods>;
 
-const classroomSchema = new Schema<
-  IClassroom,
-  ClassroomModelType,
-  IClassroomMethods
->(
+const classSchema = new Schema<IClass, ClassModelType, IClassMethods>(
   {
     name: {
       type: String,
@@ -65,7 +58,7 @@ const classroomSchema = new Schema<
     },
     visibility: {
       type: String,
-      enum: ClassroomVisibility,
+      enum: ClassVisibility,
       required: true,
     },
     members: {
@@ -77,7 +70,7 @@ const classroomSchema = new Schema<
           },
           role: {
             type: String,
-            enum: ClassroomMemberRole,
+            enum: ClassMemberRole,
             required: true,
           },
         },
@@ -93,20 +86,20 @@ const classroomSchema = new Schema<
 );
 
 /**
- * The classroom database model.
+ * The class database model.
  */
-export const ClassroomModel = model<IClassroom, ClassroomModelType>(
-  'classroom',
-  classroomSchema,
+export const ClassModel = model<IClass, ClassModelType>(
+  'class',
+  classSchema,
   undefined,
   {
     overwriteModels: true,
   }
 );
 
-export const Classroom = ClassroomModel<IClassroom>;
+export const Class = ClassModel<IClass>;
 
 /**
- * The document type of the classroom.
+ * The document type of the class.
  */
-export type ClassroomDocument = HydratedDocument<IClassroom, IClassroomMethods>;
+export type ClassDocument = HydratedDocument<IClass, IClassMethods>;

@@ -14,7 +14,7 @@ interface ILesson {
   state: string;
   permission: LessonPermission;
 
-  classroomId?: Types.ObjectId;
+  classId?: Types.ObjectId;
 
   /**
    * The time the lesson was created.
@@ -51,7 +51,7 @@ const lessonSchema = new Schema<ILesson>(
       },
       required: true,
     },
-    classroomId: { type: Schema.Types.ObjectId, required: false },
+    classId: { type: Schema.Types.ObjectId, required: false },
   },
   { timestamps: true }
 );
