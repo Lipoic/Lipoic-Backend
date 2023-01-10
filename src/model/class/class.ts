@@ -5,38 +5,33 @@ import { ClassMember, ClassMemberRole } from '@/model/class/class_member';
 
 interface IClass {
   /**
-   * The name of the class.
    * Limited to 100 characters.
    */
   name: string;
+
   /**
-   * The description of the class.
    * Limited to 500 characters.
    */
   description: string;
-  /**
-   * The visibility of the class.
-   */
+
   visibility: string;
 
-  /**
-   * The members of the class.
-   */
   members: ClassMember[];
 
   /**
-   * The owner of the class, and the unit is the user id.
+   * The user ID of the owner of the classroom.
    */
   owner: Types.ObjectId;
 
   /**
-   * The date when the class is created.
-   * Mongoose will automatically add this field.
+   * The time the class was created.
+   * Automatically added by Mongoose.
    */
   createdAt?: Date;
+
   /**
-   * The date when the class is updated.
-   * Mongoose will automatically add this field.
+   * The time the class was last updated.
+   * Automatically added by Mongoose.
    */
   updatedAt?: Date;
 }

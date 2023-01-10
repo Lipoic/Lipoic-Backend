@@ -5,7 +5,7 @@ const router = Router();
 
 router.post(
   /*
-   #swagger.description = 'Create a new class'
+   #swagger.description = 'Create a new class.'
    #swagger.security = [{ "bearerAuth": [] }]
    #swagger.requestBody = {
       required: true,

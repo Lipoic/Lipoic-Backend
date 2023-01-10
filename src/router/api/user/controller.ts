@@ -18,7 +18,7 @@ import {
 import { MulterError } from 'multer';
 
 export const getInfo = async (req: Request, res: Response) => {
-  // This middleware will check the token and set the user info to req.user
+  // Check the token and set the user information to `req.user`.
   await authMiddleware(req, res);
 
   const user = req.user;
@@ -75,7 +75,7 @@ export const getInfoByUserId = async (req: Request, res: Response) => {
 };
 
 export const updateInfo = async (req: Request, res: Response) => {
-  // This middleware will check the token and set the user info to req.user
+  // Check the token and set the user information to `req.user`.
   await authMiddleware(req, res);
 
   const user = req.user;
@@ -111,7 +111,7 @@ export const updateInfo = async (req: Request, res: Response) => {
       updateData.locale = data.locale;
     }
 
-    // Update the user info
+    // Update the user information.
     await User.updateOne(
       {
         id: user.id,
@@ -128,7 +128,7 @@ export const updateInfo = async (req: Request, res: Response) => {
 
     if (result) {
       /* #swagger.responses[200] = {
-      description: 'The user info has been updated.',
+      description: 'The user information has been updated.',
       schema: {
         code: 0,
         data: { $ref: '#/components/schemas/User' },
@@ -140,7 +140,7 @@ export const updateInfo = async (req: Request, res: Response) => {
         data: result.getPublicInfo(),
       });
     } else {
-      // If failed to update the user info
+      // If failed to update the user information.
 
       /* #swagger.responses[500] = {
         schema: {
@@ -164,7 +164,7 @@ export const signup = async (req: Request, res: Response) => {
 
   if (!data.username || !data.email || !data.password || !data.locale) {
     /* #swagger.responses[400] = {
-      description: 'Missing required fields',
+      description: 'Missing required fields.',
       schema: {
         code: 8,
       },
@@ -184,7 +184,7 @@ export const signup = async (req: Request, res: Response) => {
 
   let emailUsed = alreadyExistsAccount !== null;
 
-  // If the email hasn't been verified, then delete the user and create a new one
+  // If the email hasn't been verified, then delete the user and create a new one.
   if (
     !alreadyExistsAccount?.verifiedEmail &&
     alreadyExistsAccount?.canSendVerifyEmail()
@@ -208,7 +208,7 @@ export const signup = async (req: Request, res: Response) => {
     });
     await user.save();
 
-    // The verify email code.
+    // The verification email code.
     const code = createVerifyEmailCode(user.id, data.email);
 
     await sendVerifyEmail(data.username, data.email, code, data.locale);
@@ -220,7 +220,7 @@ export const signup = async (req: Request, res: Response) => {
     });
 
     /* #swagger.responses[200] = {
-      description: 'Success to sign up',
+      description: 'Success to sign up.',
       schema: {
         code: 0,
       },
@@ -229,7 +229,7 @@ export const signup = async (req: Request, res: Response) => {
     sendResponse(res, { code: ResponseStatusCode.SUCCESS });
   } else {
     /* #swagger.responses[409] = {
-      description: 'The email has already been used',
+      description: 'The email has already been used.',
       schema: {
         code: 7,
       },
@@ -249,7 +249,7 @@ export const verify = async (req: Request, res: Response) => {
 
   if (typeof code !== 'string') {
     /* #swagger.responses[400] = {
-      description: 'Missing required parameters',
+      description: 'Missing required parameters.',
       schema: {
         code: 9,
       },
@@ -281,7 +281,7 @@ export const verify = async (req: Request, res: Response) => {
     const token = createJWTToken(verifyUser.id);
 
     /* #swagger.responses[200] = {
-      description: 'Success to verify the email',
+      description: 'Success to verify the email.',
       schema: {
         code: 0,
         data: {
@@ -293,7 +293,7 @@ export const verify = async (req: Request, res: Response) => {
     sendResponse(res, { code: ResponseStatusCode.SUCCESS, data: { token } });
   } else {
     /* #swagger.responses[400] = {
-      description: 'The code is invalid or expired',
+      description: 'The code is invalid or expired.',
       schema: {
         code: 9,
       },
@@ -315,7 +315,7 @@ export const login = async (req: Request, res: Response) => {
 
   if (!data.email || !data.password) {
     /* #swagger.responses[400] = {
-      description: 'Missing required fields',
+      description: 'Missing required fields.',
       schema: {
         code: 10,
       },
@@ -336,7 +336,7 @@ export const login = async (req: Request, res: Response) => {
 
   if (!user || !passwordHash) {
     /* #swagger.responses[404] = {
-      description: 'The user is not found',
+      description: 'The user is not found.',
       schema: {
         code: 5,
       },
@@ -368,7 +368,7 @@ export const login = async (req: Request, res: Response) => {
         const token = createJWTToken(user.id);
 
         /* #swagger.responses[200] = {
-          description: 'Success to login',
+          description: 'Success to login.',
           schema: {
             code: 0,
             data: {
@@ -385,7 +385,7 @@ export const login = async (req: Request, res: Response) => {
         });
       } else {
         /* #swagger.responses[403] = {
-          description: 'The email has not been verified',
+          description: 'The email has not been verified.',
           schema: {
             code: 11,
           },
@@ -401,7 +401,7 @@ export const login = async (req: Request, res: Response) => {
       }
     } else {
       /* #swagger.responses[400] = {
-        description: 'The password is incorrect',
+        description: 'The password is incorrect.',
         schema: {
           code: 10,
         },
@@ -428,7 +428,7 @@ export const uploadAvatar = async (req: Request, res: Response) => {
 
     if (!file || file.size === 0) {
       /* #swagger.responses[400] = {
-        description: 'The user avatar file is missing or invalid',
+        description: 'The user avatar file is missing or invalid.',
         schema: {
           code: 12,
         },
@@ -456,7 +456,7 @@ export const uploadAvatar = async (req: Request, res: Response) => {
 export const uploadAvatarError: ErrorRequestHandler = (err, req, res, next) => {
   if (err instanceof MulterError && err.code == 'LIMIT_FILE_SIZE') {
     /* #swagger.responses[400] = {
-      description: 'The user avatar file is too large',
+      description: 'The user avatar file is too large.',
       schema: {
         code: 13,
       },
@@ -486,7 +486,7 @@ export const downloadAvatar = async (req: Request, res: Response) => {
       if (avatar) {
         /*
         #swagger.responses[200] = {
-          description: 'Success to download the avatar',
+          description: 'Success to download the avatar.',
           content: {
             'image/png': {}
           }
@@ -497,7 +497,7 @@ export const downloadAvatar = async (req: Request, res: Response) => {
         res.send(avatar);
       } else {
         /* #swagger.responses[404] = {
-          description: 'The user avatar is not found or not set',
+          description: 'The user avatar is not found or not set.',
           schema: {
             code: 14,
           },

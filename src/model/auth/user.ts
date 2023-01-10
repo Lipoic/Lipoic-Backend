@@ -17,13 +17,13 @@ interface IUser {
   avatar?: Buffer;
 
   /**
-   * The date when the user is created.
-   * Mongoose will automatically add this field.
+   * The time the user was created.
+   * Automatically added by Mongoose.
    */
   createdAt?: Date;
   /**
-   * The date when the user is updated.
-   * Mongoose will automatically add this field.
+   * The time the user was last updated.
+   * Automatically added by Mongoose.
    */
   updatedAt?: Date;
 }
@@ -39,9 +39,6 @@ interface IUserMethods {
    */
   getAuthInfo: () => IAuthUser;
 
-  /**
-   * Get the auth jwt token.
-   */
   generateJWTToken: () => string;
 
   /**
