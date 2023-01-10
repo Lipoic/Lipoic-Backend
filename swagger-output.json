@@ -150,7 +150,7 @@
         "tags": [
           "Authentication"
         ],
-        "description": "Get google oauth url",
+        "description": "Get Google OAuth URL.",
         "parameters": [
           {
             "name": "redirectUri",
@@ -674,7 +674,7 @@
         "tags": [
           "User"
         ],
-        "description": "Get the info of the current user (authorization required)",
+        "description": "Get the information of the current user (authorization required).",
         "parameters": [],
         "responses": {
           "200": {
@@ -727,11 +727,11 @@
         "tags": [
           "User"
         ],
-        "description": "Update the info of the current user (authorization required)",
+        "description": "Update the information of the current user (authorization required).",
         "parameters": [],
         "responses": {
           "200": {
-            "description": "The user info has been updated.",
+            "description": "The user information has been updated.",
             "content": {
               "application/json": {
                 "schema": {
@@ -825,7 +825,7 @@
         "tags": [
           "User"
         ],
-        "description": "Get the user info by user id",
+        "description": "Get the user information by user ID.",
         "parameters": [
           {
             "name": "userId",
@@ -917,11 +917,11 @@
         "tags": [
           "User"
         ],
-        "description": "Sign up a new user via email and password",
+        "description": "Sign up a new user via email and password.",
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Success to sign up",
+            "description": "Success to sign up.",
             "content": {
               "application/json": {
                 "schema": {
@@ -954,7 +954,7 @@
             }
           },
           "400": {
-            "description": "Missing required fields",
+            "description": "Missing required fields.",
             "content": {
               "application/json": {
                 "schema": {
@@ -987,7 +987,7 @@
             }
           },
           "409": {
-            "description": "The email has already been used",
+            "description": "The email has already been used.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1037,7 +1037,7 @@
         "tags": [
           "User"
         ],
-        "description": "Verify the email account by the code",
+        "description": "Verify the email account by the code.",
         "parameters": [
           {
             "name": "code",
@@ -1049,7 +1049,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success to verify the email",
+            "description": "Success to verify the email.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1088,7 +1088,7 @@
             }
           },
           "400": {
-            "description": "The code is invalid or expired",
+            "description": "The code is invalid or expired.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1140,11 +1140,11 @@
         "tags": [
           "User"
         ],
-        "description": "Login via email and password",
+        "description": "Login via email and password.",
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Success to login",
+            "description": "Success to login.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1183,7 +1183,7 @@
             }
           },
           "400": {
-            "description": "The password is incorrect",
+            "description": "The password is incorrect.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1228,7 +1228,7 @@
             }
           },
           "403": {
-            "description": "The email has not been verified",
+            "description": "The email has not been verified.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1261,7 +1261,7 @@
             }
           },
           "404": {
-            "description": "The user is not found",
+            "description": "The user is not found.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1311,7 +1311,7 @@
         "tags": [
           "User"
         ],
-        "description": "Upload the avatar of the user (authorization required)",
+        "description": "Upload the avatar of the user (authorization required).",
         "parameters": [
           {
             "name": "avatarFile",
@@ -1325,7 +1325,7 @@
         ],
         "responses": {
           "400": {
-            "description": "The user avatar file is too large",
+            "description": "The user avatar file is too large.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1380,7 +1380,7 @@
         "tags": [
           "User"
         ],
-        "description": "Delete the user avatar (authorization required)",
+        "description": "Delete the user avatar (authorization required).",
         "parameters": [],
         "responses": {}
       }
@@ -1390,7 +1390,7 @@
         "tags": [
           "User"
         ],
-        "description": "Download the user avatar by user id",
+        "description": "Download the user avatar by user ID.",
         "produces": [
           "image"
         ],
@@ -1406,13 +1406,13 @@
         ],
         "responses": {
           "200": {
-            "description": "Success to download the avatar",
+            "description": "Success to download the avatar.",
             "content": {
               "image/png": {}
             }
           },
           "404": {
-            "description": "The user avatar is not found or not set",
+            "description": "The user avatar is not found or not set.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1464,7 +1464,7 @@
         "tags": [
           "Class"
         ],
-        "description": "Create a new class",
+        "description": "Create a new class.",
         "parameters": [],
         "responses": {
           "200": {
