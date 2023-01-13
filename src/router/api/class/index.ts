@@ -22,4 +22,23 @@ router.post(
   classController.createClass
 );
 
+router.post(
+  /*
+  #swagger.description = 'Join a class.';
+  #swagger.security = [{ "bearerAuth": [] }];
+  #swagger.requestBody = {
+    required: true,
+    content: {
+      'application/json': {
+        schema: {
+          $ref: '#/components/schemas/JoinClassData',
+        },
+      },
+    },
+  };
+  */
+  '/join/:classId',
+  classController.joinClass
+);
+
 export { router as classRouter };

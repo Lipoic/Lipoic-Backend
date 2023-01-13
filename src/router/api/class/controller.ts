@@ -9,7 +9,6 @@ import { ClassMemberRole } from '@/model/class/class_member';
 
 export const createClass = async (req: Request, res: Response) => {
   await authMiddleware(req, res);
-
   const user = req.user;
 
   if (!user) return;
@@ -123,4 +122,37 @@ export const createClass = async (req: Request, res: Response) => {
   sendResponse(res, {
     code: ResponseStatusCode.SUCCESS,
   });
+};
+
+export const joinClass = async (req: Request, res: Response) => {
+  await authMiddleware(req, res);
+  const user = req.user;
+  const classId = req.params.classId;
+
+  if (!user) return;
+
+  if (!user.verifiedEmail) {
+    /*
+     #swagger.responses[403] = {
+        description: 'The user\'s email was not verified.',
+        schema: {
+          code: 16,
+        }
+     }
+    */
+    sendResponse(
+      res,
+      {
+        code: ResponseStatusCode.EMAIL_NOT_VERIFIED,
+      },
+      HttpStatusCode.FORBIDDEN
+    );
+    return;
+  }
+
+  const aClass = await Class.findById(classId);
+
+  if (aClass) {
+    const visibility = aClass.visibility;
+  }
 };
