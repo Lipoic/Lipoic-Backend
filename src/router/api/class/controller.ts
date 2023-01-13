@@ -176,15 +176,6 @@ export const joinClass = async (req: Request, res: Response) => {
         code: ResponseStatusCode.SUCCESS,
       });
     } else {
-      /*
-        #swagger.responses[404] = {
-          description: 'The class owner does not allow the user to join it.',
-          schema: {
-            code: 19,
-          }
-        }
-      */
-
       // Here is a deliberate to return the status that the class does not exist, to avoid causing some security problems.
       // For example, if the class owner does not allow the user to join it, but the user can use this API to check if the class exists.
       sendResponse(
@@ -196,15 +187,6 @@ export const joinClass = async (req: Request, res: Response) => {
       );
     }
   } else {
-    /*
-      #swagger.responses[404] = {
-        description: 'The class does not exist.',
-        schema: {
-          code: 19,
-        }
-      }
-    */
-
     sendResponse(
       res,
       {
@@ -213,4 +195,13 @@ export const joinClass = async (req: Request, res: Response) => {
       HttpStatusCode.NOT_FOUND
     );
   }
+
+  /*
+      #swagger.responses[404] = {
+        description: 'The class does not exist or its owner does not allow the user to join it.',
+        schema: {
+          code: 19,
+        }
+      };
+  */
 };
