@@ -19,9 +19,15 @@ interface IClass {
   members: ClassMember[];
 
   /**
-   * The user ID of the owner of the classroom.
+   * The user ID of the owner of the class.
    */
   owner: Types.ObjectId;
+
+  /**
+   * The users who are allowed to join the class by the owner.
+   * Only used when the class visibility is {@link ClassVisibility.Private | private}.
+   */
+  allowJoinMembers?: ClassMember[];
 
   /**
    * The time the class was created.

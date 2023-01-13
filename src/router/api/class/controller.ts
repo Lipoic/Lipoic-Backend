@@ -154,5 +154,63 @@ export const joinClass = async (req: Request, res: Response) => {
 
   if (aClass) {
     const visibility = aClass.visibility;
+    const isPrivate = visibility === ClassVisibility[ClassVisibility.Private];
+    const allowJoin =
+      !isPrivate || (isPrivate && aClass.allowJoinMembers?.includes(user.id));
+
+    if (allowJoin) {
+      aClass.members.push({
+        id: user.id,
+        role: ClassMemberRole[ClassMemberRole.Student],
+      });
+      await aClass.save();
+      /*
+        #swagger.responses[200] = {
+          description: 'Join a class successfully.',
+          schema: {
+            code: 0,
+          }
+        }
+      */
+      sendResponse(res, {
+        code: ResponseStatusCode.SUCCESS,
+      });
+    } else {
+      /*
+        #swagger.responses[404] = {
+          description: 'The class owner does not allow the user to join it.',
+          schema: {
+            code: 19,
+          }
+        }
+      */
+
+      // Here is a deliberate to return the status that the class does not exist, to avoid causing some security problems.
+      // For example, if the class owner does not allow the user to join it, but the user can use this API to check if the class exists.
+      sendResponse(
+        res,
+        {
+          code: ResponseStatusCode.CLASS_NOT_EXIST,
+        },
+        HttpStatusCode.NOT_FOUND
+      );
+    }
+  } else {
+    /*
+      #swagger.responses[404] = {
+        description: 'The class does not exist.',
+        schema: {
+          code: 19,
+        }
+      }
+    */
+
+    sendResponse(
+      res,
+      {
+        code: ResponseStatusCode.CLASS_NOT_EXIST,
+      },
+      HttpStatusCode.NOT_FOUND
+    );
   }
 };
