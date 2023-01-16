@@ -133,12 +133,12 @@ export const joinClass = async (req: Request, res: Response) => {
 
   if (!user.verifiedEmail) {
     /*
-     #swagger.responses[403] = {
-        description: 'The user\'s email was not verified.',
+      #swagger.responses[403] = {
+        description: "The user's email was not verified.",
         schema: {
           code: 16,
-        }
-     }
+        },
+      };
     */
     sendResponse(
       res,
@@ -164,13 +164,14 @@ export const joinClass = async (req: Request, res: Response) => {
         role: ClassMemberRole[ClassMemberRole.Student],
       });
       await aClass.save();
+
       /*
         #swagger.responses[200] = {
           description: 'Join a class successfully.',
           schema: {
             code: 0,
-          }
-        }
+          },
+        };
       */
       sendResponse(res, {
         code: ResponseStatusCode.SUCCESS,
@@ -197,11 +198,12 @@ export const joinClass = async (req: Request, res: Response) => {
   }
 
   /*
-      #swagger.responses[404] = {
-        description: 'The class does not exist or its owner does not allow the user to join it.',
-        schema: {
-          code: 19,
-        }
-      };
+    #swagger.responses[404] = {
+      description:
+        'The class does not exist or its owner does not allow the user to join it.',
+      schema: {
+        code: 19,
+      },
+    };
   */
 };
