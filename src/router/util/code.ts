@@ -22,6 +22,7 @@ export enum ResponseStatusCode {
   CLASS_NAME_TOO_LONG,
   CLASS_DESCRIPTION_TOO_LONG,
   CLASS_NOT_EXIST,
+  CLASS_ALREADY_MEMBER,
 }
 
 /**

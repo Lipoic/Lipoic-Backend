@@ -20,6 +20,7 @@ interface IClass {
 
   /**
    * The user ID of the owner of the class.
+   * The default role of the owner is {@link ClassMemberRole.Teacher | teacher}.
    */
   owner: Types.ObjectId;
 

@@ -355,7 +355,7 @@ describe('Join a class', () => {
       code: 0,
     });
 
-    const updatedClass = await Class.findById(aClass.id);
+    const updatedClass = await Class.findOne({ _id: aClass._id });
     expect(updatedClass?.members[0]).toMatchObject({
       userId: ownerUser._id,
       role: 'Teacher',
@@ -367,5 +367,125 @@ describe('Join a class', () => {
       _id: expect.anything(),
     });
     expect(updatedClass?.members).toHaveLength(2);
+  });
+
+  it('Should return 401 if user is not authenticated', async () => {
+    const ownerUser = new User({
+      username: 'test',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+    await ownerUser.save();
+
+    const aClass = new Class({
+      name: 'Test class',
+      description: 'This is a test class',
+      visibility: 'Public',
+      owner: ownerUser._id,
+      members: [
+        {
+          userId: ownerUser._id,
+          role: 'Teacher',
+        },
+      ],
+    });
+    await aClass.save();
+
+    const response = await supertest(server).post(`/class/${aClass.id}/join`);
+
+    expect(response.status).toBe(401);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 4,
+    });
+
+    const updatedClass = await Class.findOne({ _id: aClass._id });
+    expect(updatedClass?.members).toHaveLength(1);
+  });
+
+  it("Should return 403 if user's email is not verified", async () => {
+    const ownerUser = new User({
+      username: 'test',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+    await ownerUser.save();
+
+    const aClass = new Class({
+      name: 'Test class',
+      description: 'This is a test class',
+      visibility: 'Public',
+      owner: ownerUser._id,
+      members: [
+        {
+          userId: ownerUser._id,
+          role: 'Teacher',
+        },
+      ],
+    });
+    await aClass.save();
+
+    const user = new User({
+      username: 'test2',
+      email: 'test2@test.com',
+      verifiedEmail: false,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+    await user.save();
+    const token = user.generateJWTToken();
+
+    const response = await supertest(server)
+      .post(`/class/${aClass.id}/join`)
+      .auth(token, { type: 'bearer' });
+
+    expect(response.status).toBe(403);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 16,
+    });
+
+    const updatedClass = await Class.findOne({ _id: aClass._id });
+    expect(updatedClass?.members).toHaveLength(1);
+  });
+
+  it('Should return 404 if class does not exist', async () => {
+    const user = new User({
+      username: 'test',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+    await user.save();
+    const token = user.generateJWTToken();
+
+    const response = await supertest(server)
+      .post('/class/abcd/join')
+      .auth(token, { type: 'bearer' });
+
+    expect(response.status).toBe(404);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 1,
+    });
   });
 });

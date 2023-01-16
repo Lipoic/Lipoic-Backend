@@ -152,7 +152,7 @@ export const joinClass = async (req: Request, res: Response) => {
     return;
   }
 
-  const aClass = await Class.findById(classId);
+  const aClass = await Class.findOne({ id: classId });
 
   if (aClass) {
     const visibility = aClass.visibility;
@@ -161,6 +161,27 @@ export const joinClass = async (req: Request, res: Response) => {
       !isPrivate || (isPrivate && aClass.allowJoinMembers?.includes(user.id));
 
     if (allowJoin) {
+      const isMember = aClass.members.some((e) => e.userId === user.id);
+
+      if (isMember) {
+        /*
+          #swagger.responses[400] = {
+            description: 'The user is already a member of the class.',
+            schema: {
+              code: 20,
+            },
+          };
+        */
+        sendResponse(
+          res,
+          {
+            code: ResponseStatusCode.CLASS_ALREADY_MEMBER,
+          },
+          HttpStatusCode.BAD_REQUEST
+        );
+        return;
+      }
+
       aClass.members.push({
         userId: user._id,
         role: ClassMemberRole[ClassMemberRole.Student],
@@ -184,7 +205,7 @@ export const joinClass = async (req: Request, res: Response) => {
       sendResponse(
         res,
         {
-          code: ResponseStatusCode.CLASS_NOT_EXIST,
+          code: ResponseStatusCode.NOT_FOUND,
         },
         HttpStatusCode.NOT_FOUND
       );
@@ -193,7 +214,7 @@ export const joinClass = async (req: Request, res: Response) => {
     sendResponse(
       res,
       {
-        code: ResponseStatusCode.CLASS_NOT_EXIST,
+        code: ResponseStatusCode.NOT_FOUND,
       },
       HttpStatusCode.NOT_FOUND
     );
