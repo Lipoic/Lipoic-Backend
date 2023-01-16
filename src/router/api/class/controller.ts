@@ -134,7 +134,7 @@ export const joinClass = async (req: Request, res: Response) => {
   if (!user.verifiedEmail) {
     /*
       #swagger.responses[403] = {
-        description: "The user's email was not verified.",
+        description: 'The user's email was not verified.',
         schema: {
           code: 16,
         },
