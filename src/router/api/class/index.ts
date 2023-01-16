@@ -27,7 +27,7 @@ router.post(
     #swagger.description = 'Join a class (authorization required).';
     #swagger.security = [{ "bearerAuth": [] }];
   */
-  '/join/:classId',
+  '/:classId/join',
   classController.joinClass
 );
 

@@ -27,7 +27,7 @@ interface IClass {
    * The users who are allowed to join the class by the owner.
    * Only used when the class visibility is {@link ClassVisibility.Private | private}.
    */
-  allowJoinMembers?: ClassMember[];
+  allowJoinMembers?: Types.ObjectId[];
 
   /**
    * The time the class was created.
@@ -67,10 +67,14 @@ const classSchema = new Schema<IClass, ClassModelType, IClassMethods>(
       enum: ClassVisibility,
       required: true,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
     members: {
       type: [
         {
-          id: {
+          userId: {
             type: Schema.Types.ObjectId,
             required: true,
           },
@@ -83,9 +87,9 @@ const classSchema = new Schema<IClass, ClassModelType, IClassMethods>(
       ],
       required: true,
     },
-    owner: {
-      type: Schema.Types.ObjectId,
-      required: true,
+    allowJoinMembers: {
+      type: [Types.ObjectId],
+      required: false,
     },
   },
   { timestamps: true }

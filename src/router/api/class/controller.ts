@@ -105,7 +105,9 @@ export const createClass = async (req: Request, res: Response) => {
     name: body.name,
     description: body.description,
     visibility: ClassVisibility[body.visibility],
-    members: [{ id: user.id, role: ClassMemberRole[ClassMemberRole.Teacher] }],
+    members: [
+      { userId: user.id, role: ClassMemberRole[ClassMemberRole.Teacher] },
+    ],
     owner: user.id,
   });
 
@@ -160,7 +162,7 @@ export const joinClass = async (req: Request, res: Response) => {
 
     if (allowJoin) {
       aClass.members.push({
-        id: user.id,
+        userId: user._id,
         role: ClassMemberRole[ClassMemberRole.Student],
       });
       await aClass.save();

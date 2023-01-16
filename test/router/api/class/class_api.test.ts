@@ -5,6 +5,7 @@ import { init } from '@/util/init';
 import { createServer } from '@/util/server';
 import supertest from 'supertest';
 import { User } from '@/model/auth/user';
+import { Class } from '@/model/class/class';
 
 let server: Express;
 let db: Database;
@@ -300,5 +301,71 @@ describe('Create a class', () => {
     expect(response.body).toEqual({
       code: 16,
     });
+  });
+});
+
+describe('Join a class', () => {
+  it('Anyone should be able to join a public class', async () => {
+    const ownerUser = new User({
+      username: 'test',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+    await ownerUser.save();
+
+    const aClass = new Class({
+      name: 'Test class',
+      description: 'This is a test class',
+      visibility: 'Public',
+      owner: ownerUser._id,
+      members: [
+        {
+          userId: ownerUser._id,
+          role: 'Teacher',
+        },
+      ],
+    });
+    await aClass.save();
+
+    const user = new User({
+      username: 'test2',
+      email: 'test2@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+    await user.save();
+    const token = user.generateJWTToken();
+
+    const response = await supertest(server)
+      .post(`/class/${aClass.id}/join`)
+      .auth(token, { type: 'bearer' });
+
+    expect(response.status).toBe(200);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({
+      code: 0,
+    });
+
+    const updatedClass = await Class.findById(aClass.id);
+    expect(updatedClass?.members[0]).toMatchObject({
+      userId: ownerUser._id,
+      role: 'Teacher',
+      _id: expect.anything(),
+    });
+    expect(updatedClass?.members[1]).toMatchObject({
+      userId: user._id,
+      role: 'Student',
+      _id: expect.anything(),
+    });
+    expect(updatedClass?.members).toHaveLength(2);
   });
 });
