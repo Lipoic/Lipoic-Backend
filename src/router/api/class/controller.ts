@@ -200,7 +200,7 @@ export const joinClass = async (req: Request, res: Response) => {
         code: ResponseStatusCode.SUCCESS,
       });
     } else {
-      // Here is a deliberate to return the status that the class does not exist, to avoid causing some security problems.
+      // It's deliberately designed to return not-found status to avoid potential secuerity issues.
       // For example, if the class owner does not allow the user to join it, but the user can use this API to check if the class exists.
       sendResponse(
         res,
