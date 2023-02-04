@@ -16,7 +16,7 @@ export async function sendVerifyEmail(
   code: string,
   locale: UserLocale
 ) {
-  const clientURL = process.env.CLIENT_URL || 'https://lipoic.org';
+  const clientURL = process.env.CLIENT_URL || 'https://app.lipoic.org';
 
   const emailFilePath = `${rootPath}/assets/verify_email/${locale}.html`;
   const emailHtml = fs
