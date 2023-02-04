@@ -60,6 +60,8 @@ You can find an example in [`.env.example`](.env.example).
 | `VERIFY_EMAIL_USER`     | The host username for send sign up verification emails.               |                                       |
 | `VERIFY_EMAIL_PASSWORD` | The host password for send sign up verification emails.               |                                       |
 | `VERIFY_EMAIL_FROM`     | The email address of the sender for send sign up verification emails. | `Lipoic Account <contact@lipoic.org>` |
+| `CERT_KEY`              | The private key of the SSL certificate.                               |                                       |
+| `CERT`                  | The SSL certificate.                                                  |                                       |
 
 ### Generate JWT keys
 Generate keys for signing and verifying JWT tokens.
