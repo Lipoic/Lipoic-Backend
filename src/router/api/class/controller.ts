@@ -121,9 +121,7 @@ export const createClass = async (req: Request, res: Response) => {
       }
     }
   */
-  sendResponse(res, {
-    code: ResponseStatusCode.SUCCESS,
-  });
+  sendResponse(res, { code: ResponseStatusCode.SUCCESS });
 };
 
 export const joinClass = async (req: Request, res: Response) => {
@@ -142,6 +140,7 @@ export const joinClass = async (req: Request, res: Response) => {
         },
       };
     */
+
     sendResponse(
       res,
       {
@@ -154,63 +153,22 @@ export const joinClass = async (req: Request, res: Response) => {
 
   const aClass = await Class.findOne({ id: classId });
 
-  if (aClass) {
-    const visibility = aClass.visibility;
-    const isPrivate = visibility === ClassVisibility[ClassVisibility.Private];
-    const allowJoin =
-      !isPrivate || (isPrivate && aClass.allowJoinMembers?.includes(user.id));
+  const visibility = aClass?.visibility;
+  const isPrivate = visibility === ClassVisibility[ClassVisibility.Private];
+  const allowJoin =
+    !isPrivate || (isPrivate && aClass?.allowJoinMembers?.includes(user.id));
 
-    if (allowJoin) {
-      const isMember = aClass.members.some((e) => e.userId === user.id);
-
-      if (isMember) {
-        /*
-          #swagger.responses[400] = {
-            description: 'The user is already a member of the class.',
-            schema: {
-              code: 20,
-            },
-          };
-        */
-        sendResponse(
-          res,
-          {
-            code: ResponseStatusCode.CLASS_ALREADY_MEMBER,
-          },
-          HttpStatusCode.BAD_REQUEST
-        );
-        return;
-      }
-
-      aClass.members.push({
-        userId: user._id,
-        role: ClassMemberRole[ClassMemberRole.Student],
-      });
-      await aClass.save();
-
-      /*
-        #swagger.responses[200] = {
-          description: 'Join a class successfully.',
-          schema: {
-            code: 0,
-          },
-        };
-      */
-      sendResponse(res, {
-        code: ResponseStatusCode.SUCCESS,
-      });
-    } else {
-      // It's deliberately designed to return not-found status to avoid potential secuerity issues.
-      // For example, if the class owner does not allow the user to join it, but the user can use this API to check if the class exists.
-      sendResponse(
-        res,
-        {
-          code: ResponseStatusCode.NOT_FOUND,
+  if (!aClass || allowJoin) {
+    /*
+      #swagger.responses[404] = {
+        description:
+          'The class does not exist or its owner does not allow the user to join it.',
+        schema: {
+          code: 19,
         },
-        HttpStatusCode.NOT_FOUND
-      );
-    }
-  } else {
+      };
+    */
+
     sendResponse(
       res,
       {
@@ -218,15 +176,45 @@ export const joinClass = async (req: Request, res: Response) => {
       },
       HttpStatusCode.NOT_FOUND
     );
+    return;
   }
 
+  const isMember = aClass.members.some((e) => e.userId === user.id);
+
+  if (isMember) {
+    /*
+      #swagger.responses[400] = {
+        description: 'The user is already a member of the class.',
+        schema: {
+          code: 20,
+        },
+      };
+    */
+
+    sendResponse(
+      res,
+      {
+        code: ResponseStatusCode.CLASS_ALREADY_MEMBER,
+      },
+      HttpStatusCode.BAD_REQUEST
+    );
+    return;
+  }
+
+  aClass.members.push({
+    userId: user._id,
+    role: ClassMemberRole[ClassMemberRole.Student],
+  });
+  await aClass.save();
+
   /*
-    #swagger.responses[404] = {
-      description:
-        'The class does not exist or its owner does not allow the user to join it.',
+    #swagger.responses[200] = {
+      description: 'Join a class successfully.',
       schema: {
-        code: 19,
+         code: 0,
       },
     };
   */
+
+  sendResponse(res, { code: ResponseStatusCode.SUCCESS });
 };
