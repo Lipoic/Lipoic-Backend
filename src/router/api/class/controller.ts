@@ -155,8 +155,7 @@ export const joinClass = async (req: Request, res: Response) => {
 
   const visibility = aClass?.visibility;
   const isPrivate = visibility === ClassVisibility[ClassVisibility.Private];
-  const allowJoin =
-    !isPrivate || (isPrivate && aClass?.allowJoinMembers?.includes(user.id));
+  const allowJoin = !isPrivate || aClass?.allowJoinMembers?.includes(user.id);
 
   if (!aClass || allowJoin) {
     /*
