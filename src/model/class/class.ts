@@ -26,7 +26,6 @@ interface IClass {
 
   /**
    * The users who are allowed to join the class by the owner.
-   * Only used when the class visibility is {@link ClassVisibility.Private | private}.
    */
   allowJoinMembers?: Types.ObjectId[];
 
