@@ -157,7 +157,7 @@ export const joinClass = async (req: Request, res: Response) => {
   const isPrivate = visibility === ClassVisibility[ClassVisibility.Private];
   const allowJoin = !isPrivate || aClass?.allowJoinMembers?.includes(user.id);
 
-  if (!aClass || allowJoin) {
+  if (!aClass || !allowJoin) {
     /*
       #swagger.responses[404] = {
         description:
