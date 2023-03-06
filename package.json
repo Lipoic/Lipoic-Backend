@@ -47,7 +47,7 @@
     "@typescript-eslint/parser": "5.49.0",
     "@vitest/coverage-c8": "0.23.2",
     "@vitest/ui": "^0.24.0",
-    "concurrently": "7.4.0",
+    "concurrently": "7.6.0",
     "eslint": "8.23.0",
     "eslint-config-prettier": "8.6.0",
     "eslint-plugin-prettier": "4.2.1",
