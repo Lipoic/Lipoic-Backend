@@ -305,7 +305,7 @@ describe('Create a class', () => {
 });
 
 describe('Join a class', () => {
-  it('Anyone should be able to join a public class', async () => {
+  it('Anyone be able to join a public class', async () => {
     const ownerUser = new User({
       username: 'test',
       email: 'test@test.com',
@@ -369,7 +369,7 @@ describe('Join a class', () => {
     expect(updatedClass?.members).toHaveLength(2);
   });
 
-  it('Should return 401 if user is not authenticated', async () => {
+  it('Return 401 if the user is not authenticated', async () => {
     const ownerUser = new User({
       username: 'test',
       email: 'test@test.com',
@@ -409,7 +409,7 @@ describe('Join a class', () => {
     expect(updatedClass?.members).toHaveLength(1);
   });
 
-  it("Should return 403 if user's email is not verified", async () => {
+  it("Return 403 if the user's email is not verified", async () => {
     const ownerUser = new User({
       username: 'test',
       email: 'test@test.com',
@@ -463,7 +463,7 @@ describe('Join a class', () => {
     expect(updatedClass?.members).toHaveLength(1);
   });
 
-  it('Should return 404 if class does not exist', async () => {
+  it('Return 404 if the class does not exist', async () => {
     const user = new User({
       username: 'test',
       email: 'test@test.com',
@@ -487,5 +487,61 @@ describe('Join a class', () => {
     expect(response.body).toEqual({
       code: 1,
     });
+  });
+
+  it('Return 400 if the user is already a member of the class', async () => {
+    // Arrange
+    const ownerUser = new User({
+      username: 'test',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+    await ownerUser.save();
+    const user = new User({
+      username: 'test2',
+      email: 'test2@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+    await user.save();
+
+    const aClass = new Class({
+      name: 'Test class',
+      description: 'This is a test class',
+      visibility: 'Public',
+      owner: ownerUser._id,
+      members: [
+        {
+          userId: ownerUser._id,
+          role: 'Teacher',
+        },
+        {
+          userId: user._id,
+          role: 'Student',
+        },
+      ],
+    });
+    await aClass.save();
+
+    const token = user.generateJWTToken();
+
+    // Act
+    const response = await supertest(server)
+      .post(`/class/${aClass.id}/join`)
+      .auth(token, { type: 'bearer' });
+
+    // Assert
+    expect(response.status).toBe(400);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({ code: 20 });
   });
 });
