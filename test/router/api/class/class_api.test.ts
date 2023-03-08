@@ -305,7 +305,7 @@ describe('Create a class', () => {
 });
 
 describe('Join a class', () => {
-  it('Anyone be able to join a public class', async () => {
+  it('Anyone is able to join a public class', async () => {
     const ownerUser = new User({
       username: 'test',
       email: 'test@test.com',
