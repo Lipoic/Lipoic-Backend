@@ -48,7 +48,7 @@
     "@vitest/coverage-c8": "0.23.2",
     "@vitest/ui": "^0.24.0",
     "concurrently": "7.6.0",
-    "eslint": "8.23.0",
+    "eslint": "8.35.0",
     "eslint-config-prettier": "8.6.0",
     "eslint-plugin-prettier": "4.2.1",
     "msw": "^0.47.3",
