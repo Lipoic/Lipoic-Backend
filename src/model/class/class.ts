@@ -25,9 +25,9 @@ interface IClass {
   owner: Types.ObjectId;
 
   /**
-   * The users who are allowed to join the class by the owner.
+   * The users who are invited to join the class by the owner.
    */
-  allowJoinMembers?: Types.ObjectId[];
+  invitedMembers?: Types.ObjectId[];
 
   /**
    * The time the class was created.
@@ -87,7 +87,7 @@ const classSchema = new Schema<IClass, ClassModelType, IClassMethods>(
       ],
       required: true,
     },
-    allowJoinMembers: {
+    invitedMembers: {
       type: [Types.ObjectId],
       required: false,
     },

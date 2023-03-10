@@ -7,9 +7,9 @@ export enum ClassVisibility {
    */
   Public,
   /**
-   * Non-public class can be joined by anyone with the invitation code or link.
+   * Invite-only class can be joined by anyone with the invitation code or link.
    */
-  NonPublic,
+  InviteOnly,
   /**
    * Private class can only be joined by the owner.
    */
