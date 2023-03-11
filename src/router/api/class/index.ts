@@ -5,9 +5,9 @@ const router = Router();
 
 router.post(
   /*
-   #swagger.description = 'Create a new class.'
-   #swagger.security = [{ "bearerAuth": [] }]
-   #swagger.requestBody = {
+    #swagger.description = 'Create a new class. (authorization required)'
+    #swagger.security = [{ "bearerAuth": [] }]
+    #swagger.requestBody = {
       required: true,
       content: {
         'application/json': {
@@ -20,6 +20,15 @@ router.post(
    */
   '/',
   classController.createClass
+);
+
+router.post(
+  /*
+    #swagger.description = 'Join a class by ID. (authorization required)';
+    #swagger.security = [{ "bearerAuth": [] }];
+  */
+  '/:classId/join',
+  classController.joinClass
 );
 
 export { router as classRouter };

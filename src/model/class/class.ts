@@ -19,9 +19,15 @@ interface IClass {
   members: ClassMember[];
 
   /**
-   * The user ID of the owner of the classroom.
+   * The user ID of the owner of the class.
+   * The default role of the owner is {@link ClassMemberRole.Teacher | teacher}.
    */
   owner: Types.ObjectId;
+
+  /**
+   * The users who are invited to join the class by the owner.
+   */
+  invitedMembers?: Types.ObjectId[];
 
   /**
    * The time the class was created.
@@ -61,10 +67,14 @@ const classSchema = new Schema<IClass, ClassModelType, IClassMethods>(
       enum: ClassVisibility,
       required: true,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
     members: {
       type: [
         {
-          id: {
+          userId: {
             type: Schema.Types.ObjectId,
             required: true,
           },
@@ -77,9 +87,9 @@ const classSchema = new Schema<IClass, ClassModelType, IClassMethods>(
       ],
       required: true,
     },
-    owner: {
-      type: Schema.Types.ObjectId,
-      required: true,
+    invitedMembers: {
+      type: [Types.ObjectId],
+      required: false,
     },
   },
   { timestamps: true }

@@ -9,7 +9,6 @@ import { ClassMemberRole } from '@/model/class/class_member';
 
 export const createClass = async (req: Request, res: Response) => {
   await authMiddleware(req, res);
-
   const user = req.user;
 
   if (!user) return;
@@ -106,7 +105,9 @@ export const createClass = async (req: Request, res: Response) => {
     name: body.name,
     description: body.description,
     visibility: ClassVisibility[body.visibility],
-    members: [{ id: user.id, role: ClassMemberRole[ClassMemberRole.Teacher] }],
+    members: [
+      { userId: user.id, role: ClassMemberRole[ClassMemberRole.Teacher] },
+    ],
     owner: user.id,
   });
 
@@ -120,7 +121,102 @@ export const createClass = async (req: Request, res: Response) => {
       }
     }
   */
-  sendResponse(res, {
-    code: ResponseStatusCode.SUCCESS,
+  sendResponse(res, { code: ResponseStatusCode.SUCCESS });
+};
+
+export const joinClass = async (req: Request, res: Response) => {
+  await authMiddleware(req, res);
+  const user = req.user;
+  const classId = req.params.classId;
+
+  if (!user) return;
+
+  if (!user.verifiedEmail) {
+    /*
+      #swagger.responses[403] = {
+        description: 'The user\'s email was not verified.',
+        schema: {
+          code: 16,
+        },
+      };
+    */
+
+    sendResponse(
+      res,
+      {
+        code: ResponseStatusCode.EMAIL_NOT_VERIFIED,
+      },
+      HttpStatusCode.FORBIDDEN
+    );
+    return;
+  }
+
+  const aClass = await Class.findOne({ id: classId });
+
+  const visibility = aClass?.visibility;
+  const isInviteOnly =
+    visibility === ClassVisibility[ClassVisibility.InviteOnly];
+  const canJoin = !isInviteOnly || aClass?.invitedMembers?.includes(user.id);
+
+  if (!aClass || !canJoin) {
+    /*
+      #swagger.responses[404] = {
+        description:
+          'The class doesn\'t exist or the user wasn\'t invited.',
+        schema: {
+          code: 1,
+        },
+      };
+    */
+
+    sendResponse(
+      res,
+      {
+        code: ResponseStatusCode.NOT_FOUND,
+      },
+      HttpStatusCode.NOT_FOUND
+    );
+    return;
+  }
+
+  const isMember = aClass.members.some(
+    (e) => e.userId.toHexString() === user.id
+  );
+
+  if (isMember) {
+    /*
+      #swagger.responses[400] = {
+        description: 'The user is already a member of the class.',
+        schema: {
+          code: 19,
+        },
+      };
+    */
+
+    sendResponse(
+      res,
+      {
+        code: ResponseStatusCode.CLASS_ALREADY_MEMBER,
+      },
+      HttpStatusCode.BAD_REQUEST
+    );
+    return;
+  }
+
+  aClass.members.push({
+    userId: user._id,
+    role: ClassMemberRole[ClassMemberRole.Student],
   });
+  await aClass.save();
+
+  /*
+    #swagger.responses[200] = {
+      description: 'Join a class successfully.',
+      schema: {
+         code: 0,
+      },
+    };
+  */
+
+  sendResponse(res, { code: ResponseStatusCode.SUCCESS });
 };

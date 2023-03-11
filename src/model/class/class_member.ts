@@ -6,7 +6,7 @@ export interface ClassMember {
   /**
    * The user ID of the member.
    */
-  id: Types.ObjectId;
+  userId: Types.ObjectId;
   /**
    * The role of the member.
    * @see ClassMemberRole

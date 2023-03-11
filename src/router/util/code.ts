@@ -21,6 +21,7 @@ export enum ResponseStatusCode {
   EMAIL_NOT_VERIFIED,
   CLASS_NAME_TOO_LONG,
   CLASS_DESCRIPTION_TOO_LONG,
+  CLASS_ALREADY_MEMBER,
 }
 
 /**
