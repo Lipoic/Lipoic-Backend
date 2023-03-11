@@ -56,7 +56,7 @@ export async function connectOAuthAccount(
   let isConnected = false;
 
   if (accountAlreadyExists) {
-    const user = await User.findOne({ _id: accountAlreadyExists._id });
+    const user = await User.findById(accountAlreadyExists._id);
 
     if (user) {
       isConnected =
