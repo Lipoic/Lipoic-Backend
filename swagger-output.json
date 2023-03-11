@@ -1464,7 +1464,7 @@
         "tags": [
           "Class"
         ],
-        "description": "Create a new class.",
+        "description": "Create a new class. (authorization required)",
         "parameters": [],
         "responses": {
           "200": {
@@ -1595,6 +1595,163 @@
           }
         }
       }
+    },
+    "/class/{classId}/join": {
+      "post": {
+        "tags": [
+          "Class"
+        ],
+        "description": "Join a class by ID. (authorization required)",
+        "parameters": [
+          {
+            "name": "classId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Join a class successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 0
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 0
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The user is already a member of the class.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 19
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 19
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The user's email was not verified.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 16
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 16
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The class doesn't exist or the user wasn't invited.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -1643,7 +1800,8 @@
           "MISSING_OR_INVALID_PARAMETERS (15)",
           "EMAIL_NOT_VERIFIED (16)",
           "CLASS_NAME_TOO_LONG (17)",
-          "CLASS_DESCRIPTION_TOO_LONG (18)"
+          "CLASS_DESCRIPTION_TOO_LONG (18)",
+          "CLASS_ALREADY_MEMBER (19)"
         ]
       },
       "AuthURL": {
@@ -1920,8 +2078,8 @@
         "description": "The visibility of the class.",
         "enum": [
           "Public",
-          "NonPublic",
-          "Private"
+          "Private",
+          "InviteOnly"
         ]
       }
     }
