@@ -3,7 +3,7 @@
  */
 export enum ClassVisibility {
   /**
-   * A public class can be joined by anyone or search by anyone.
+   * A public class can be joined by anyone or searched by anyone.
    */
   Public,
   /**
