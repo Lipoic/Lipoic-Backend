@@ -649,4 +649,56 @@ describe('Join a class', () => {
     );
     expect(response.body).toEqual({ code: 0 });
   });
+
+  it('Anyone knows the class id can join a private class', async () => {
+    // Arrange
+    const ownerUser = new User({
+      username: 'test',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+    await ownerUser.save();
+    const user = new User({
+      username: 'test2',
+      email: 'test2@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+    await user.save();
+
+    const aClass = new Class({
+      name: 'Test class',
+      description: 'This is a test class',
+      visibility: 'Private',
+      owner: ownerUser._id,
+      members: [
+        {
+          userId: ownerUser._id,
+          role: 'Teacher',
+        },
+      ],
+    });
+    await aClass.save();
+
+    const token = user.generateJWTToken();
+
+    // Act
+    const response = await supertest(server)
+      .post(`/class/${aClass.id}/join`)
+      .auth(token, { type: 'bearer' });
+
+    // Assert
+    expect(response.status).toBe(200);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({ code: 0 });
+  });
 });
