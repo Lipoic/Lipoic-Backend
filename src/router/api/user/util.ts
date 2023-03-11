@@ -72,7 +72,7 @@ export async function checkVerifyEmailCode(
       const email = payload.email;
 
       if (typeof id === 'string' && typeof email === 'string') {
-        const user = await User.findOne({ id });
+        const user = await User.findById(id);
         if (user && user.email === email) {
           return user;
         }
