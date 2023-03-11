@@ -45,7 +45,7 @@ describe('Create a class', () => {
       .send({
         name: 'Test class',
         description: 'This is a test class',
-        visibility: 'NonPublic',
+        visibility: 'Private',
       });
 
     expect(response.status).toBe(200);
@@ -61,7 +61,7 @@ describe('Create a class', () => {
     const response = await supertest(server).post('/class').send({
       name: 'Test class',
       description: 'This is a test class',
-      visibility: 'NonPublic',
+      visibility: 'Private',
     });
 
     expect(response.status).toBe(401);
@@ -94,7 +94,7 @@ describe('Create a class', () => {
       .send({
         name: 'A'.repeat(101),
         description: 'This is a test class',
-        visibility: 'NonPublic',
+        visibility: 'Private',
       });
 
     expect(response.status).toBe(400);
@@ -127,7 +127,7 @@ describe('Create a class', () => {
       .send({
         name: 'Test class',
         description: 'A'.repeat(501),
-        visibility: 'NonPublic',
+        visibility: 'Private',
       });
 
     expect(response.status).toBe(400);
@@ -193,7 +193,7 @@ describe('Create a class', () => {
       .send({
         name: '',
         description: 'This is a test class',
-        visibility: 'NonPublic',
+        visibility: 'Private',
       });
 
     expect(response.status).toBe(400);
@@ -226,7 +226,7 @@ describe('Create a class', () => {
       .send({
         name: 'Test class',
         description: '',
-        visibility: 'NonPublic',
+        visibility: 'Private',
       });
 
     expect(response.status).toBe(400);
@@ -291,7 +291,7 @@ describe('Create a class', () => {
       .send({
         name: 'Test class',
         description: 'This is a test class',
-        visibility: 'NonPublic',
+        visibility: 'Private',
       });
 
     expect(response.status).toBe(403);
@@ -542,6 +542,58 @@ describe('Join a class', () => {
     expect(response.headers['content-type']).toBe(
       'application/json; charset=utf-8'
     );
-    expect(response.body).toEqual({ code: 20 });
+    expect(response.body).toEqual({ code: 19 });
+  });
+
+  it("The user can't join a class that the owner does not invite", async () => {
+    // Arrange
+    const ownerUser = new User({
+      username: 'test',
+      email: 'test@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+    await ownerUser.save();
+    const user = new User({
+      username: 'test2',
+      email: 'test2@test.com',
+      verifiedEmail: true,
+      connects: [],
+      modes: [],
+      loginIps: [],
+      locale: 'en-US',
+    });
+    await user.save();
+
+    const aClass = new Class({
+      name: 'Test class',
+      description: 'This is a test class',
+      visibility: 'InviteOnly',
+      owner: ownerUser._id,
+      members: [
+        {
+          userId: ownerUser._id,
+          role: 'Teacher',
+        },
+      ],
+    });
+    await aClass.save();
+
+    const token = user.generateJWTToken();
+
+    // Act
+    const response = await supertest(server)
+      .post(`/class/${aClass.id}/join`)
+      .auth(token, { type: 'bearer' });
+
+    // Assert
+    expect(response.status).toBe(404);
+    expect(response.headers['content-type']).toBe(
+      'application/json; charset=utf-8'
+    );
+    expect(response.body).toEqual({ code: 1 });
   });
 });
