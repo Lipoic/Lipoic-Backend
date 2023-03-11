@@ -154,8 +154,9 @@ export const joinClass = async (req: Request, res: Response) => {
   const aClass = await Class.findOne({ id: classId });
 
   const visibility = aClass?.visibility;
-  const isPrivate = visibility === ClassVisibility[ClassVisibility.Private];
-  const canJoin = !isPrivate || aClass?.invitedMembers?.includes(user.id);
+  const isInviteOnly =
+    visibility === ClassVisibility[ClassVisibility.InviteOnly];
+  const canJoin = !isInviteOnly || aClass?.invitedMembers?.includes(user.id);
 
   if (!aClass || !canJoin) {
     /*
@@ -163,7 +164,7 @@ export const joinClass = async (req: Request, res: Response) => {
         description:
           'The class does not exist or its owner does not allow the user to join it.',
         schema: {
-          code: 19,
+          code: 1,
         },
       };
     */
@@ -187,7 +188,7 @@ export const joinClass = async (req: Request, res: Response) => {
       #swagger.responses[400] = {
         description: 'The user is already a member of the class.',
         schema: {
-          code: 20,
+          code: 19,
         },
       };
     */

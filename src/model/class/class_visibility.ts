@@ -3,15 +3,14 @@
  */
 export enum ClassVisibility {
   /**
-   * Public class can be joined by anyone or search by anyone.
+   * A public class can be joined by anyone or search by anyone.
    */
   Public,
   /**
-   * Invite-only class can be joined by anyone with the invitation code or link.
-   */
-  InviteOnly,
-  /**
-   * Private class can only be joined by the owner.
+   * A private class can be joined by anyone with the class id.
    */
   Private,
+  /**
+   */
+  InviteOnly,
 }
