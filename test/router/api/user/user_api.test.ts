@@ -763,7 +763,7 @@ describe('Verify the email by the code', () => {
     });
     expect(response.body.data['token']).toBeDefined();
 
-    const updatedUser = await User.findOne({ _id: user._id });
+    const updatedUser = await User.findById(user.id);
     expect(updatedUser).toBeDefined();
     expect(updatedUser?.verifiedEmail).toBe(true);
   });
@@ -1177,7 +1177,7 @@ describe('Delete the user avatar', () => {
       code: 0,
     });
 
-    const updatedUser = await User.findOne({ _id: user._id });
+    const updatedUser = await User.findById(user.id);
     expect(updatedUser).toBeDefined();
     expect(updatedUser?.avatar).toBeUndefined();
   });
