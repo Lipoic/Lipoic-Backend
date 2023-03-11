@@ -11,6 +11,7 @@ export enum ClassVisibility {
    */
   Private,
   /**
+   * An invite-only class can only be joined with an invitation from the owner.
    */
   InviteOnly,
 }
