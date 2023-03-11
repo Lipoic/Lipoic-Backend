@@ -7,7 +7,7 @@ export enum ClassVisibility {
    */
   Public,
   /**
-   * A private class can be joined by anyone with the class id.
+   * A private class can be joined by anyone with the class ID.
    */
   Private,
   /**
