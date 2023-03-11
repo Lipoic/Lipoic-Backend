@@ -162,7 +162,7 @@ export const joinClass = async (req: Request, res: Response) => {
     /*
       #swagger.responses[404] = {
         description:
-          'The class does not exist or its owner does not allow the user to join it.',
+          'The class doesn\'t exist or the user wasn\'t invited.',
         schema: {
           code: 1,
         },
