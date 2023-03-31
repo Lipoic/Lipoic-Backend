@@ -1,7 +1,7 @@
 # Contributing
 First, thank you for your interest in contributing to Lipoic!
 We appreciate all kinds of contributions.
-If you have any question, please feel free and ask on [Discord](https://discord.gg/ArKk54ajfr) or
+If you have any questions, please feel free and ask on [Discord](https://discord.gg/ArKk54ajfr) or
 [GitHub](https://github.com/Lipoic/Lipoic-Backend/discussions).
 
 ## Pull requests
@@ -15,7 +15,7 @@ Please note that unfinished pull requests should be marked as drafts.
 ## Contributing guidelines
 
 ### Commits
-A commit should focus on one thing only. If necessary, update associated documents and tests in the same commit.
+Each commit should focus on one thing only. If necessary, update associated documents and tests in the same commit.
 
 The title of a commit message consists of the type, scope, and short description of the change (less than 50 characters).
 If needed, you may also provide further information in the other paragraphs.
@@ -49,6 +49,6 @@ Available types include:
 A exclamation mark (`!`) is added for breaking changes.
 
 ### Code style
-Basically, use the prettier.
+Basically, use [Prettier](https://prettier.io/) to reformat the code.
 
 Line separators are LF, and each line ends with one.
