@@ -65,7 +65,7 @@ You can find an example in [`.env.example`](.env.example).
 Generate keys for signing and verifying JWT tokens.
 
 ```shell
-openssl ecparam -genkey -name secp256k1 -noout -out jwt_private_key.pem
+openssl ecparam -genkey -name prime256v1 -noout -out jwt_private_key.pem
 openssl ec -in jwt_private_key.pem -pubout -out jwt_public_key.pem
 ```
 
