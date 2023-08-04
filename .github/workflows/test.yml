@@ -19,7 +19,7 @@ jobs:
         run: yarn install
       - name: Generate ECDSA keys
         run: |
-          openssl ecparam -genkey -name secp256k1 -noout -out jwt_private_key.pem
+          openssl ecparam -genkey -name prime256v1 -noout -out jwt_private_key.pem
           openssl ec -in jwt_private_key.pem -pubout -out jwt_public_key.pem
       - name: Test and generate coverage
         run: sudo yarn coverage
